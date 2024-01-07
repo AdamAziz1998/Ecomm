@@ -1,6 +1,8 @@
 package com.azizONeill.product.convert;
 
 
+import com.azizONeill.product.dto.ProductDTO;
+import com.azizONeill.product.model.Product;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

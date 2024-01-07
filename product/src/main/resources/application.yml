@@ -14,9 +14,9 @@ spring:
     import: optional:configserver:http:/localhost:8888
 
   datasource:
-    driver-class-name: org.postgresql. Driver
+    driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/students
-    username: username
+    username: adam
     password: password
   jpa:
     hibernate:
@@ -24,5 +24,10 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-springdoc.api-docs:
+  docker:
+    compose:
+      file: ./product/compose.yaml
+
+springdoc:
+  api-docs:
     path: /api-docs

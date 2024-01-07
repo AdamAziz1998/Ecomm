@@ -1,11 +1,12 @@
 package com.azizONeill.product.service.serviceImpl;
 
-import com.productService.product.convert.ProductConverter;
-import com.productService.product.dto.ProductDTO;
-import com.productService.product.model.Product;
-import com.productService.product.model.enums.Category;
-import com.productService.product.repository.ProductRepository;
-import com.productService.product.service.ProductService;
+
+import com.azizONeill.product.convert.ProductConverter;
+import com.azizONeill.product.dto.ProductDTO;
+import com.azizONeill.product.model.Product;
+import com.azizONeill.product.model.enums.Category;
+import com.azizONeill.product.repository.ProductRepository;
+import com.azizONeill.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

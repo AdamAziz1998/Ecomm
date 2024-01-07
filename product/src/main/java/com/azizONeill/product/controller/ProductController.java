@@ -1,8 +1,9 @@
 package com.azizONeill.product.controller;
 
-import com.productService.product.dto.ProductDTO;
-import com.productService.product.model.enums.Category;
-import com.productService.product.service.ProductService;
+
+import com.azizONeill.product.dto.ProductDTO;
+import com.azizONeill.product.model.enums.Category;
+import com.azizONeill.product.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;

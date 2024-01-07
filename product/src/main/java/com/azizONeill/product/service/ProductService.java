@@ -1,7 +1,8 @@
 package com.azizONeill.product.service;
 
-import com.productService.product.dto.ProductDTO;
-import com.productService.product.model.enums.Category;
+
+import com.azizONeill.product.dto.ProductDTO;
+import com.azizONeill.product.model.enums.Category;
 
 import java.util.List;
 import java.util.UUID;
