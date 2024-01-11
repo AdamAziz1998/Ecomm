@@ -1,0 +1,15 @@
+version: "3.8"
+services:
+  postgres_db:
+    image: "postgres:11-alpine"
+    container_name: PostgresCarts
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=carts
+      - POSTGRES_USER=adam
+      - POSTGRES_PASSWORD=password
+    restart: always
+volumes:
+  postgres_db:
+    driver: local
