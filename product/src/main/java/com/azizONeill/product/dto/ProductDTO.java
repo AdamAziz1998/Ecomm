@@ -4,9 +4,7 @@ package com.azizONeill.product.dto;
 import com.azizONeill.product.model.enums.Category;
 import com.azizONeill.product.model.enums.Status;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -21,6 +19,7 @@ public class ProductDTO {
 
     @NotNull(message = "name is mandatory")
     @NotBlank(message = "name is mandatory")
+    @Size(min = 2, message = "name must be at least 2 characters")
     private String name;
 
     @NotNull(message = "status is mandatory")
@@ -29,10 +28,12 @@ public class ProductDTO {
 
     @NotNull(message = "price is mandatory")
     @NotBlank(message = "price is mandatory")
+    @Positive(message = "price must be positive")
     private BigDecimal price;
 
     @NotNull(message = "stockQuantity is mandatory")
     @NotBlank(message = "stockQuantity is mandatory")
+    @PositiveOrZero(message = "stockQuantity must be at least 0")
     private int stockQuantity;
 
     @NotNull(message = "description is mandatory")
