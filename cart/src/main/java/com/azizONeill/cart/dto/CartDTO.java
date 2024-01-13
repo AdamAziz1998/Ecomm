@@ -20,5 +20,5 @@ public class CartDTO {
     private UUID userID;
 
     @NotNull(message = "cartItems must be mandatory")
-    private List<CartItemDTO> cartItems;
+    private List<CreateCartItemDTO> cartItems;
 }
