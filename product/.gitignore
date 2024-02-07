@@ -33,5 +33,5 @@ build/
 .vscode/
 
 ### Mac Os ###
-**/.DS_Store
+!**/.DS_Store
 
