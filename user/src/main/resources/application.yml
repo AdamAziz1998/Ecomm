@@ -21,8 +21,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+    show-sql: false
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
 
   docker:
     compose:
