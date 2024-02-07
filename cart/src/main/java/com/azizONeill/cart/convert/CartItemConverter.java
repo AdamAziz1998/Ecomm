@@ -1,6 +1,6 @@
 package com.azizONeill.cart.convert;
 
-import com.azizONeill.cart.dto.CreateCartItemDTO;
+import com.azizONeill.cart.dto.CartItemDTO;
 import com.azizONeill.cart.model.CartItem;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
@@ -13,11 +13,11 @@ public class CartItemConverter {
         this.modelMapper = modelMapper;
     }
 
-    public CreateCartItemDTO convertCartItemToCartItemDTO (CartItem cartItem) {
-        return modelMapper.map(cartItem, CreateCartItemDTO.class);
+public CartItemDTO convertCartItemToCartItemDTO (CartItem cartItem) {
+        return modelMapper.map(cartItem, CartItemDTO.class);
     }
 
-    public CartItem convertCartItemDTOToCartItem (CreateCartItemDTO createCartItemDTO) {
-        return modelMapper.map(createCartItemDTO, CartItem.class);
+    public CartItem convertCartItemDTOToCartItem (CartItemDTO cartItemDTO) {
+        return modelMapper.map(cartItemDTO, CartItem.class);
     }
 }

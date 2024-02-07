@@ -29,16 +29,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getAllProducts() {
-        log.info("getAllProducts started");
         List<Product> products = productRepository.findAll();
-        log.info("getAllProducts len: " + products.size());
 
         return products.stream().map(productConverter::convertProductToProductDTO).collect(Collectors.toList());
     }
 
     @Override
     public ProductDTO getProductById(UUID productId) {
-        log.info("getProductById started");
         Product product = productRepository.findById(productId).orElse(null);
 
         if (product != null) {
@@ -50,18 +47,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> getProductsByCategory(Category category) {
-        log.info("getProductsByCategory started");
         List<Product> products = productRepository.findByCategory(category);
-        log.info("getProductsByCategory len: " + products.size());
 
         return products.stream().map(productConverter::convertProductToProductDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductDTO> getProductsBySearch(String searchTerm) {
-        log.info("getProductsBySearch started");
         List<Product> products = productRepository.findBySearchTerm(searchTerm);
-        log.info("getProductsBySearch len: " + products.size());
 
         return products.stream().map(productConverter::convertProductToProductDTO).collect(Collectors.toList());
     }
@@ -70,8 +63,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO createProduct(ProductDTO productDTO) {
-
-        log.info("createProduct started");
 
         Product newProduct = new Product();
 
@@ -83,19 +74,13 @@ public class ProductServiceImpl implements ProductService {
         newProduct.setDescription(productDTO.getDescription());
         newProduct.setCategory(productDTO.getCategory());
 
-        log.info("createProduct before save id: " + newProduct.getId());
-
         newProduct = productRepository.save(newProduct);
-
-        log.info("createProduct after save id: " + newProduct.getId());
 
         return productConverter.convertProductToProductDTO(newProduct);
     }
 
     @Override
     public ProductDTO updateProduct(UUID productId, ProductDTO productDTO) {
-
-        log.info("updateProduct started");
 
         Product updatedProduct = productRepository.findById(productId).orElse(null);
 

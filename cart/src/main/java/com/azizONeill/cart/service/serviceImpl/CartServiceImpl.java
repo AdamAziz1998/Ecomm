@@ -1,7 +1,7 @@
 package com.azizONeill.cart.service.serviceImpl;
 
-import com.azizONeill.cart.convert.CartConverter;
-import com.azizONeill.cart.convert.CartItemConverter;
+import com.azizONeill.cart.convert.CreateCartItemConverter;
+import com.azizONeill.cart.dto.CartItemDTO;
 import com.azizONeill.cart.dto.CreateCartItemDTO;
 import com.azizONeill.cart.model.Cart;
 import com.azizONeill.cart.model.CartItem;
@@ -19,25 +19,33 @@ import java.util.UUID;
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
-    private final CartItemConverter cartItemConverter;
-    private final CartConverter cartConverter;
+    private final CreateCartItemConverter createCartItemConverter;
+
 
     @Autowired
-    public CartServiceImpl(CartRepository cartRepository, CartItemConverter cartItemConverter, CartConverter cartConverter) {
+    public CartServiceImpl(CartRepository cartRepository, CreateCartItemConverter createCartItemConverter) {
         this.cartRepository = cartRepository;
-        this.cartConverter = cartConverter;
-        this.cartItemConverter = cartItemConverter;
+        this.createCartItemConverter = createCartItemConverter;
     }
 
     @Override
-    public Cart getCartByUserId(UUID userId);
+    public List<CartItemDTO> getCartItemsByUserId(UUID userId) {
+
+        Cart cart = cartRepository.findByUserId(userId);
+
+        if (cart == null) {
+            return null;
+        }
+
+        List<CartItem> cartItems = cart.getCartItems();
+
+        return this.ca
+    }
 
     @Override
     public CreateCartItemDTO addProductToCart(UUID cartId, CreateCartItemDTO createCartItemDTO) {
 
-        log.info("addProductToCart started");
-
-        Cart cart = cartRepository.findById(cartId).orElse(null);
+        Cart cart = this.cartRepository.findById(cartId).orElse(null);
 
         if (cart == null) {
             return null;
@@ -51,13 +59,12 @@ public class CartServiceImpl implements CartService {
 
         cartItems.add(newCartItem);
 
-        CartItem cartItem = cartRepository.addProductToCart(cartId, cartItems);
+        CartItem cartItem = this.cartRepository.addProductToCart(cartId, cartItems);
 
-        return cartItemConverter.convertCartItemToCartItemDTO(cartItem);
+        return this.createCartItemConverter.convertCartItemToCartItemDTO(cartItem);
     }
 
 
-//    Cart findByUserId(UUID userId);
 //    Cart deleteByUserId(UUID userId);
 //    Cart addProductToCart(
 //    Cart updateCartItemQuantity(

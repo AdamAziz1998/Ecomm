@@ -8,9 +8,6 @@ import com.azizONeill.user.dto.UserDTO;
 import com.azizONeill.user.model.User;
 import com.azizONeill.user.repository.UserRepository;
 import com.azizONeill.user.service.UserService;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,16 +32,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getAllUsers() {
-        log.info("getAllUsers started");
         List<User> users = userRepository.findAll();
-        log.info("getAllUsers len: " + users.size());
 
         return users.stream().map(userConverter::convertUserToUserDTO).collect(Collectors.toList());
     }
 
     @Override
     public UserDTO getUserById(UUID userId) {
-        log.info("getUserById started");
         User user = userRepository.findById(userId).orElse(null);
 
         if (user != null) {
@@ -56,7 +50,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserByEmail(String userEmail) {
-        log.info("getUserByEmail started");
         User user = userRepository.findByEmail(userEmail);
 
         if (user != null) {
@@ -68,8 +61,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(NewUserRequestDTO newUserRequestDTO) {
-
-        log.info("createUser Started");
 
         User newUser = new User();
 
@@ -86,20 +77,13 @@ public class UserServiceImpl implements UserService {
         newUser.setPostCode(newUserRequestDTO.getPostCode());
         newUser.setPassword(newUserRequestDTO.getPassword());
 
-
-        log.info("createUser before save id: " + newUser.getId());
-
         newUser = userRepository.save(newUser);
-
-        log.info("createUser after save id: " + newUser.getId());
 
         return userConverter.convertUserToUserDTO(newUser);
     }
 
     @Override
     public UserDTO updateUser(UUID id, UpdateUserRequestDTO updateUserRequestDTO) {
-
-        log.info("updateUser Started id: " + id);
 
         User updatedUser = userRepository.findById(id).orElse(null);
 
