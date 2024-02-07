@@ -149,17 +149,7 @@ public class UserController {
     }
 
     @DeleteMapping("/users/{id}")
-    @Operation(summary = "Delete User")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully Deleted User",
-                    content = { @Content() }),
-            @ApiResponse(responseCode = "400", description = "Failed to Delete User",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "User Id does not exist",
-                    content = @Content),
-            @ApiResponse(responseCode = "403", description = "Authorization Failed",
-                    content = @Content) })
-    public ResponseEntity<?> deleteUser(@Parameter(description = "User Id to be deleted") @PathVariable UUID id) {
+    public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
         // Delete the id
 
         log.info("deleteUser Started");
