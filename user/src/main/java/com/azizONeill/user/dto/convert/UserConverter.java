@@ -1,4 +1,4 @@
-package com.azizONeill.user.convert;
+package com.azizONeill.user.dto.convert;
 
 import com.azizONeill.user.dto.UserDTO;
 import com.azizONeill.user.model.User;

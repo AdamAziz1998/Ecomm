@@ -1,4 +1,4 @@
-package com.azizONeill.product.convert;
+package com.azizONeill.product.dto.convert;
 
 
 import com.azizONeill.product.dto.ProductDTO;

@@ -1,4 +1,4 @@
-package com.azizONeill.cart.convert;
+package com.azizONeill.cart.dto.convert;
 
 import com.azizONeill.cart.dto.CreateCartItemDTO;
 import com.azizONeill.cart.model.CartItem;

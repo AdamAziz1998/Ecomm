@@ -1,7 +1,7 @@
 package com.azizONeill.product.service.serviceImpl;
 
 
-import com.azizONeill.product.convert.ProductConverter;
+import com.azizONeill.product.dto.convert.ProductConverter;
 import com.azizONeill.product.dto.ProductDTO;
 import com.azizONeill.product.model.Product;
 import com.azizONeill.product.model.enums.Category;

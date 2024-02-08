@@ -1,6 +1,9 @@
 package com.azizONeill.cart.service.serviceImpl;
 
-import com.azizONeill.cart.convert.CreateCartItemConverter;
+import com.azizONeill.cart.dto.CartDTO;
+import com.azizONeill.cart.dto.convert.CartConverter;
+import com.azizONeill.cart.dto.convert.CartItemConverter;
+import com.azizONeill.cart.dto.convert.CreateCartItemConverter;
 import com.azizONeill.cart.dto.CartItemDTO;
 import com.azizONeill.cart.dto.CreateCartItemDTO;
 import com.azizONeill.cart.model.Cart;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -20,12 +24,21 @@ public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
     private final CreateCartItemConverter createCartItemConverter;
+    private final CartItemConverter cartItemConverter;
+    private final CartConverter cartConverter;
 
 
     @Autowired
-    public CartServiceImpl(CartRepository cartRepository, CreateCartItemConverter createCartItemConverter) {
+    public CartServiceImpl(
+            CartRepository cartRepository,
+            CreateCartItemConverter createCartItemConverter,
+            CartItemConverter cartItemConverter,
+            CartConverter cartConverter
+    ) {
         this.cartRepository = cartRepository;
         this.createCartItemConverter = createCartItemConverter;
+        this.cartItemConverter = cartItemConverter;
+        this.cartConverter = cartConverter;
     }
 
     @Override
@@ -39,11 +52,11 @@ public class CartServiceImpl implements CartService {
 
         List<CartItem> cartItems = cart.getCartItems();
 
-        return this.ca
+        return cartItems.stream().map(cartItemConverter::convertCartItemToCartItemDTO).collect(Collectors.toList());
     }
 
     @Override
-    public CreateCartItemDTO addProductToCart(UUID cartId, CreateCartItemDTO createCartItemDTO) {
+    public CreateCartItemDTO addToCart(UUID cartId, CreateCartItemDTO createCartItemDTO) {
 
         Cart cart = this.cartRepository.findById(cartId).orElse(null);
 
@@ -61,12 +74,37 @@ public class CartServiceImpl implements CartService {
 
         CartItem cartItem = this.cartRepository.addProductToCart(cartId, cartItems);
 
-        return this.createCartItemConverter.convertCartItemToCartItemDTO(cartItem);
+        return this.createCartItemConverter.convertCreateCartItemToCreateCartItemDTO(cartItem);
     }
 
+    @Override
+    public CartDTO clearCart(UUID userId) {
 
-//    Cart deleteByUserId(UUID userId);
-//    Cart addProductToCart(
-//    Cart updateCartItemQuantity(
-//    Cart removeProductFromCart(
+        Cart cart = this.cartRepository.findByUserId(userId);
+
+        if (cart == null) {
+            return null;
+        }
+
+        cart.getCartItems().clear();
+        cartRepository.save(cart);
+
+        return this.cartConverter.convertCartToCartDTO(cart);
+    }
+
+    @Override
+    public CartDTO createCart(CartDTO cartDTO) {
+
+    }
+
+    @Override
+    public List<CartItem> updateCartItemQuantity(UUID userId, UUID productId, int quantity) {
+        //dto the input
+    }
+    @Override
+    public List<CartItem> removeCartItem(String userId, UUID productId) {
+        //dto the input
+        //TODO: Potentially have only a DTO as an input and have the converter methods all into 1
+        // (in config maybe)
+    }
 }

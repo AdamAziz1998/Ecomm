@@ -1,7 +1,7 @@
 package com.azizONeill.user.service.serviceImpl;
 
 
-import com.azizONeill.user.convert.UserConverter;
+import com.azizONeill.user.dto.convert.UserConverter;
 import com.azizONeill.user.dto.NewUserRequestDTO;
 import com.azizONeill.user.dto.UpdateUserRequestDTO;
 import com.azizONeill.user.dto.UserDTO;
