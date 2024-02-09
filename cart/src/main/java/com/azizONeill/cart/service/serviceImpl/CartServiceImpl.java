@@ -1,10 +1,7 @@
 package com.azizONeill.cart.service.serviceImpl;
 
-import com.azizONeill.cart.dto.AddToCartDTO;
-import com.azizONeill.cart.dto.CartDTO;
+import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.dto.convert.CartConverter;
-import com.azizONeill.cart.dto.CartItemDTO;
-import com.azizONeill.cart.dto.CreateCartItemDTO;
 import com.azizONeill.cart.model.Cart;
 import com.azizONeill.cart.model.CartItem;
 import com.azizONeill.cart.repository.CartRepository;
@@ -50,7 +47,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartItemDTO addToCart(AddToCartDTO addToCartDTO) {
+    public CartDTO addToCart(AddToCartDTO addToCartDTO) {
 
         Cart cart = this.cartRepository.findByUserId(addToCartDTO.getUserId());
 
@@ -103,11 +100,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartItem> updateCartItemQuantity(UUID userId, UUID productId, int quantity) {
+    public List<CartItem> updateCartItemQuantity(UpdateCartItemDTO updateCartItemDTO) {
         //dto the input
     }
     @Override
-    public List<CartItem> removeCartItem(String userId, UUID productId) {
+    public List<CartItem> removeCartItem(RemoveCartItemDTO removeCartItemDTO) {
         //dto the input
         //TODO: Potentially have only a DTO as an input and have the converter methods all into 1
         // (in config maybe)
