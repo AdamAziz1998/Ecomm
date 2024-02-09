@@ -1,9 +1,8 @@
 package com.azizONeill.cart.service.serviceImpl;
 
+import com.azizONeill.cart.dto.AddToCartDTO;
 import com.azizONeill.cart.dto.CartDTO;
 import com.azizONeill.cart.dto.convert.CartConverter;
-import com.azizONeill.cart.dto.convert.CartItemConverter;
-import com.azizONeill.cart.dto.convert.CreateCartItemConverter;
 import com.azizONeill.cart.dto.CartItemDTO;
 import com.azizONeill.cart.dto.CreateCartItemDTO;
 import com.azizONeill.cart.model.Cart;
@@ -12,6 +11,7 @@ import com.azizONeill.cart.repository.CartRepository;
 import com.azizONeill.cart.service.CartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,21 +23,15 @@ import java.util.stream.Collectors;
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
-    private final CreateCartItemConverter createCartItemConverter;
-    private final CartItemConverter cartItemConverter;
     private final CartConverter cartConverter;
 
 
     @Autowired
     public CartServiceImpl(
             CartRepository cartRepository,
-            CreateCartItemConverter createCartItemConverter,
-            CartItemConverter cartItemConverter,
             CartConverter cartConverter
     ) {
         this.cartRepository = cartRepository;
-        this.createCartItemConverter = createCartItemConverter;
-        this.cartItemConverter = cartItemConverter;
         this.cartConverter = cartConverter;
     }
 
@@ -52,29 +46,40 @@ public class CartServiceImpl implements CartService {
 
         List<CartItem> cartItems = cart.getCartItems();
 
-        return cartItems.stream().map(cartItemConverter::convertCartItemToCartItemDTO).collect(Collectors.toList());
+        return cartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).collect(Collectors.toList());
     }
 
     @Override
-    public CreateCartItemDTO addToCart(UUID cartId, CreateCartItemDTO createCartItemDTO) {
+    public CartItemDTO addToCart(AddToCartDTO addToCartDTO) {
 
-        Cart cart = this.cartRepository.findById(cartId).orElse(null);
+        Cart cart = this.cartRepository.findByUserId(addToCartDTO.getUserId());
 
         if (cart == null) {
             return null;
         }
 
+        //if cart already exists
         List<CartItem> cartItems = cart.getCartItems();
+        CartItem filteredCartItem = cartItems.stream()
+                .filter(cartItem -> cartItem.getProductId().equals(addToCartDTO.getProductId()))
+                .findFirst()
+                .orElse(null);
 
-        CartItem newCartItem = new CartItem();
-        newCartItem.setProductId(createCartItemDTO.getProductId());
-        newCartItem.setQuantity(createCartItemDTO.getQuantity());
+        if (filteredCartItem == null) {
+            CartItem newCartItem = new CartItem();
+            newCartItem.setProductId(addToCartDTO.getProductId());
+            newCartItem.setQuantity(addToCartDTO.getQuantity());
+            cartItems.add(newCartItem);
 
-        cartItems.add(newCartItem);
+            CartItem cartItem = this.cartRepository.addProductToCart(cart.getId(), cartItems);
+        } else {
+            CartItem cartItem = this.cartRepository.updateCartItemQuantity(
+                    filteredCartItem.getId(),
+                    filteredCartItem.getQuantity() + 1);
+        }
 
-        CartItem cartItem = this.cartRepository.addProductToCart(cartId, cartItems);
 
-        return this.createCartItemConverter.convertCreateCartItemToCreateCartItemDTO(cartItem);
+        return this.cartConverter.convertCartItemToCartItemDTO(cartItem);
     }
 
     @Override

@@ -13,14 +13,15 @@ import java.util.UUID;
 public class CartDTO {
     @Valid
 
-    @NotNull(message = "cartId is mandatory")
+    @NotNull(message = "cartId cannot be null")
+    @NotBlank(message = "cartId cannot be empty")
     private UUID id;
 
-    @NotNull(message = "userId is mandatory")
-    @NotBlank(message = "userId is mandatory")
+    @NotNull(message = "userId cannot be null")
+    @NotBlank(message = "userId cannot be empty")
     private UUID userId;
 
-    @NotNull(message = "cartItems is mandatory")
-    @NotBlank(message = "cartItems is mandatory")
+    @NotNull(message = "cartItems cannot be null")
+    @NotBlank(message = "cartItems cannot be empty")
     private List<CartItem> cartItems;
 }

@@ -17,35 +17,35 @@ public class ProductDTO {
 
     @Valid
 
-    @NotNull(message = "name is mandatory")
-    @NotBlank(message = "name is mandatory")
+    @NotNull(message = "name cannot be null")
+    @NotBlank(message = "name cannot be empty")
     @Size(min = 2, message = "name must be at least 2 characters")
     private String name;
 
-    @NotNull(message = "status is mandatory")
-    @NotBlank(message = "status is mandatory")
+    @NotNull(message = "status cannot be null")
+    @NotBlank(message = "status cannot be empty")
     private Status status;
 
-    @NotNull(message = "price is mandatory")
-    @NotBlank(message = "price is mandatory")
+    @NotNull(message = "price cannot be null")
+    @NotBlank(message = "price cannot be empty")
     @Positive(message = "price must be positive")
     private BigDecimal price;
 
-    @NotNull(message = "stockQuantity is mandatory")
-    @NotBlank(message = "stockQuantity is mandatory")
+    @NotNull(message = "stockQuantity cannot be null")
+    @NotBlank(message = "stockQuantity cannot be empty")
     @PositiveOrZero(message = "stockQuantity must be at least 0")
     private int stockQuantity;
 
-    @NotNull(message = "description is mandatory")
-    @NotBlank(message = "description is mandatory")
+    @NotNull(message = "description cannot be null")
+    @NotBlank(message = "description cannot be empty")
     @Size(min = 5, message = "description must be at least 5 characters")
     private String description;
 
-    @NotNull(message = "imageUrl is mandatory")
-    @NotBlank(message = "imageUrl is mandatory")
+    @NotNull(message = "imageUrl cannot be null")
+    @NotBlank(message = "imageUrl cannot be empty")
     private String imageUrl;
 
-    @NotNull(message = "category is mandatory")
-    @NotBlank(message = "category is mandatory")
+    @NotNull(message = "category cannot be null")
+    @NotBlank(message = "category cannot be empty")
     private Category category;
 }

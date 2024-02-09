@@ -16,52 +16,52 @@ public class UpdateUserRequestDTO {
 
     @Valid
 
-    @NotNull(message = "title is mandatory")
-    @NotBlank(message = "title is mandatory")
+    @NotNull(message = "title cannot be null")
+    @NotBlank(message = "title cannot be empty")
     private Title title;
 
-    @NotNull(message = "firstName is mandatory")
-    @NotBlank(message = "FirstName is mandatory")
+    @NotNull(message = "firstName cannot be null")
+    @NotBlank(message = "FirstName cannot be empty")
     @Size(min = 2, max = 200, message = "firstName must be between 2 and 200 characters")
     private String firstName;
 
-    @NotNull(message = "LastName is mandatory")
-    @NotBlank(message = "LastName is mandatory")
+    @NotNull(message = "LastName cannot be null")
+    @NotBlank(message = "LastName cannot be empty")
     @Size(min = 2, max = 200, message = "lastName must be between 2 and 200 characters")
     private String lastName;
 
-    @NotNull(message = "email is mandatory")
-    @NotBlank(message = "email is mandatory")
+    @NotNull(message = "email cannot be null")
+    @NotBlank(message = "email cannot be empty")
     @EmailAddress(message = "Please provide a valid email address")
     private String email;
 
-    @NotNull(message = "phoneNumber is mandatory")
-    @NotBlank(message = "phoneNumber is mandatory")
+    @NotNull(message = "phoneNumber cannot be null")
+    @NotBlank(message = "phoneNumber cannot be empty")
     @UKPhoneNumber(message = "Please provide a valid UK phone number")
     private String phoneNumber;
 
-    @NotNull(message = "houseNameNumber is mandatory")
-    @NotBlank(message = "houseNameNumber is mandatory")
+    @NotNull(message = "houseNameNumber cannot be null")
+    @NotBlank(message = "houseNameNumber cannot be empty")
     private String houseNameNumber;
 
-    @NotNull(message = "addressLine1 is mandatory")
-    @NotBlank(message = "addressLine1 is mandatory")
+    @NotNull(message = "addressLine1 cannot be null")
+    @NotBlank(message = "addressLine1 cannot be empty")
     private String addressLine1;
 
-    @NotNull(message = "addressLine2 is mandatory")
-    @NotBlank(message = "addressLine2 is mandatory")
+    @NotNull(message = "addressLine2 cannot be null")
+    @NotBlank(message = "addressLine2 cannot be empty")
     private String addressLine2;
 
-    @NotNull(message = "townCity is mandatory")
-    @NotBlank(message = "townCity is mandatory")
+    @NotNull(message = "townCity cannot be null")
+    @NotBlank(message = "townCity cannot be empty")
     private String townCity;
 
-    @NotNull(message = "county is mandatory")
-    @NotBlank(message = "county is mandatory")
+    @NotNull(message = "county cannot be null")
+    @NotBlank(message = "county cannot be empty")
     private String county;
 
-    @NotNull(message = "postCode is mandatory")
-    @NotBlank(message = "postCode is mandatory")
+    @NotNull(message = "postCode cannot be null")
+    @NotBlank(message = "postCode cannot be empty")
     @UKPostCode(message = "Please provide a valid UK postcode")
     private String postCode;
 

@@ -22,7 +22,7 @@ public interface CartRepository extends JpaRepository<Cart, UUID> {
 
     @Modifying
     @Query("UPDATE CartItem ci SET ci.quantity = :quantity WHERE ci.id = :cartItemId")
-    Cart updateCartItemQuantity(@Param("cartItemId") UUID cartItemId, @Param("quantity") int quantity);
+    CartItem updateCartItemQuantity(@Param("cartItemId") UUID cartItemId, @Param("quantity") int quantity);
 
     @Modifying
     @Query("DELETE FROM CartItem ci WHERE ci.id = :cartItemId")

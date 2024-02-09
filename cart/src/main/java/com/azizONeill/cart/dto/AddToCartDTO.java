@@ -9,11 +9,16 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class CreateCartItemDTO {
+public class AddToCartDTO {
     @Valid
 
+    @NotNull(message = "userId cannot be null")
+    @NotBlank(message = "userId cannot be empty")
+    private UUID userId;
+
+
     @NotNull(message = "productId cannot be null")
-    @NotBlank(message = "productId cannot be empty")
+    @NotBlank(message = "productId cannot be blank")
     private UUID productId;
 
     @NotNull(message = "quantity cannot be null")
