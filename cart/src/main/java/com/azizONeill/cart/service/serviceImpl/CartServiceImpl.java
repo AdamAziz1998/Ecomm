@@ -8,10 +8,11 @@ import com.azizONeill.cart.repository.CartRepository;
 import com.azizONeill.cart.service.CartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -43,19 +44,34 @@ public class CartServiceImpl implements CartService {
 
         List<CartItem> cartItems = cart.getCartItems();
 
-        return cartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).collect(Collectors.toList());
+        return cartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).toList();
     }
 
     @Override
-    public CartDTO addToCart(AddToCartDTO addToCartDTO) {
+    public List<CartItemDTO> addToCart(AddToCartDTO addToCartDTO) {
 
         Cart cart = this.cartRepository.findByUserId(addToCartDTO.getUserId());
 
+        CartItem newCartItem = new CartItem();
+        newCartItem.setProductId(addToCartDTO.getProductId());
+        newCartItem.setQuantity(1);
+
+        //If cart does not exist
         if (cart == null) {
-            return null;
+            cart = new Cart();
+
+            List<CartItem> cartItems = new ArrayList<>();
+            cartItems.add(newCartItem);
+
+            cart.setUserId(addToCartDTO.getUserId());
+            cart.setCartItems(cartItems);
+
+            cartRepository.save(cart);
+
+            return cartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).toList();
         }
 
-        //if cart already exists
+        //If the cart does exist
         List<CartItem> cartItems = cart.getCartItems();
         CartItem filteredCartItem = cartItems.stream()
                 .filter(cartItem -> cartItem.getProductId().equals(addToCartDTO.getProductId()))
@@ -63,20 +79,18 @@ public class CartServiceImpl implements CartService {
                 .orElse(null);
 
         if (filteredCartItem == null) {
-            CartItem newCartItem = new CartItem();
-            newCartItem.setProductId(addToCartDTO.getProductId());
-            newCartItem.setQuantity(addToCartDTO.getQuantity());
+            //If the cart does exist but the cartItem does not exist
             cartItems.add(newCartItem);
 
-            CartItem cartItem = this.cartRepository.addProductToCart(cart.getId(), cartItems);
+            this.cartRepository.addProductToCart(cart.getId(), cartItems);
         } else {
-            CartItem cartItem = this.cartRepository.updateCartItemQuantity(
+            //The cart exists and the cartItem exists also
+            this.cartRepository.updateCartItemQuantity(
                     filteredCartItem.getId(),
                     filteredCartItem.getQuantity() + 1);
         }
 
-
-        return this.cartConverter.convertCartItemToCartItemDTO(cartItem);
+        return cartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).toList();
     }
 
     @Override
@@ -95,18 +109,54 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO createCart(CartDTO cartDTO) {
+    public List<CartItemDTO> updateCartItemQuantity(UpdateCartItemDTO updateCartItemDTO) {
+        Cart cart = cartRepository.findByUserId(updateCartItemDTO.getUserId());
 
-    }
+        if (cart == null) {
+            return null;
+        }
 
-    @Override
-    public List<CartItem> updateCartItemQuantity(UpdateCartItemDTO updateCartItemDTO) {
-        //dto the input
+        List<CartItem> cartItems = cart.getCartItems();
+        CartItem filteredCartItem = cartItems.stream()
+                .filter(cartItem -> cartItem.getProductId().equals(updateCartItemDTO.getProductId()))
+                .findFirst()
+                .orElse(null);
+
+        if (filteredCartItem == null) {
+            return null;
+        }
+
+        cartRepository.updateCartItemQuantity(filteredCartItem.getId(), updateCartItemDTO.getQuantity());
+
+        List<CartItem> filteredCartItems = cartItems.stream()
+                .map(cartItem -> cartItem.getProductId().equals(updateCartItemDTO.getProductId()) ? null : cartItem)
+                .filter(Objects::nonNull)
+                .toList();
+        
+
+        return filteredCartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).toList();
     }
     @Override
-    public List<CartItem> removeCartItem(RemoveCartItemDTO removeCartItemDTO) {
-        //dto the input
-        //TODO: Potentially have only a DTO as an input and have the converter methods all into 1
-        // (in config maybe)
+    public List<CartItemDTO> removeCartItem(RemoveCartItemDTO removeCartItemDTO) {
+        Cart cart = cartRepository.findByUserId(removeCartItemDTO.getUserId());
+        List<CartItem> cartItems = cart.getCartItems();
+
+        CartItem filteredCartItem = cartItems.stream()
+                .filter(cartItem -> cartItem.getProductId().equals(removeCartItemDTO.getProductId()))
+                .findFirst()
+                .orElse(null);
+
+        if (filteredCartItem == null) {
+            return null;
+        }
+
+        List<CartItem> filteredCartItems = cartItems.stream()
+                .map(cartItem -> cartItem.getProductId().equals(removeCartItemDTO.getProductId()) ? null : cartItem)
+                .filter(Objects::nonNull) // Remove null values
+                .toList();
+
+        cartRepository.removeProductFromCart(filteredCartItem.getId());
+
+        return filteredCartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).toList();
     }
 }

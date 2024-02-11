@@ -14,15 +14,15 @@ public interface CartRepository extends JpaRepository<Cart, UUID> {
 
     Cart findByUserId(UUID userId);
 
-    Cart deleteByUserId(UUID userId);
+    void deleteByUserId(UUID userId);
 
     @Modifying
     @Query("UPDATE Cart c SET c.cartItems = :cartItems WHERE c.id = :cartId")
-    CartItem addProductToCart(@Param("cartId") UUID cartId, @Param("cartItems") List<CartItem> cartItems);
+    void addProductToCart(@Param("cartId") UUID cartId, @Param("cartItems") List<CartItem> cartItems);
 
     @Modifying
     @Query("UPDATE CartItem ci SET ci.quantity = :quantity WHERE ci.id = :cartItemId")
-    CartItem updateCartItemQuantity(@Param("cartItemId") UUID cartItemId, @Param("quantity") int quantity);
+    void updateCartItemQuantity(@Param("cartItemId") UUID cartItemId, @Param("quantity") int quantity);
 
     @Modifying
     @Query("DELETE FROM CartItem ci WHERE ci.id = :cartItemId")
