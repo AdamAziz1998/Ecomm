@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -158,5 +157,19 @@ public class CartServiceImpl implements CartService {
         cartRepository.removeProductFromCart(filteredCartItem.getId());
 
         return filteredCartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).toList();
+    }
+
+    @Override
+    public void deleteCart(UUID userId) {
+        Cart cart = cartRepository.findByUserId(userId);
+
+        //List<CartItem> cartItems = cart.getCartItems();
+
+        //remove the cartItems related to that cart
+        //cartItems.forEach(cartItem -> cartRepository.removeProductFromCart(cartItem.getId()));
+
+        //remove the cart itself
+        cartRepository.deleteByUserId(cart.getUserId());
+
     }
 }
