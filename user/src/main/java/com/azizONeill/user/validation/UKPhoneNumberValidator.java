@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class UKPhoneNumberValidator implements ConstraintValidator<UKPhoneNumber, String> {
 
     private static final String UK_PHONE_NUMBER_PATTERN =
-            "^\\+44\\s?\\(?0\\)?\\s?[1-9]\\d{1,4}\\s?\\d{6,8}$";
+            "^(((\\+44\\s?\\d{4}|\\(?0\\d{4}\\)?)\\s?\\d{3}\\s?\\d{3})|((\\+44\\s?\\d{3}|\\(?0\\d{3}\\)?)\\s?\\d{3}\\s?\\d{4})|((\\+44\\s?\\d{2}|\\(?0\\d{2}\\)?)\\s?\\d{4}\\s?\\d{4}))(\\s?#(\\d{4}|\\d{3}))?$";
 
     @Override
     public void initialize(UKPhoneNumber constraintAnnotation) {

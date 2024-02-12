@@ -71,11 +71,11 @@ public class User {
     @Column(name = "password")
     private String password;
 
-    @NotNull
-    @Column(name = "lastLogin")
-    private LocalDateTime lastLogin;
+    //@NotNull
+    //@Column(name = "lastLogin")
+    //private LocalDateTime lastLogin;
 
-    @NotNull
-    @Column(name = "accountCreationTime", updatable = false)
-    private LocalDateTime accountCreationTime;
+    //@NotNull
+    //@Column(name = "accountCreationTime", updatable = false)
+    //private LocalDateTime accountCreationTime;
 }

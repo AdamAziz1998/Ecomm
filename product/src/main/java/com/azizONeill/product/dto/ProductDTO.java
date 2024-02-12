@@ -23,16 +23,13 @@ public class ProductDTO {
     private String name;
 
     @NotNull(message = "status cannot be null")
-    @NotBlank(message = "status cannot be empty")
     private Status status;
 
     @NotNull(message = "price cannot be null")
-    @NotBlank(message = "price cannot be empty")
     @Positive(message = "price must be positive")
     private BigDecimal price;
 
     @NotNull(message = "stockQuantity cannot be null")
-    @NotBlank(message = "stockQuantity cannot be empty")
     @PositiveOrZero(message = "stockQuantity must be at least 0")
     private int stockQuantity;
 
@@ -46,6 +43,5 @@ public class ProductDTO {
     private String imageUrl;
 
     @NotNull(message = "category cannot be null")
-    @NotBlank(message = "category cannot be empty")
     private Category category;
 }

@@ -18,7 +18,6 @@ public class NewUserRequestDTO {
     @Valid
 
     @NotNull(message = "title cannot be null")
-    @NotBlank(message = "title cannot be empty")
     private Title title;
 
     @NotNull(message = "firstName cannot be null")
