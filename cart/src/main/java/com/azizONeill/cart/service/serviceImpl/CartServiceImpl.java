@@ -160,7 +160,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void deleteCart(UUID userId) {
+    public void deleteCart(UUID cartId) {
         Cart cart = cartRepository.findByUserId(userId);
 
         //List<CartItem> cartItems = cart.getCartItems();

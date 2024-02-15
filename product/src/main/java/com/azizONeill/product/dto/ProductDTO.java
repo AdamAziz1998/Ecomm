@@ -12,9 +12,6 @@ import java.util.UUID;
 
 @Data
 public class ProductDTO {
-
-    private UUID id;
-
     @Valid
 
     @NotNull(message = "name cannot be null")
