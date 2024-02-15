@@ -47,12 +47,12 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartItemDTO> addToCart(AddToCartDTO addToCartDTO) {
+    public List<CartItemDTO> addToCart(CreateCartItemDTO createCartItemDTO) {
 
-        Cart cart = this.cartRepository.findByUserId(addToCartDTO.getUserId());
+        Cart cart = this.cartRepository.findByUserId(createCartItemDTO.getUserId());
 
         CartItem newCartItem = new CartItem();
-        newCartItem.setProductId(addToCartDTO.getProductId());
+        newCartItem.setProductId(createCartItemDTO.getProductId());
         newCartItem.setQuantity(1);
 
         //If cart does not exist
@@ -62,7 +62,7 @@ public class CartServiceImpl implements CartService {
             List<CartItem> cartItems = new ArrayList<>();
             cartItems.add(newCartItem);
 
-            cart.setUserId(addToCartDTO.getUserId());
+            cart.setUserId(createCartItemDTO.getUserId());
             cart.setCartItems(cartItems);
 
             cartRepository.save(cart);
@@ -73,7 +73,7 @@ public class CartServiceImpl implements CartService {
         //If the cart does exist
         List<CartItem> cartItems = cart.getCartItems();
         CartItem filteredCartItem = cartItems.stream()
-                .filter(cartItem -> cartItem.getProductId().equals(addToCartDTO.getProductId()))
+                .filter(cartItem -> cartItem.getProductId().equals(createCartItemDTO.getProductId()))
                 .findFirst()
                 .orElse(null);
 

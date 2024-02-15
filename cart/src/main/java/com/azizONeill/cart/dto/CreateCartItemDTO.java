@@ -9,7 +9,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class AddToCartDTO {
+public class CreateCartItemDTO {
     @Valid
 
     @NotNull(message = "userId cannot be null")
