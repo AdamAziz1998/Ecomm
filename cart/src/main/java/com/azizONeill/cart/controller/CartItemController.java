@@ -1,7 +1,8 @@
 package com.azizONeill.cart.controller;
 
-import com.azizONeill.cart.dto.*;
-import com.azizONeill.cart.service.CartService;
+import com.azizONeill.cart.dto.CartItemDTO;
+import com.azizONeill.cart.dto.CreateCartItemDTO;
+import com.azizONeill.cart.service.CartItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,8 @@ public class CartItemController {
     private CartItemService cartItemService;
 
     @PostMapping("/cartItem")
-    public ResponseEntity<List<CartItemDTO>> createCartItem(@RequestBody CreateCartItemDTO createCartItemDTO) {
-        List<CartItemDTO> cartItemDTOs = this.cartItemService.createCartItem(createCartItemDTO);
+    public ResponseEntity<CartItemDTO> createCartItem(@RequestBody CreateCartItemDTO createCartItemDTO) {
+        List<CartItemDTO> cartItemDTOs = this.cartItemService.
 
         if (cartItemDTOs != null) {
             return ResponseEntity.status(HttpStatus.OK).body(cartItemDTOs);
@@ -31,7 +32,7 @@ public class CartItemController {
     }
 
     @GetMapping("/cartItem/{cartId}")
-    public ResponseEntity<List<CartItemDTO>> getCartItemByCartItemId(@PathVariable UUID cartItemId) {
+    public ResponseEntity<CartItemDTO> getCartItemByCartItemId(@PathVariable UUID cartItemId) {
         List<CartItemDTO> cartItemDTOS = this.cartItemService.getCartItemsByCartItemsId(cartItemId);
 
         if (cartItemDTOS != null) {
@@ -53,7 +54,7 @@ public class CartItemController {
     }
 
     @PutMapping("/cartItem")
-    public ResponseEntity<List<CartItemDTO>> updateCartItemQuantity(@RequestParam(value = "quantity") int quantity) {
+    public ResponseEntity<CartItemDTO> updateCartItemQuantity(@RequestParam(value = "quantity") int quantity) {
         List<CartItemDTO> cartItemDTOS = this.cartService.updateCartItemQuantity(updateCartItemDTO);
 
         if (cartItemDTOS != null) {
@@ -64,7 +65,7 @@ public class CartItemController {
     }
 
     @DeleteMapping("/cartItem/{cartId}")
-    public ResponseEntity<List<CartItemDTO>> deleteCartItem(@PathVariable UUID cartId) {
+    public ResponseEntity<CartItemDTO> deleteCartItem(@PathVariable UUID cartId) {
         List<CartItemDTO> cartItemDTOS = this.cartService.removeCartItem(removeCartItemDTO);
 
         if (cartItemDTOS != null) {

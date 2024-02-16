@@ -1,7 +1,7 @@
 package com.azizONeill.cart.service.serviceImpl;
 
 import com.azizONeill.cart.dto.*;
-import com.azizONeill.cart.dto.convert.CartConverter;
+import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
 import com.azizONeill.cart.model.CartItem;
 import com.azizONeill.cart.repository.CartRepository;
@@ -20,16 +20,16 @@ import java.util.UUID;
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
-    private final CartConverter cartConverter;
+    private final DTOConverter DTOConverter;
 
 
     @Autowired
     public CartServiceImpl(
             CartRepository cartRepository,
-            CartConverter cartConverter
+            DTOConverter DTOConverter
     ) {
         this.cartRepository = cartRepository;
-        this.cartConverter = cartConverter;
+        this.DTOConverter = DTOConverter;
     }
 
     @Override
@@ -43,7 +43,7 @@ public class CartServiceImpl implements CartService {
 
         List<CartItem> cartItems = cart.getCartItems();
 
-        return cartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).toList();
+        return cartItems.stream().map(DTOConverter::convertCartItemToCartItemDTO).toList();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class CartServiceImpl implements CartService {
 
             cartRepository.save(cart);
 
-            return cartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).toList();
+            return cartItems.stream().map(DTOConverter::convertCartItemToCartItemDTO).toList();
         }
 
         //If the cart does exist
@@ -89,7 +89,7 @@ public class CartServiceImpl implements CartService {
                     filteredCartItem.getQuantity() + 1);
         }
 
-        return cartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).toList();
+        return cartItems.stream().map(DTOConverter::convertCartItemToCartItemDTO).toList();
     }
 
     @Override
@@ -104,7 +104,7 @@ public class CartServiceImpl implements CartService {
         cart.getCartItems().clear();
         cartRepository.save(cart);
 
-        return this.cartConverter.convertCartToCartDTO(cart);
+        return this.DTOConverter.convertCartToCartDTO(cart);
     }
 
     @Override
@@ -133,7 +133,7 @@ public class CartServiceImpl implements CartService {
                 .toList();
         
 
-        return filteredCartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).toList();
+        return filteredCartItems.stream().map(DTOConverter::convertCartItemToCartItemDTO).toList();
     }
     @Override
     public List<CartItemDTO> removeCartItem(RemoveCartItemDTO removeCartItemDTO) {
@@ -156,7 +156,7 @@ public class CartServiceImpl implements CartService {
 
         cartRepository.removeProductFromCart(filteredCartItem.getId());
 
-        return filteredCartItems.stream().map(cartConverter::convertCartItemToCartItemDTO).toList();
+        return filteredCartItems.stream().map(DTOConverter::convertCartItemToCartItemDTO).toList();
     }
 
     @Override

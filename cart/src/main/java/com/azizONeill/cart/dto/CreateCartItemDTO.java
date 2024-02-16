@@ -12,9 +12,9 @@ import java.util.UUID;
 public class CreateCartItemDTO {
     @Valid
 
-    @NotNull(message = "userId cannot be null")
-    @NotBlank(message = "userId cannot be empty")
-    private UUID userId;
+    @NotNull(message = "cartId cannot be null")
+    @NotBlank(message = "cartId cannot be empty")
+    private UUID cartId;
 
 
     @NotNull(message = "productId cannot be null")

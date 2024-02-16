@@ -8,10 +8,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CartConverter {
+public class DTOConverter {
     private final ModelMapper modelMapper;
 
-    public CartConverter(ModelMapper modelMapper) {
+    public DTOConverter(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
