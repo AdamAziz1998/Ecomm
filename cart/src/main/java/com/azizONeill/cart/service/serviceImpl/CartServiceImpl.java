@@ -33,9 +33,26 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartItemDTO> getCartItemsByUserId(UUID userId) {
+    public CartDTO createCart(CreateCartDTO createCartDTO) {
 
-        Cart cart = cartRepository.findByUserId(userId);
+        Cart cart = new Cart();
+
+        List<CartItemDTO> cartItemDTOS = createCartDTO.getCartItems();
+        List<CartItem> cartItems = cartItemDTOS.stream()
+                .map(this.DTOConverter::convertCartItemDTOToCartItem).toList();
+
+        cart.setCartItems(cartItems);
+        cart.setUserId(createCartDTO.getUserId());
+
+        Cart newcart = this.cartRepository.save(cart);
+
+        return this.DTOConverter.convertCartToCartDTO(newcart);
+    }
+
+    @Override
+    public CartDTO getCartByCartId(UUID cartId) {
+
+        Cart cart = cartRepository.findById(cartId).orElse(null);
 
         if (cart == null) {
             return null;
@@ -131,10 +148,10 @@ public class CartServiceImpl implements CartService {
                 .map(cartItem -> cartItem.getProductId().equals(updateCartItemDTO.getProductId()) ? null : cartItem)
                 .filter(Objects::nonNull)
                 .toList();
-        
 
         return filteredCartItems.stream().map(DTOConverter::convertCartItemToCartItemDTO).toList();
     }
+
     @Override
     public List<CartItemDTO> removeCartItem(RemoveCartItemDTO removeCartItemDTO) {
         Cart cart = cartRepository.findByUserId(removeCartItemDTO.getUserId());

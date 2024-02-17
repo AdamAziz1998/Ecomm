@@ -23,6 +23,10 @@ public class DTOConverter {
         return modelMapper.map(cartItem, CartItemDTO.class);
     }
 
+    public CartItem convertCartItemDTOToCartItem(CartItemDTO cartItemDTO) {
+        return modelMapper.map(cartItemDTO, CartItem.class);
+    }
+
 
 
 }

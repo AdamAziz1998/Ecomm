@@ -10,12 +10,8 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-public class CartDTO {
+public class CreateCartDTO {
     @Valid
-
-    @NotNull(message = "cartId cannot be null")
-    @NotBlank(message = "cartId cannot be empty")
-    private UUID id;
 
     @NotNull(message = "userId cannot be null")
     @NotBlank(message = "userId cannot be empty")

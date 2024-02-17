@@ -29,7 +29,13 @@ public class CartController {
 
     @GetMapping("/cart/{cartId}")
     public ResponseEntity<CartDTO> getCartByCartId(@PathVariable UUID cartId) {
+        CartDTO cartDTO = cartService.getCartByCartId(cartId);
 
+        if (cartDTO != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(cartDTO);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @GetMapping("/cart/{cartId}")
@@ -65,14 +71,4 @@ public class CartController {
 
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-
-
 }
-// Change of plans, have the basic calls for each model, potentially create additional
-// java classes to separate cart and cart item methods.
-//
-// Once all this is in place have a spacial method called getProductsInCart which uses the client
-// getProductById, this return a list of productDTOs, this can also be defined in this project
-//
-// The reason I am going by this approach is so that each microservice is more loosely coupled.

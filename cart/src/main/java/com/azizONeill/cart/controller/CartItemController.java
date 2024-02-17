@@ -2,6 +2,7 @@ package com.azizONeill.cart.controller;
 
 import com.azizONeill.cart.dto.CartItemDTO;
 import com.azizONeill.cart.dto.CreateCartItemDTO;
+import com.azizONeill.cart.dto.UpdateCartItemDTO;
 import com.azizONeill.cart.service.CartItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,10 @@ public class CartItemController {
 
     @PostMapping("/cartItem")
     public ResponseEntity<CartItemDTO> createCartItem(@RequestBody CreateCartItemDTO createCartItemDTO) {
-        List<CartItemDTO> cartItemDTOs = this.cartItemService.
+        CartItemDTO cartItemDTO = cartItemService.createCartItem(createCartItemDTO);
 
-        if (cartItemDTOs != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(cartItemDTOs);
+        if (cartItemDTO != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(cartItemDTO);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -33,10 +34,10 @@ public class CartItemController {
 
     @GetMapping("/cartItem/{cartId}")
     public ResponseEntity<CartItemDTO> getCartItemByCartItemId(@PathVariable UUID cartItemId) {
-        List<CartItemDTO> cartItemDTOS = this.cartItemService.getCartItemsByCartItemsId(cartItemId);
+        CartItemDTO cartItemDTO = this.cartItemService.getCartItemByCartItemId(cartItemId);
 
-        if (cartItemDTOS != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(cartItemDTOS);
+        if (cartItemDTO != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(cartItemDTO);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
@@ -44,7 +45,7 @@ public class CartItemController {
 
     @GetMapping("/cartItem")
     public ResponseEntity<List<CartItemDTO>> getCartItemsByCartId(@RequestParam(value = "cartId") UUID cartId) {
-        List<CartItemDTO> cartItemDTOS = this.cartService.getCartItemsByUserId(userId);
+        List<CartItemDTO> cartItemDTOS = this.cartItemService.getCartItemsByCartId(cartId);
 
         if (cartItemDTOS != null) {
             return ResponseEntity.status(HttpStatus.OK).body(cartItemDTOS);
@@ -54,24 +55,20 @@ public class CartItemController {
     }
 
     @PutMapping("/cartItem")
-    public ResponseEntity<CartItemDTO> updateCartItemQuantity(@RequestParam(value = "quantity") int quantity) {
-        List<CartItemDTO> cartItemDTOS = this.cartService.updateCartItemQuantity(updateCartItemDTO);
+    public ResponseEntity<CartItemDTO> updateCartItemQuantity(@RequestBody UpdateCartItemDTO updateCartItemDTO) {
+        CartItemDTO cartItemDTO = this.cartItemService.updateCartItemQuantity(updateCartItemDTO);
 
-        if (cartItemDTOS != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(cartItemDTOS);
+        if (cartItemDTO != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(cartItemDTO);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
     @DeleteMapping("/cartItem/{cartId}")
-    public ResponseEntity<CartItemDTO> deleteCartItem(@PathVariable UUID cartId) {
-        List<CartItemDTO> cartItemDTOS = this.cartService.removeCartItem(removeCartItemDTO);
+    public ResponseEntity<?> deleteCartItem(@PathVariable UUID cartId) {
+        this.cartItemService.deleteCartItem(cartId);
 
-        if (cartItemDTOS != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(cartItemDTOS);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 }

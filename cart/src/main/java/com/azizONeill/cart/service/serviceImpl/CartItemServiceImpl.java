@@ -37,6 +37,7 @@ public class CartItemServiceImpl implements CartItemService {
         this.DTOConverter = DTOConverter;
     }
 
+    @Override
     public CartItemDTO createCartItem(CreateCartItemDTO createCartItemDTO) {
 
         Cart cart = this.cartRepository.findById(createCartItemDTO.getCartId()).orElse(null);
@@ -56,6 +57,7 @@ public class CartItemServiceImpl implements CartItemService {
         return this.DTOConverter.convertCartItemToCartItemDTO(cartItem);
     }
 
+    @Override
     public CartItemDTO getCartItemByCartItemId(UUID cartItemId) {
         CartItem cartItem = this.cartItemRepository.findById(cartItemId).orElse(null);
 
@@ -66,6 +68,7 @@ public class CartItemServiceImpl implements CartItemService {
         return this.DTOConverter.convertCartItemToCartItemDTO(cartItem);
     }
 
+    @Override
     public List<CartItemDTO> getCartItemsByCartId(UUID cartId) {
         Cart cart = this.cartRepository.findById(cartId).orElse(null);
 
@@ -78,6 +81,7 @@ public class CartItemServiceImpl implements CartItemService {
         return cartItems.stream().map(this.DTOConverter::convertCartItemToCartItemDTO).collect(Collectors.toList());
     }
 
+    @Override
     public CartItemDTO updateCartItemQuantity(UpdateCartItemDTO updateCartItemDTO) {
         CartItem cartItem = this.cartItemRepository.findById(updateCartItemDTO.getCartItemId()).orElse(null);
 
@@ -92,8 +96,11 @@ public class CartItemServiceImpl implements CartItemService {
         return this.DTOConverter.convertCartItemToCartItemDTO(updatedCartItem);
     }
 
-    public CartItemDTO deleteCartItem(UUID cartId) {
+    @Override
+    public void deleteCartItem(UUID cartId) {
+        CartItem cartItem = cartItemRepository.findById(cartId).orElse(null);
 
+        cartItemRepository.delete(cartItem);
     }
 
 }
