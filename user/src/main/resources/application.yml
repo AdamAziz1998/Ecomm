@@ -1,3 +1,10 @@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      default-zone: http://localhost:8761/eureka
+
 server:
   port: 8070
 spring:
@@ -5,7 +12,6 @@ spring:
     name: users
   config:
     import: optional:configserver:http:/localhost:8888
-
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/users
@@ -17,7 +23,6 @@ spring:
     show-sql: false
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-
 
   docker:
     compose:

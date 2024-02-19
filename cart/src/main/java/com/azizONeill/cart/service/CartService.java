@@ -10,4 +10,10 @@ public interface CartService {
     CartDTO createCart(CreateCartDTO createCartDTO);
 
     CartDTO getCartByCartId(UUID cartId);
+
+    List<ProductDTO> getProductsByCartId(UUID cartId);
+
+    CartDTO clearCart(UUID cartId);
+
+    void deleteCart(UUID cartId);
 }

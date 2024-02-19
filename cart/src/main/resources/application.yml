@@ -27,7 +27,3 @@ spring:
   docker:
     compose:
       file: ./cart/compose.yaml
-
-springdoc:
-  api-docs:
-    path: /api-docs

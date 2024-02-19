@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(value="/api/v1")
 @Slf4j
 public class ProductController {
 
@@ -44,15 +44,15 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products")
-    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@RequestParam(value = "category") Category category) {
+    @GetMapping("/products/category/")
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@RequestParam(value = "category") String category) {
 
-        List<ProductDTO> productDTOList = productService.getProductsByCategory(category);
+        List<ProductDTO> productDTOList = productService.getProductsByCategory(Category.valueOf(category));
 
         return ResponseEntity.status(HttpStatus.OK).body(productDTOList);
     }
 
-    @GetMapping("/products")
+    @GetMapping("/products/search/")
     public ResponseEntity<List<ProductDTO>> getProductsBySearch(@RequestParam(value = "search") String searchTerm) {
 
         List<ProductDTO> productDTOList = productService.getProductsBySearch(searchTerm);

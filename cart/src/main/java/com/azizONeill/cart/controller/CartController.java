@@ -43,20 +43,9 @@ public class CartController {
 
     }
 
-    @PutMapping("/cart/add/{id}")
-    public ResponseEntity<List<CartItemDTO>> addToCart(@PathVariable UUID id, @RequestBody CreateCartItemDTO createCartItemDTO) {
-        List<CartItemDTO> cartItemDTOS = this.cartService.addToCart(createCartItemDTO);
-
-        if (cartItemDTOS != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(cartItemDTOS);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
-
     @PutMapping("/cart/clear/{id}")
     public ResponseEntity<CartDTO> clearCart(@PathVariable UUID cartId) {
-        CartDTO cartDTO = this.cartService.clearCart(userId);
+        CartDTO cartDTO = this.cartService.clearCart(cartId);
 
         if (cartDTO != null) {
             return ResponseEntity.status(HttpStatus.OK).body(cartDTO);

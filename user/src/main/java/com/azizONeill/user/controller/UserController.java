@@ -43,7 +43,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users")
+    @GetMapping("/users/email")
     public ResponseEntity<?> getUserByEmail(@RequestParam(value = "email") String email) {
 
         UserDTO userDTO = userService.getUserByEmail(email);
