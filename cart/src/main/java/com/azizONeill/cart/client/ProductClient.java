@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface ProductClient {
 
     @GetMapping("/products/{productId}")
-    List<ProductDTO> findProductById(@PathVariable("productId") UUID productId);
+    ProductDTO findProductById(@PathVariable("productId") UUID productId);
 }

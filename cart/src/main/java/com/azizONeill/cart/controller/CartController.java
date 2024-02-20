@@ -38,9 +38,15 @@ public class CartController {
         }
     }
 
-    @GetMapping("/cart/{cartId}")
+    @GetMapping("/cart/products/{cartId}")
     public ResponseEntity<List<ProductDTO>> getProductsByCartId(@PathVariable UUID cartId) {
+        List<ProductDTO> productDTOs = this.cartService.getProductsByCartId(cartId);
 
+        if (productDTOs != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(productDTOs);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @PutMapping("/cart/clear/{id}")

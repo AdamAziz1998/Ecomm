@@ -1,5 +1,6 @@
 package com.azizONeill.cart.service.serviceImpl;
 
+import com.azizONeill.cart.client.ProductClient;
 import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
@@ -19,15 +20,18 @@ public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
     private final DTOConverter DTOConverter;
+    private final ProductClient productClient;
 
 
     @Autowired
     public CartServiceImpl(
             CartRepository cartRepository,
-            DTOConverter DTOConverter
+            DTOConverter DTOConverter,
+            ProductClient productClient
     ) {
         this.cartRepository = cartRepository;
         this.DTOConverter = DTOConverter;
+        this.productClient = productClient;
     }
 
     @Override
@@ -68,11 +72,9 @@ public class CartServiceImpl implements CartService {
             return null;
         }
 
-        //step 2: get the cartItems in the cart
         List<CartItem> cartItems = cart.getCartItems();
 
-        //step 3: for each cartItem get the product by its id
-
+        return cartItems.stream().map(cartItem -> productClient.findProductById(cartItem.getProductId())).toList();
     }
 
     @Override
