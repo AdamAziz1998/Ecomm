@@ -9,7 +9,7 @@ server:
   port: 8090
 spring:
   application:
-    name: products
+    name: product
   config:
     import: optional:configserver:http:/localhost:8888
 

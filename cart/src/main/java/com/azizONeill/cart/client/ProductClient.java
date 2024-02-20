@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "student-service", url = "${application.config.students-url}")
+@FeignClient(name = "product-service", url = "${application.config.product-url}")
 public interface ProductClient {
 
-    @GetMapping("/product/{productId}")
+    @GetMapping("/products/{productId}")
     List<ProductDTO> findProductById(@PathVariable("productId") UUID productId);
 }

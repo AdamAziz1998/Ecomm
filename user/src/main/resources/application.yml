@@ -9,7 +9,7 @@ server:
   port: 8070
 spring:
   application:
-    name: users
+    name: user
   config:
     import: optional:configserver:http:/localhost:8888
   datasource:
