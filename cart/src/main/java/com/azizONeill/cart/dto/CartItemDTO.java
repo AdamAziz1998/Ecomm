@@ -14,15 +14,12 @@ public class CartItemDTO {
     @Valid
 
     @NotNull(message = "cartItemId cannot be null")
-    @NotEmpty(message = "cartItemId cannot be empty")
     private UUID id;
 
     @NotNull(message = "productId cannot be null")
-    @NotBlank(message = "productId cannot be empty")
     private UUID productId;
 
     @NotNull(message = "quantity cannot be null")
-    @NotBlank(message = "quantity cannot be empty")
     @Positive(message = "quantity must be positive")
     private int quantity;
 }

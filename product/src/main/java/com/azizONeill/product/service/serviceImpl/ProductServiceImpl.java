@@ -1,6 +1,8 @@
 package com.azizONeill.product.service.serviceImpl;
 
 
+import com.azizONeill.product.dto.CreateProductDTO;
+import com.azizONeill.product.dto.UpdateProductDTO;
 import com.azizONeill.product.dto.convert.ProductConverter;
 import com.azizONeill.product.dto.ProductDTO;
 import com.azizONeill.product.model.Product;
@@ -62,17 +64,17 @@ public class ProductServiceImpl implements ProductService {
     //code below will be useful for the back office for this application
 
     @Override
-    public ProductDTO createProduct(ProductDTO productDTO) {
+    public ProductDTO createProduct(CreateProductDTO createProductDTO) {
 
         Product newProduct = new Product();
 
-        newProduct.setName(productDTO.getName());
-        newProduct.setStatus(productDTO.getStatus());
-        newProduct.setPrice(productDTO.getPrice());
-        newProduct.setStockQuantity(productDTO.getStockQuantity());
-        newProduct.setImageUrl(productDTO.getImageUrl());
-        newProduct.setDescription(productDTO.getDescription());
-        newProduct.setCategory(productDTO.getCategory());
+        newProduct.setName(createProductDTO.getName());
+        newProduct.setStatus(createProductDTO.getStatus());
+        newProduct.setPrice(createProductDTO.getPrice());
+        newProduct.setStockQuantity(createProductDTO.getStockQuantity());
+        newProduct.setImageUrl(createProductDTO.getImageUrl());
+        newProduct.setDescription(createProductDTO.getDescription());
+        newProduct.setCategory(createProductDTO.getCategory());
 
         newProduct = productRepository.save(newProduct);
 
@@ -80,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDTO updateProduct(UUID productId, ProductDTO productDTO) {
+    public ProductDTO updateProduct(UUID productId, UpdateProductDTO updateProductDTO) {
 
         Product updatedProduct = productRepository.findById(productId).orElse(null);
 
@@ -88,13 +90,13 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
 
-        updatedProduct.setName(productDTO.getName());
-        updatedProduct.setStatus(productDTO.getStatus());
-        updatedProduct.setPrice(productDTO.getPrice());
-        updatedProduct.setStockQuantity(productDTO.getStockQuantity());
-        updatedProduct.setImageUrl(productDTO.getImageUrl());
-        updatedProduct.setDescription(productDTO.getDescription());
-        updatedProduct.setCategory(productDTO.getCategory());
+        updatedProduct.setName(updateProductDTO.getName());
+        updatedProduct.setStatus(updateProductDTO.getStatus());
+        updatedProduct.setPrice(updateProductDTO.getPrice());
+        updatedProduct.setStockQuantity(updateProductDTO.getStockQuantity());
+        updatedProduct.setImageUrl(updateProductDTO.getImageUrl());
+        updatedProduct.setDescription(updateProductDTO.getDescription());
+        updatedProduct.setCategory(updateProductDTO.getCategory());
 
         productRepository.save(updatedProduct);
 

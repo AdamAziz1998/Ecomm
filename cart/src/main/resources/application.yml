@@ -28,6 +28,7 @@ spring:
     compose:
       file: ./cart/compose.yaml
 
+
 application:
   config:
-    products-url: http://localhost:8090/api/v1
+    product-url: http://localhost:8090/api/v1

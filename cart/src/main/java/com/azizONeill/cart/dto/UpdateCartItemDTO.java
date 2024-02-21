@@ -14,11 +14,9 @@ public class UpdateCartItemDTO {
     @Valid
 
     @NotNull(message = "userId cannot be null")
-    @NotBlank(message = "userId cannot be empty")
     private UUID cartItemId;
 
     @NotNull(message = "quantity cannot be null")
-    @NotBlank(message = "quantity cannot be empty")
     @Positive(message = "quantity must be positive")
     private int quantity;
 }

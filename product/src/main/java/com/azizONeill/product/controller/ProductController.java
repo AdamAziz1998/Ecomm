@@ -1,7 +1,9 @@
 package com.azizONeill.product.controller;
 
 
+import com.azizONeill.product.dto.CreateProductDTO;
 import com.azizONeill.product.dto.ProductDTO;
+import com.azizONeill.product.dto.UpdateProductDTO;
 import com.azizONeill.product.model.enums.Category;
 import com.azizONeill.product.service.ProductService;
 import jakarta.validation.Valid;
@@ -61,17 +63,17 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO newProductDTO) {
+    public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody CreateProductDTO createProductDTO) {
 
-        ProductDTO productDTO = productService.createProduct(newProductDTO);
+        ProductDTO productDTO = productService.createProduct(createProductDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(productDTO);
     }
 
     @PutMapping("/products/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable UUID id, @Valid @RequestBody ProductDTO updatedProductDTO) {
+    public ResponseEntity<?> updateProduct(@PathVariable UUID id, @Valid @RequestBody UpdateProductDTO updateProductDTO) {
 
-        ProductDTO productDTO = productService.updateProduct(id, updatedProductDTO);
+        ProductDTO productDTO = productService.updateProduct(id, updateProductDTO);
 
         if (productDTO != null) {
             return ResponseEntity.status(HttpStatus.OK).body(productDTO);
@@ -82,8 +84,6 @@ public class ProductController {
 
     @DeleteMapping("/products/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable UUID id) {
-        // Delete the id
-
         ProductDTO productDTO = productService.deleteProduct(id);
 
         if (productDTO!= null) {

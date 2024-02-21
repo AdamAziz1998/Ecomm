@@ -1,6 +1,5 @@
 package com.azizONeill.product.dto;
 
-
 import com.azizONeill.product.model.enums.Category;
 import com.azizONeill.product.model.enums.Status;
 import jakarta.validation.Valid;
@@ -11,11 +10,8 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
-public class ProductDTO {
+public class UpdateProductDTO {
     @Valid
-
-    @NotNull(message = "productId cannot be null")
-    private UUID id;
 
     @NotNull(message = "name cannot be null")
     @NotBlank(message = "name cannot be empty")
