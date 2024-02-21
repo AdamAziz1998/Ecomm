@@ -52,6 +52,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    public List<CartDTO> getAllCarts() {
+        List<Cart> carts = cartRepository.findAll();
+
+        return carts.stream().map(this.DTOConverter::convertCartToCartDTO).toList();
+    }
+
+    @Override
     public CartDTO getCartByCartId(UUID cartId) {
 
         Cart cart = cartRepository.findById(cartId).orElse(null);

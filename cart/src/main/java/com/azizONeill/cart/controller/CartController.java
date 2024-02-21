@@ -27,6 +27,13 @@ public class CartController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cartDTO);
     }
 
+    @GetMapping("/cart")
+    public ResponseEntity<List<CartDTO>> getAllCarts() {
+        List<CartDTO> cartDTOs = cartService.getAllCarts();
+
+        return ResponseEntity.status(HttpStatus.OK).body(cartDTOs);
+    }
+
     @GetMapping("/cart/{cartId}")
     public ResponseEntity<CartDTO> getCartByCartId(@PathVariable UUID cartId) {
         CartDTO cartDTO = cartService.getCartByCartId(cartId);

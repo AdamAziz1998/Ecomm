@@ -9,6 +9,8 @@ public interface CartService {
 
     CartDTO createCart(CreateCartDTO createCartDTO);
 
+    List<CartDTO> getAllCarts();
+
     CartDTO getCartByCartId(UUID cartId);
 
     List<ProductDTO> getProductsByCartId(UUID cartId);
