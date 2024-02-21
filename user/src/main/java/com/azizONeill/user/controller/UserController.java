@@ -43,10 +43,10 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/email")
-    public ResponseEntity<?> getUserByEmail(@RequestParam(value = "email") String email) {
+    @GetMapping("/users/email/{emailAddress}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String emailAddress) {
 
-        UserDTO userDTO = userService.getUserByEmail(email);
+        UserDTO userDTO = userService.getUserByEmail(emailAddress);
 
         if (userDTO != null) {
             return ResponseEntity.status(HttpStatus.OK).body(userDTO);

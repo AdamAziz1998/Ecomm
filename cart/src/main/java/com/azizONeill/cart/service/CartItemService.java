@@ -16,5 +16,5 @@ public interface CartItemService {
 
     CartItemDTO updateCartItemQuantity(UpdateCartItemDTO updateCartItemDTO);
 
-    void deleteCartItem(UUID cartId);
+    void deleteCartItem(UUID cartItemId);
 }

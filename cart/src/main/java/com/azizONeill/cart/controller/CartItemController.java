@@ -43,8 +43,8 @@ public class CartItemController {
         }
     }
 
-    @GetMapping("/cartItem")
-    public ResponseEntity<List<CartItemDTO>> getCartItemsByCartId(@RequestParam(value = "cartId") UUID cartId) {
+    @GetMapping("/cartItem/cart/{cartId}")
+    public ResponseEntity<List<CartItemDTO>> getCartItemsByCartId(@PathVariable UUID cartId) {
         List<CartItemDTO> cartItemDTOS = this.cartItemService.getCartItemsByCartId(cartId);
 
         if (cartItemDTOS != null) {
@@ -66,8 +66,8 @@ public class CartItemController {
     }
 
     @DeleteMapping("/cartItem/{cartId}")
-    public ResponseEntity<?> deleteCartItem(@PathVariable UUID cartId) {
-        this.cartItemService.deleteCartItem(cartId);
+    public ResponseEntity<?> deleteCartItem(@PathVariable UUID cartItemId) {
+        this.cartItemService.deleteCartItem(cartItemId);
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }

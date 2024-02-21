@@ -97,8 +97,8 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void deleteCartItem(UUID cartId) {
-        CartItem cartItem = cartItemRepository.findById(cartId).orElse(null);
+    public void deleteCartItem(UUID cartItemId) {
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElse(null);
 
         cartItemRepository.delete(cartItem);
     }

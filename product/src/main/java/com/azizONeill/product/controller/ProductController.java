@@ -46,16 +46,16 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/category/")
-    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@RequestParam(value = "category") String category) {
+    @GetMapping("/products/category/{category}")
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable String category) {
 
         List<ProductDTO> productDTOList = productService.getProductsByCategory(Category.valueOf(category));
 
         return ResponseEntity.status(HttpStatus.OK).body(productDTOList);
     }
 
-    @GetMapping("/products/search/")
-    public ResponseEntity<List<ProductDTO>> getProductsBySearch(@RequestParam(value = "search") String searchTerm) {
+    @GetMapping("/products/search/{searchTerm}")
+    public ResponseEntity<List<ProductDTO>> getProductsBySearch(@PathVariable String searchTerm) {
 
         List<ProductDTO> productDTOList = productService.getProductsBySearch(searchTerm);
 
