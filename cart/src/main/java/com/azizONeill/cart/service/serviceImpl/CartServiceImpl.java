@@ -5,12 +5,15 @@ import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
 import com.azizONeill.cart.model.CartItem;
+import com.azizONeill.cart.repository.CartItemRepository;
 import com.azizONeill.cart.repository.CartRepository;
+import com.azizONeill.cart.service.CartItemService;
 import com.azizONeill.cart.service.CartService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +22,7 @@ import java.util.UUID;
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
     private final DTOConverter DTOConverter;
     private final ProductClient productClient;
 
@@ -26,10 +30,12 @@ public class CartServiceImpl implements CartService {
     @Autowired
     public CartServiceImpl(
             CartRepository cartRepository,
+            CartItemRepository cartItemRepository,
             DTOConverter DTOConverter,
             ProductClient productClient
     ) {
         this.cartRepository = cartRepository;
+        this.cartItemRepository = cartItemRepository;
         this.DTOConverter = DTOConverter;
         this.productClient = productClient;
     }
@@ -93,9 +99,10 @@ public class CartServiceImpl implements CartService {
             return null;
         }
 
-        cart.getCartItems().clear();
-        cartRepository.save(cart);
+        List<CartItem> cartItems = cart.getCartItems();
+        cartItems.forEach(cartItemRepository::delete);
 
+        cart.setCartItems(new ArrayList<>());
         return this.DTOConverter.convertCartToCartDTO(cart);
     }
 

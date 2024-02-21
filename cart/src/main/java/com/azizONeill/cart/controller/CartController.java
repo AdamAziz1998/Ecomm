@@ -56,7 +56,7 @@ public class CartController {
         }
     }
 
-    @PutMapping("/cart/clear/{id}")
+    @PutMapping("/cart/clear/{cartId}")
     public ResponseEntity<CartDTO> clearCart(@PathVariable UUID cartId) {
         CartDTO cartDTO = this.cartService.clearCart(cartId);
 
