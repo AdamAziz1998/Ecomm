@@ -12,9 +12,11 @@ public interface CartItemService {
 
     CartItemDTO getCartItemByCartItemId(UUID cartItemId);
 
+    List<CartItemDTO> getAllCartItems();
+
     List<CartItemDTO> getCartItemsByCartId(UUID cartId);
 
     CartItemDTO updateCartItemQuantity(UpdateCartItemDTO updateCartItemDTO);
 
-    void deleteCartItem(UUID cartItemId);
+    CartItemDTO deleteCartItem(UUID cartItemId);
 }

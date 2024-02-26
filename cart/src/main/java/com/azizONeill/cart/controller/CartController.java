@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1")
+@CrossOrigin
 @Slf4j
 public class CartController {
 
@@ -56,7 +57,7 @@ public class CartController {
         }
     }
 
-    @PutMapping("/cart/clear/{cartId}")
+    @DeleteMapping("/cart/clear/{cartId}")
     public ResponseEntity<CartDTO> clearCart(@PathVariable UUID cartId) {
         CartDTO cartDTO = this.cartService.clearCart(cartId);
 

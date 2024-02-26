@@ -1,43 +1,45 @@
 package com.azizONeill.cart.service.serviceImpl;
 
 import com.azizONeill.cart.client.ProductClient;
-import com.azizONeill.cart.dto.*;
+import com.azizONeill.cart.dto.CartDTO;
+import com.azizONeill.cart.dto.CartItemDTO;
+import com.azizONeill.cart.dto.CreateCartDTO;
+import com.azizONeill.cart.dto.ProductDTO;
 import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
 import com.azizONeill.cart.model.CartItem;
 import com.azizONeill.cart.repository.CartItemRepository;
 import com.azizONeill.cart.repository.CartRepository;
-import com.azizONeill.cart.service.CartItemService;
 import com.azizONeill.cart.service.CartService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
     private final DTOConverter DTOConverter;
     private final ProductClient productClient;
+    private final CartItemRepository cartItemRepository;
 
 
     @Autowired
     public CartServiceImpl(
             CartRepository cartRepository,
-            CartItemRepository cartItemRepository,
             DTOConverter DTOConverter,
-            ProductClient productClient
+            ProductClient productClient,
+            CartItemRepository cartItemRepository
     ) {
         this.cartRepository = cartRepository;
-        this.cartItemRepository = cartItemRepository;
         this.DTOConverter = DTOConverter;
         this.productClient = productClient;
+        this.cartItemRepository = cartItemRepository;
     }
 
     @Override
@@ -45,9 +47,9 @@ public class CartServiceImpl implements CartService {
 
         Cart cart = new Cart();
 
-        List<CartItemDTO> cartItemDTOS = createCartDTO.getCartItems();
-        List<CartItem> cartItems = cartItemDTOS.stream()
-                .map(this.DTOConverter::convertCartItemDTOToCartItem).toList();
+        Set<CartItemDTO> cartItemDTOS = createCartDTO.getCartItems();
+        Set<CartItem> cartItems = cartItemDTOS.stream()
+                .map(this.DTOConverter::convertCartItemDTOToCartItem).collect(Collectors.toSet());
 
         cart.setCartItems(cartItems);
         cart.setUserId(createCartDTO.getUserId());
@@ -78,14 +80,13 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<ProductDTO> getProductsByCartId(UUID cartId) {
-        //step 1: get the cart
         Cart cart = this.cartRepository.findById(cartId).orElse(null);
 
         if (cart == null) {
             return null;
         }
 
-        List<CartItem> cartItems = cart.getCartItems();
+        Set<CartItem> cartItems = cart.getCartItems();
 
         return cartItems.stream().map(cartItem -> productClient.findProductById(cartItem.getProductId())).toList();
     }
@@ -99,11 +100,16 @@ public class CartServiceImpl implements CartService {
             return null;
         }
 
-        List<CartItem> cartItems = cart.getCartItems();
-        cartItems.forEach(cartItemRepository::delete);
+        //get cartItems which will be deleted
+        Set<CartItem> cartItems = cart.getCartItems();
 
-        cart.setCartItems(new ArrayList<>());
-        return this.DTOConverter.convertCartToCartDTO(cart);
+        //clear the cart and save that
+        cartItems.forEach(cartItems::remove);
+        cart.setCartItems(cartItems);
+
+        Cart emptiedCart = cartRepository.save(cart);
+
+        return this.DTOConverter.convertCartToCartDTO(emptiedCart);
     }
 
     @Override

@@ -1,19 +1,22 @@
 package com.azizONeill.cart.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
+@Getter(onMethod_ = @JsonIgnore)
+@Setter
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "Cart")
 public class Cart {
 
@@ -26,8 +29,6 @@ public class Cart {
     @Column(name = "userId")
     private UUID userId;
 
-    @NotNull
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
-    @Column(name = "cartItems")
-    private List<CartItem> cartItems;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<CartItem> cartItems;
 }

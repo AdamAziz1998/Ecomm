@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -20,5 +21,5 @@ public class CartDTO {
     private UUID userId;
 
     @NotNull(message = "cartItems cannot be null")
-    private List<CartItemDTO> cartItems;
+    private Set<CartItemDTO> cartItems;
 }

@@ -22,7 +22,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/users")
+    @GetMapping("/user")
     public ResponseEntity<?> getAllUsers() {
 
         List<UserDTO> users = userService.getAllUsers();
@@ -30,7 +30,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/user/{id}")
     public ResponseEntity<?> getUserById(@PathVariable UUID id) {
 
         UserDTO userDTO = userService.getUserById(id);
@@ -43,7 +43,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("/users/email/{emailAddress}")
+    @GetMapping("/user/email/{emailAddress}")
     public ResponseEntity<?> getUserByEmail(@PathVariable String emailAddress) {
 
         UserDTO userDTO = userService.getUserByEmail(emailAddress);
@@ -56,7 +56,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/users")
+    @PostMapping("/user")
     public ResponseEntity<?> createUser(@Valid @RequestBody NewUserRequestDTO newUserDTO) {
 
         UserDTO userDTO = userService.createUser(newUserDTO);
@@ -64,7 +64,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/user/{id}")
     public ResponseEntity<?> updateUser(@PathVariable UUID id, @Valid @RequestBody UpdateUserRequestDTO updatedUserDTO) {
 
         UserDTO userDTO = userService.updateUser(id, updatedUserDTO);
@@ -76,7 +76,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/user/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
         // Delete the id
 

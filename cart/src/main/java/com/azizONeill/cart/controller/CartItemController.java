@@ -32,7 +32,7 @@ public class CartItemController {
         }
     }
 
-    @GetMapping("/cartItem/{cartId}")
+    @GetMapping("/cartItem/{cartItemId}")
     public ResponseEntity<CartItemDTO> getCartItemByCartItemId(@PathVariable UUID cartItemId) {
         CartItemDTO cartItemDTO = this.cartItemService.getCartItemByCartItemId(cartItemId);
 
@@ -41,6 +41,13 @@ public class CartItemController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+    }
+
+    @GetMapping("/cartItem")
+    public ResponseEntity<List<CartItemDTO>> getAllCartItems() {
+        List<CartItemDTO> cartItemDTOs = this.cartItemService.getAllCartItems();
+
+        return ResponseEntity.status(HttpStatus.OK).body(cartItemDTOs);
     }
 
     @GetMapping("/cartItem/cart/{cartId}")
@@ -65,10 +72,14 @@ public class CartItemController {
         }
     }
 
-    @DeleteMapping("/cartItem/{cartId}")
+    @DeleteMapping("/cartItem/{cartItemId}")
     public ResponseEntity<?> deleteCartItem(@PathVariable UUID cartItemId) {
-        this.cartItemService.deleteCartItem(cartItemId);
+        CartItemDTO cartItemDTO = this.cartItemService.deleteCartItem(cartItemId);
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        if (cartItemDTO != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(cartItemDTO);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 }

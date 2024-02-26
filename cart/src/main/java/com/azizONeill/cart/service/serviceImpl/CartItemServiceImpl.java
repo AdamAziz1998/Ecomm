@@ -11,9 +11,11 @@ import com.azizONeill.cart.repository.CartRepository;
 import com.azizONeill.cart.service.CartItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -46,15 +48,25 @@ public class CartItemServiceImpl implements CartItemService {
             return null;
         }
 
+        //check if cartItem is already in cart
+        Set<CartItem> cartItems = cart.getCartItems();
+        Set<CartItem> filteredCartItems = cartItems.stream().filter(cartItem -> cartItem.getProductId() == createCartItemDTO.getProductId()).collect(Collectors.toSet());
+
+        if (!filteredCartItems.isEmpty()) {
+            return null;
+        }
+
         CartItem newCartItem = new CartItem();
 
         newCartItem.setProductId(createCartItemDTO.getProductId());
         newCartItem.setQuantity(createCartItemDTO.getQuantity());
-        newCartItem.setCart(cart);
 
-        CartItem cartItem = this.cartItemRepository.save(newCartItem);
+        cart.getCartItems().add(newCartItem);
 
-        return this.DTOConverter.convertCartItemToCartItemDTO(cartItem);
+        this.cartItemRepository.save(newCartItem);
+        this.cartRepository.save(cart);
+
+        return this.DTOConverter.convertCartItemToCartItemDTO(newCartItem);
     }
 
     @Override
@@ -69,6 +81,13 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
+    public List<CartItemDTO> getAllCartItems() {
+        List<CartItem> cartItems = cartItemRepository.findAll();
+
+        return cartItems.stream().map(DTOConverter::convertCartItemToCartItemDTO).toList();
+    }
+
+    @Override
     public List<CartItemDTO> getCartItemsByCartId(UUID cartId) {
         Cart cart = this.cartRepository.findById(cartId).orElse(null);
 
@@ -76,7 +95,7 @@ public class CartItemServiceImpl implements CartItemService {
             return null;
         }
 
-        List<CartItem> cartItems = cart.getCartItems();
+        Set<CartItem> cartItems = cart.getCartItems();
 
         return cartItems.stream().map(this.DTOConverter::convertCartItemToCartItemDTO).collect(Collectors.toList());
     }
@@ -97,10 +116,15 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public void deleteCartItem(UUID cartItemId) {
+    public CartItemDTO deleteCartItem(UUID cartItemId) {
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElse(null);
 
+        if (cartItem == null) {
+            return null;
+        }
+
         cartItemRepository.delete(cartItem);
+        return DTOConverter.convertCartItemToCartItemDTO(cartItem);
     }
 
 }
