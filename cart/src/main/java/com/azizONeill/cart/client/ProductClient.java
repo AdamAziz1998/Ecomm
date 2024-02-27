@@ -13,6 +13,6 @@ import java.util.UUID;
 @FeignClient(name = "product-service", url = "${application.config.product-url}")
 public interface ProductClient {
 
-    @GetMapping("/products/{productId}")
+    @GetMapping("/product/{productId}")
     ProductDTO findProductById(@PathVariable("productId") UUID productId);
 }
