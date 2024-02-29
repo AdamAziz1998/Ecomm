@@ -1,0 +1,55 @@
+services:
+
+  product:
+    image: "postgres:11-alpine"
+    container_name: product
+    ports:
+      - "5435:5432"
+    environment:
+      - POSTGRES_DB=products
+      - POSTGRES_USER=adam
+      - POSTGRES_PASSWORD=password
+    restart: always
+
+  cart:
+    image: "postgres:11-alpine"
+    container_name: cart
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=carts
+      - POSTGRES_USER=adam
+      - POSTGRES_PASSWORD=password
+    restart: always
+
+
+  user:
+    image: "postgres:11-alpine"
+    container_name: user
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=users
+      - POSTGRES_USER=adam
+      - POSTGRES_PASSWORD=password
+    restart: always
+
+
+  zipkin:
+    container_name: zipkin
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - zipkin
+
+
+networks:
+  postgres:
+    driver: bridge
+  zipkin:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:
