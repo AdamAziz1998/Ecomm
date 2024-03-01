@@ -10,12 +10,9 @@ server:
 spring:
   application:
     name: cart
-  config:
-    import: optional:configserver:http:/localhost:8888
-
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/carts
+    url: jdbc:postgresql://localhost:5434/carts
     username: adam
     password: password
   jpa:
@@ -24,10 +21,11 @@ spring:
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
 
-  docker:
-    compose:
-      file: ./cart/compose.yaml
-
 application:
   config:
     product-url: http://localhost:8222/api/v1
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

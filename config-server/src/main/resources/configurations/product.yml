@@ -12,7 +12,7 @@ spring:
     name: product
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/products
+    url: jdbc:postgresql://localhost:5435/products
     username: adam
     password: password
   jpa:
@@ -24,3 +24,8 @@ spring:
   docker:
     compose:
       file: ./product/compose.yaml
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

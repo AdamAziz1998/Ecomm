@@ -100,12 +100,8 @@ public class CartServiceImpl implements CartService {
             return null;
         }
 
-        //get cartItems which will be deleted
         Set<CartItem> cartItems = cart.getCartItems();
-
-        //clear the cart and save that
-        cartItems.forEach(cartItems::remove);
-        cart.setCartItems(cartItems);
+        cartItems.clear();
 
         Cart emptiedCart = cartRepository.save(cart);
 
