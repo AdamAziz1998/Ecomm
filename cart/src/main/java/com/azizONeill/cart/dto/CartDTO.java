@@ -6,12 +6,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 @Data
-public class CartDTO {
+public class CartDTO implements Serializable {
     @Valid
 
     @NotNull(message = "cartId cannot be null")

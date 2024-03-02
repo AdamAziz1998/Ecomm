@@ -48,10 +48,8 @@ public class CartItemServiceImpl implements CartItemService {
 
         //check if cartItem is already in cart
         Set<CartItem> cartItems = cart.getCartItems();
-        Set<CartItem> filteredCartItems = cartItems.stream().filter(cartItem -> cartItem.getProductId() == createCartItemDTO.getProductId()).collect(Collectors.toSet());
+        Set<CartItem> filteredCartItems = cartItems.stream().filter(cartItem -> createCartItemDTO.getProductId().equals(cartItem.getProductId())).collect(Collectors.toSet());
 
-        System.out.println(cartItems);
-        System.out.println(filteredCartItems);
         if (!filteredCartItems.isEmpty()) {
             return null;
         }
@@ -109,7 +107,6 @@ public class CartItemServiceImpl implements CartItemService {
         }
 
         cartItem.setQuantity(updateCartItemDTO.getQuantity());
-
         CartItem updatedCartItem = cartItemRepository.save(cartItem);
 
         return this.DTOConverter.convertCartItemToCartItemDTO(updatedCartItem);
@@ -135,7 +132,6 @@ public class CartItemServiceImpl implements CartItemService {
         }
 
         cartItems.remove(cartItem);
-
         Cart newCart = cartRepository.save(cart);
 
         return DTOConverter.convertCartToCartDTO(newCart);
