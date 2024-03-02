@@ -1,8 +1,6 @@
 package com.azizONeill.cart.controller;
 
-import com.azizONeill.cart.dto.CartItemDTO;
-import com.azizONeill.cart.dto.CreateCartItemDTO;
-import com.azizONeill.cart.dto.UpdateCartItemDTO;
+import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.service.CartItemService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,12 +70,12 @@ public class CartItemController {
         }
     }
 
-    @DeleteMapping("/cartItem/{cartItemId}")
-    public ResponseEntity<?> deleteCartItem(@PathVariable UUID cartItemId) {
-        CartItemDTO cartItemDTO = this.cartItemService.deleteCartItem(cartItemId);
+    @DeleteMapping("/cartItem")
+    public ResponseEntity<CartDTO> deleteCartItem(@RequestBody DeleteCartItemDTO deleteCartItemDTO) {
+        CartDTO cartDTO = this.cartItemService.deleteCartItem(deleteCartItemDTO);
 
-        if (cartItemDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(cartItemDTO);
+        if (cartDTO != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(cartDTO);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }

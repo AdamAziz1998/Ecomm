@@ -1,8 +1,6 @@
 package com.azizONeill.cart.service;
 
-import com.azizONeill.cart.dto.CartItemDTO;
-import com.azizONeill.cart.dto.CreateCartItemDTO;
-import com.azizONeill.cart.dto.UpdateCartItemDTO;
+import com.azizONeill.cart.dto.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,5 +16,5 @@ public interface CartItemService {
 
     CartItemDTO updateCartItemQuantity(UpdateCartItemDTO updateCartItemDTO);
 
-    CartItemDTO deleteCartItem(UUID cartItemId);
+    CartDTO deleteCartItem(DeleteCartItemDTO deleteCartItemDTO);
 }

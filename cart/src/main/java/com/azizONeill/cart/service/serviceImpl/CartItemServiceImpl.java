@@ -1,8 +1,6 @@
 package com.azizONeill.cart.service.serviceImpl;
 
-import com.azizONeill.cart.dto.CartItemDTO;
-import com.azizONeill.cart.dto.CreateCartItemDTO;
-import com.azizONeill.cart.dto.UpdateCartItemDTO;
+import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
 import com.azizONeill.cart.model.CartItem;
@@ -52,6 +50,8 @@ public class CartItemServiceImpl implements CartItemService {
         Set<CartItem> cartItems = cart.getCartItems();
         Set<CartItem> filteredCartItems = cartItems.stream().filter(cartItem -> cartItem.getProductId() == createCartItemDTO.getProductId()).collect(Collectors.toSet());
 
+        System.out.println(cartItems);
+        System.out.println(filteredCartItems);
         if (!filteredCartItems.isEmpty()) {
             return null;
         }
@@ -116,15 +116,29 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public CartItemDTO deleteCartItem(UUID cartItemId) {
-        CartItem cartItem = cartItemRepository.findById(cartItemId).orElse(null);
+    public CartDTO deleteCartItem(DeleteCartItemDTO deleteCartItemDTO) {
+
+        Cart cart = cartRepository.findById(deleteCartItemDTO.getCartId()).orElse(null);
+
+        if (cart == null) {
+            return null;
+        }
+
+        Set<CartItem> cartItems = cart.getCartItems();
+        CartItem cartItem = cartItems.stream()
+                .filter(item -> deleteCartItemDTO.getCartItemId().equals(item.getId()))
+                .findFirst()
+                .orElse(null);
 
         if (cartItem == null) {
             return null;
         }
 
-        cartItemRepository.delete(cartItem);
-        return DTOConverter.convertCartItemToCartItemDTO(cartItem);
+        cartItems.remove(cartItem);
+
+        Cart newCart = cartRepository.save(cart);
+
+        return DTOConverter.convertCartToCartDTO(newCart);
     }
 
 }

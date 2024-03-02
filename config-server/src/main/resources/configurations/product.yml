@@ -10,16 +10,23 @@ server:
 spring:
   application:
     name: product
+
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5435/products
     username: adam
     password: password
+
   jpa:
     hibernate:
       ddl-auto: update
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  cache:
+    type: redis
+    host: localhost
+    port: 6379
 
   docker:
     compose:

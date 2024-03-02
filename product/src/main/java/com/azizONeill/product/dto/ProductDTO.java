@@ -7,11 +7,12 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
-public class ProductDTO {
+public class ProductDTO implements Serializable {
     @Valid
 
     @NotNull(message = "productId cannot be null")

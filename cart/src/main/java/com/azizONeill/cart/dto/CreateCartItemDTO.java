@@ -15,7 +15,6 @@ public class CreateCartItemDTO {
     @NotNull(message = "cartId cannot be null")
     private UUID cartId;
 
-
     @NotNull(message = "productId cannot be null")
     private UUID productId;
 

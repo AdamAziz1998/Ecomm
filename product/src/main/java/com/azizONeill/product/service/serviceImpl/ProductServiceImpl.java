@@ -1,6 +1,5 @@
 package com.azizONeill.product.service.serviceImpl;
 
-
 import com.azizONeill.product.dto.CreateProductDTO;
 import com.azizONeill.product.dto.UpdateProductDTO;
 import com.azizONeill.product.dto.convert.ProductConverter;
@@ -11,8 +10,12 @@ import com.azizONeill.product.repository.ProductRepository;
 import com.azizONeill.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -37,6 +40,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable("productCache")
     public ProductDTO getProductById(UUID productId) {
         Product product = productRepository.findById(productId).orElse(null);
 
@@ -82,6 +86,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CachePut(value = "productCache", key = "#productId")
     public ProductDTO updateProduct(UUID productId, UpdateProductDTO updateProductDTO) {
 
         Product updatedProduct = productRepository.findById(productId).orElse(null);
@@ -104,6 +109,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(value = "productCache", key = "#productId", beforeInvocation = true)
     public ProductDTO deleteProduct(UUID productId) {
 
         Product product = productRepository.findById(productId).orElse(null);
