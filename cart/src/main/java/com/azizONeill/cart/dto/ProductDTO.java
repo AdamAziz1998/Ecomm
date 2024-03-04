@@ -25,7 +25,7 @@ public class ProductDTO {
     private BigDecimal price;
 
     @NotNull(message = "stockQuantity cannot be null")
-    @PositiveOrZero(message = "stockQuantity must be at least 0")
+    @Positive(message = "stockQuantity must be at least 0")
     private int stockQuantity;
 
     @NotNull(message = "description cannot be null")

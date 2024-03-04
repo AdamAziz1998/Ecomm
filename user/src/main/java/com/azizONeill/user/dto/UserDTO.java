@@ -8,6 +8,7 @@ import com.azizONeill.user.validation.UKPostCode;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -70,8 +71,10 @@ public class UserDTO {
     private String postCode;
 
     @NotNull(message = "lastLogin cannot be null")
+    @Past(message = "lastLogin must be in the past")
     private LocalDateTime lastLogin;
 
     @NotNull(message = "accountCreationTime cannot be null")
+    @Past(message = "accountCreationTime must be in the past")
     private LocalDateTime accountCreationTime;
 }

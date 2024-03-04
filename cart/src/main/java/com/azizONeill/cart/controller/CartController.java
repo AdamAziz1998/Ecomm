@@ -3,6 +3,7 @@ package com.azizONeill.cart.controller;
 import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.model.Cart;
 import com.azizONeill.cart.service.CartService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +23,7 @@ public class CartController {
     private CartService cartService;
 
     @PostMapping("/cart")
-    public ResponseEntity<CartDTO> createCart(@RequestBody CreateCartDTO createCartDTO) {
+    public ResponseEntity<CartDTO> createCart(@Valid @RequestBody CreateCartDTO createCartDTO) {
         CartDTO cartDTO = cartService.createCart(createCartDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(cartDTO);

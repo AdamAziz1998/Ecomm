@@ -2,6 +2,7 @@ package com.azizONeill.cart.controller;
 
 import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.service.CartItemService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class CartItemController {
     private CartItemService cartItemService;
 
     @PostMapping("/cartItem")
-    public ResponseEntity<CartItemDTO> createCartItem(@RequestBody CreateCartItemDTO createCartItemDTO) {
+    public ResponseEntity<CartItemDTO> createCartItem(@Valid @RequestBody CreateCartItemDTO createCartItemDTO) {
         CartItemDTO cartItemDTO = cartItemService.createCartItem(createCartItemDTO);
 
         if (cartItemDTO != null) {
@@ -60,7 +61,7 @@ public class CartItemController {
     }
 
     @PutMapping("/cartItem")
-    public ResponseEntity<CartItemDTO> updateCartItemQuantity(@RequestBody UpdateCartItemDTO updateCartItemDTO) {
+    public ResponseEntity<CartItemDTO> updateCartItemQuantity(@Valid @RequestBody UpdateCartItemDTO updateCartItemDTO) {
         CartItemDTO cartItemDTO = this.cartItemService.updateCartItemQuantity(updateCartItemDTO);
 
         if (cartItemDTO != null) {
@@ -71,7 +72,7 @@ public class CartItemController {
     }
 
     @DeleteMapping("/cartItem")
-    public ResponseEntity<CartDTO> deleteCartItem(@RequestBody DeleteCartItemDTO deleteCartItemDTO) {
+    public ResponseEntity<CartDTO> deleteCartItem(@Valid @RequestBody DeleteCartItemDTO deleteCartItemDTO) {
         CartDTO cartDTO = this.cartItemService.deleteCartItem(deleteCartItemDTO);
 
         if (cartDTO != null) {

@@ -1,13 +1,10 @@
 package com.azizONeill.cart.dto;
 
-import com.azizONeill.cart.model.CartItem;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -15,7 +12,7 @@ import java.util.UUID;
 public class CartDTO implements Serializable {
     @Valid
 
-    @NotNull(message = "cartId cannot be null")
+    @NotNull(message = "cartId is required")
     private UUID id;
 
     @NotNull(message = "userId cannot be null")

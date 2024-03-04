@@ -14,6 +14,9 @@ import com.azizONeill.cart.service.CartService;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,20 +29,17 @@ public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final DTOConverter DTOConverter;
     private final ProductClient productClient;
-    private final CartItemRepository cartItemRepository;
 
 
     @Autowired
     public CartServiceImpl(
             CartRepository cartRepository,
             DTOConverter DTOConverter,
-            ProductClient productClient,
-            CartItemRepository cartItemRepository
+            ProductClient productClient
     ) {
         this.cartRepository = cartRepository;
         this.DTOConverter = DTOConverter;
         this.productClient = productClient;
-        this.cartItemRepository = cartItemRepository;
     }
 
     @Override
@@ -67,6 +67,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Cacheable("cartCache")
     public CartDTO getCartByCartId(UUID cartId) {
 
         Cart cart = cartRepository.findById(cartId).orElse(null);
@@ -92,6 +93,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @CachePut(value = "cartCache", key = "#cartId")
     public CartDTO clearCart(UUID cartId) {
 
         Cart cart = this.cartRepository.findById(cartId).orElse(null);
@@ -109,6 +111,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @CacheEvict(value = "cartItemCache", key = "#cartId")
     public void deleteCart(UUID cartId) {
         Cart cart = this.cartRepository.findById(cartId).orElse(null);
 
