@@ -14,7 +14,7 @@ public interface SubcategoryService {
 
     Set<SubcategoryDTO> getAllSubcategories();
 
-    SubcategoryDTO updateSubcategory(UpdateSubcategoryDTO updateSubcategoryDTO);
+    SubcategoryDTO updateSubcategory(UUID subcategoryId, UpdateSubcategoryDTO updateSubcategoryDTO);
 
     void deleteSubcategory(UUID subcategoryID);
 }

@@ -15,7 +15,7 @@ public interface CategoryService {
 
     Set<CategoryDTO> getAllCategories();
 
-    CategoryDTO updateCategory(UpdateCategoryDTO updateCategoryDTO);
+    CategoryDTO updateCategory(UUID categoryId, UpdateCategoryDTO updateCategoryDTO);
 
-    void deleteCategory(UUID categoryID);
+    void deleteCategory(UUID categoryId);
 }

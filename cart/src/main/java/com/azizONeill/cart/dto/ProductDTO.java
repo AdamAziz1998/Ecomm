@@ -1,6 +1,5 @@
 package com.azizONeill.cart.dto;
 
-import com.azizONeill.cart.dto.enums.Category;
 import com.azizONeill.cart.dto.enums.Status;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;

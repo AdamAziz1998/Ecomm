@@ -1,9 +1,8 @@
 package com.azizONeill.product.service.serviceImpl;
 
 import com.azizONeill.product.dto.CreateProductDTO;
-import com.azizONeill.product.dto.SubcategoryDTO;
 import com.azizONeill.product.dto.UpdateProductDTO;
-import com.azizONeill.product.dto.convert.ProductConverter;
+import com.azizONeill.product.dto.convert.DTOConverter;
 import com.azizONeill.product.dto.ProductDTO;
 import com.azizONeill.product.model.Category;
 import com.azizONeill.product.model.Product;
@@ -29,19 +28,19 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
-    private final ProductConverter productConverter;
+    private final DTOConverter DTOConverter;
     private final SubcategoryRepository subcategoryRepository;
     private final CategoryRepository categoryRepository;
 
     @Autowired
     public ProductServiceImpl(
             ProductRepository productRepository,
-            ProductConverter productConverter,
+            DTOConverter DTOConverter,
             SubcategoryRepository subcategoryRepository,
             CategoryRepository categoryRepository
     ) {
         this.productRepository = productRepository;
-        this.productConverter = productConverter;
+        this.DTOConverter = DTOConverter;
         this.subcategoryRepository = subcategoryRepository;
         this.categoryRepository = categoryRepository;
     }
@@ -50,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
-        return products.stream().map(productConverter::convertProductToProductDTO).collect(Collectors.toList());
+        return products.stream().map(DTOConverter::convertProductToProductDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -59,7 +58,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(productId).orElse(null);
 
         if (product != null) {
-            return productConverter.convertProductToProductDTO(product);
+            return DTOConverter.convertProductToProductDTO(product);
         }
 
         return null;
@@ -69,7 +68,7 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDTO> getProductsBySearch(String searchTerm) {
         List<Product> products = productRepository.findBySearchTerm(searchTerm);
 
-        return products.stream().map(productConverter::convertProductToProductDTO).collect(Collectors.toList());
+        return products.stream().map(DTOConverter::convertProductToProductDTO).collect(Collectors.toList());
     }
 
     //code below will be useful for the back office for this application
@@ -97,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
         subcategory.getProducts().add(newProduct);
         subcategoryRepository.save(subcategory);
 
-        return productConverter.convertProductToProductDTO(newProduct);
+        return DTOConverter.convertProductToProductDTO(newProduct);
     }
 
     @Override
@@ -127,7 +126,7 @@ public class ProductServiceImpl implements ProductService {
 
         productRepository.save(updatedProduct);
 
-        return productConverter.convertProductToProductDTO(updatedProduct);
+        return DTOConverter.convertProductToProductDTO(updatedProduct);
     }
 
     @Override
@@ -142,7 +141,7 @@ public class ProductServiceImpl implements ProductService {
 
         productRepository.deleteById(productId);
 
-        return productConverter.convertProductToProductDTO(product);
+        return DTOConverter.convertProductToProductDTO(product);
     }
 
     @Override
@@ -160,7 +159,7 @@ public class ProductServiceImpl implements ProductService {
                 subcategory -> products.addAll(subcategory.getProducts())
         );
 
-        return products.stream().map(productConverter::convertProductToProductDTO).collect(Collectors.toList());
+        return products.stream().map(DTOConverter::convertProductToProductDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -173,6 +172,6 @@ public class ProductServiceImpl implements ProductService {
 
         Set<Product> products = subcategory.getProducts();
 
-        return products.stream().map(productConverter::convertProductToProductDTO).collect(Collectors.toList());
+        return products.stream().map(DTOConverter::convertProductToProductDTO).collect(Collectors.toList());
     }
 }
