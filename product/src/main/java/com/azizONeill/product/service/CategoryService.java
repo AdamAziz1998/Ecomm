@@ -2,6 +2,7 @@ package com.azizONeill.product.service;
 
 import com.azizONeill.product.dto.CategoryDTO;
 import com.azizONeill.product.dto.CreateCategoryDTO;
+import com.azizONeill.product.dto.UpdateCategoryDTO;
 
 import java.util.Set;
 import java.util.UUID;

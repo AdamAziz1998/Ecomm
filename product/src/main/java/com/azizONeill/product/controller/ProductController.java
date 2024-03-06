@@ -45,14 +45,6 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product/category/{category}")
-    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable String category) {
-
-        List<ProductDTO> productDTOList = productService.getProductsByCategory(Category.valueOf(category));
-
-        return ResponseEntity.status(HttpStatus.OK).body(productDTOList);
-    }
-
     @GetMapping("/product/search/{searchTerm}")
     public ResponseEntity<List<ProductDTO>> getProductsBySearch(@PathVariable String searchTerm) {
 
@@ -91,5 +83,21 @@ public class ProductController {
         else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{}");
         }
+    }
+
+    @GetMapping("/product/category/{categoryId}")
+    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable UUID categoryId) {
+
+        List<ProductDTO> productDTOList = productService.getProductsByCategory(categoryId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(productDTOList);
+    }
+
+    @GetMapping("/product/subCategory/{subcategory}")
+    public ResponseEntity<List<ProductDTO>> getProductsBySubcategory(@PathVariable UUID subcategoryId) {
+
+        List<ProductDTO> productDTOList = productService.getProductsBySubcategory(subcategoryId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(productDTOList);
     }
 }

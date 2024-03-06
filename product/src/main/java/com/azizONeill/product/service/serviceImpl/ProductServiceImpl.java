@@ -1,11 +1,16 @@
 package com.azizONeill.product.service.serviceImpl;
 
 import com.azizONeill.product.dto.CreateProductDTO;
+import com.azizONeill.product.dto.SubcategoryDTO;
 import com.azizONeill.product.dto.UpdateProductDTO;
 import com.azizONeill.product.dto.convert.ProductConverter;
 import com.azizONeill.product.dto.ProductDTO;
+import com.azizONeill.product.model.Category;
 import com.azizONeill.product.model.Product;
+import com.azizONeill.product.model.Subcategory;
+import com.azizONeill.product.repository.CategoryRepository;
 import com.azizONeill.product.repository.ProductRepository;
+import com.azizONeill.product.repository.SubcategoryRepository;
 import com.azizONeill.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +19,9 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -23,11 +30,20 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductConverter productConverter;
+    private final SubcategoryRepository subcategoryRepository;
+    private final CategoryRepository categoryRepository;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ProductConverter productConverter) {
+    public ProductServiceImpl(
+            ProductRepository productRepository,
+            ProductConverter productConverter,
+            SubcategoryRepository subcategoryRepository,
+            CategoryRepository categoryRepository
+    ) {
         this.productRepository = productRepository;
         this.productConverter = productConverter;
+        this.subcategoryRepository = subcategoryRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -50,13 +66,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDTO> getProductsByCategory(Category category) {
-        List<Product> products = productRepository.findByCategory(category);
-
-        return products.stream().map(productConverter::convertProductToProductDTO).collect(Collectors.toList());
-    }
-
-    @Override
     public List<ProductDTO> getProductsBySearch(String searchTerm) {
         List<Product> products = productRepository.findBySearchTerm(searchTerm);
 
@@ -76,9 +85,17 @@ public class ProductServiceImpl implements ProductService {
         newProduct.setStockQuantity(createProductDTO.getStockQuantity());
         newProduct.setImageUrl(createProductDTO.getImageUrl());
         newProduct.setDescription(createProductDTO.getDescription());
-        newProduct.setCategory(createProductDTO.getCategory());
 
-        newProduct = productRepository.save(newProduct);
+        Subcategory subcategory = subcategoryRepository
+                .findById(createProductDTO.getSubcategoryId())
+                .orElse(null);
+
+        if (subcategory == null) {
+            return null;
+        }
+
+        subcategory.getProducts().add(newProduct);
+        subcategoryRepository.save(subcategory);
 
         return productConverter.convertProductToProductDTO(newProduct);
     }
@@ -99,7 +116,14 @@ public class ProductServiceImpl implements ProductService {
         updatedProduct.setStockQuantity(updateProductDTO.getStockQuantity());
         updatedProduct.setImageUrl(updateProductDTO.getImageUrl());
         updatedProduct.setDescription(updateProductDTO.getDescription());
-        updatedProduct.setCategory(updateProductDTO.getCategory());
+
+        Subcategory subcategory = subcategoryRepository.findById(updateProductDTO.getSubcategoryId()).orElse(null);
+
+        if (subcategory == null) {
+            return null;
+        }
+
+        updatedProduct.setSubcategory(subcategory);
 
         productRepository.save(updatedProduct);
 
@@ -119,5 +143,36 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(productId);
 
         return productConverter.convertProductToProductDTO(product);
+    }
+
+    @Override
+    public List<ProductDTO> getProductsByCategory(UUID categoryId) {
+        Category category = categoryRepository.findById(categoryId).orElse(null);
+
+        if (category == null) {
+            return null;
+        }
+
+        Set<Subcategory> subCategories = category.getSubCategories();
+        Set<Product> products = new HashSet<>();
+
+        subCategories.forEach(
+                subcategory -> products.addAll(subcategory.getProducts())
+        );
+
+        return products.stream().map(productConverter::convertProductToProductDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductDTO> getProductsBySubcategory(UUID subcategoryId) {
+        Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElse(null);
+
+        if (subcategory == null) {
+            return null;
+        }
+
+        Set<Product> products = subcategory.getProducts();
+
+        return products.stream().map(productConverter::convertProductToProductDTO).collect(Collectors.toList());
     }
 }
