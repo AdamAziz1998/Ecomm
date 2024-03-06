@@ -1,6 +1,5 @@
 package com.azizONeill.product.dto;
 
-import com.azizONeill.product.model.enums.Category;
 import com.azizONeill.product.model.enums.Status;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -11,8 +10,6 @@ import java.util.UUID;
 
 @Data
 public class CreateProductDTO {
-
-    @Valid
 
     @NotNull(message = "name cannot be null")
     @NotBlank(message = "name cannot be empty")
@@ -39,6 +36,6 @@ public class CreateProductDTO {
     @NotBlank(message = "imageUrl cannot be empty")
     private String imageUrl;
 
-    @NotNull(message = "category cannot be null")
-    private Category category;
+    @NotNull(message = "subcategory cannot be null")
+    private UUID subcategoryId;
 }

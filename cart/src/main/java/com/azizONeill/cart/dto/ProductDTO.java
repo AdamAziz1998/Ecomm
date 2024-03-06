@@ -36,7 +36,4 @@ public class ProductDTO {
     @NotNull(message = "imageUrl cannot be null")
     @NotBlank(message = "imageUrl cannot be empty")
     private String imageUrl;
-
-    @NotNull(message = "category cannot be null")
-    private Category category;
 }

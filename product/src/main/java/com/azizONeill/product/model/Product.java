@@ -1,7 +1,6 @@
 package com.azizONeill.product.model;
 
 
-import com.azizONeill.product.model.enums.Category;
 import com.azizONeill.product.model.enums.Status;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -23,7 +22,7 @@ public class Product {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @Column(name = "id", updatable = false, nullable = false)
+    @Column(name = "product_id", updatable = false, nullable = false)
     private UUID id;
 
     @NotNull
@@ -52,7 +51,10 @@ public class Product {
     @Column(name = "description")
     private String description;
 
-    @NotNull
-    @Column(name = "category", columnDefinition = "integer")
-    private Category category;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "subcategory_id")
+    private Category subcategory;
+
+
+
 }

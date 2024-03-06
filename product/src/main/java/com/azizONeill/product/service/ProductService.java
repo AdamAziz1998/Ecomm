@@ -4,7 +4,6 @@ package com.azizONeill.product.service;
 import com.azizONeill.product.dto.CreateProductDTO;
 import com.azizONeill.product.dto.ProductDTO;
 import com.azizONeill.product.dto.UpdateProductDTO;
-import com.azizONeill.product.model.enums.Category;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,8 +14,6 @@ public interface ProductService {
 
     ProductDTO getProductById(UUID productId);
 
-    List<ProductDTO> getProductsByCategory(Category category);
-
     List<ProductDTO> getProductsBySearch(String searchTerm);
 
     ProductDTO createProduct(CreateProductDTO createProductDTO);
@@ -24,4 +21,8 @@ public interface ProductService {
     ProductDTO updateProduct(UUID productId, UpdateProductDTO updateProductDTO);
 
     ProductDTO deleteProduct(UUID productId);
+
+    List<ProductDTO> getProductsByCategory(UUID categoryId);
+
+    List<ProductDTO> getProductsBySubcategory(UUID subcategoryId);
 }

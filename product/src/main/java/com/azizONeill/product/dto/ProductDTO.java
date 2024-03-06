@@ -1,7 +1,6 @@
 package com.azizONeill.product.dto;
 
 
-import com.azizONeill.product.model.enums.Category;
 import com.azizONeill.product.model.enums.Status;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -13,7 +12,6 @@ import java.util.UUID;
 
 @Data
 public class ProductDTO implements Serializable {
-    @Valid
 
     @NotNull(message = "productId cannot be null")
     private UUID id;
@@ -42,7 +40,4 @@ public class ProductDTO implements Serializable {
     @NotNull(message = "imageUrl cannot be null")
     @NotBlank(message = "imageUrl cannot be empty")
     private String imageUrl;
-
-    @NotNull(message = "category cannot be null")
-    private Category category;
 }

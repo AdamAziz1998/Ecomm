@@ -5,7 +5,6 @@ import com.azizONeill.product.dto.UpdateProductDTO;
 import com.azizONeill.product.dto.convert.ProductConverter;
 import com.azizONeill.product.dto.ProductDTO;
 import com.azizONeill.product.model.Product;
-import com.azizONeill.product.model.enums.Category;
 import com.azizONeill.product.repository.ProductRepository;
 import com.azizONeill.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,6 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

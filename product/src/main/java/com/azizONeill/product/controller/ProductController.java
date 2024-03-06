@@ -4,7 +4,6 @@ package com.azizONeill.product.controller;
 import com.azizONeill.product.dto.CreateProductDTO;
 import com.azizONeill.product.dto.ProductDTO;
 import com.azizONeill.product.dto.UpdateProductDTO;
-import com.azizONeill.product.model.enums.Category;
 import com.azizONeill.product.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
