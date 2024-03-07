@@ -1,9 +1,9 @@
 package com.azizONeill.product.service.serviceImpl;
 
 import com.azizONeill.product.dto.CreateProductDTO;
+import com.azizONeill.product.dto.ProductDTO;
 import com.azizONeill.product.dto.UpdateProductDTO;
 import com.azizONeill.product.dto.convert.DTOConverter;
-import com.azizONeill.product.dto.ProductDTO;
 import com.azizONeill.product.model.Category;
 import com.azizONeill.product.model.Product;
 import com.azizONeill.product.model.Subcategory;

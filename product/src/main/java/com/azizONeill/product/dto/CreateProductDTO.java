@@ -1,7 +1,6 @@
 package com.azizONeill.product.dto;
 
 import com.azizONeill.product.model.enums.Status;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 

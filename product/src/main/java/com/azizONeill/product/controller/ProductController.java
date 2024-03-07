@@ -33,7 +33,7 @@ public class ProductController {
     }
 
     @GetMapping("/product/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable UUID id) {
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID id) {
 
         ProductDTO productDTO = productService.getProductById(id);
 
@@ -41,7 +41,7 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.OK).body(productDTO);
         }
         else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{}");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -62,14 +62,14 @@ public class ProductController {
     }
 
     @PutMapping("/product/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable UUID id, @Valid @RequestBody UpdateProductDTO updateProductDTO) {
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID id, @Valid @RequestBody UpdateProductDTO updateProductDTO) {
 
         ProductDTO productDTO = productService.updateProduct(id, updateProductDTO);
 
         if (productDTO != null) {
             return ResponseEntity.status(HttpStatus.OK).body(productDTO);
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{}");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
