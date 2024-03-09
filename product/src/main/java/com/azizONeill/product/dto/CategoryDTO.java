@@ -1,15 +1,18 @@
 package com.azizONeill.product.dto;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 @Data
 public class CategoryDTO {
+    @Valid
 
     @NotNull(message = "categoryId cannot be null")
     private UUID id;
@@ -20,5 +23,5 @@ public class CategoryDTO {
     private String name;
 
     @NotNull(message = "subcategories cannot be null")
-    private Set<SubcategoryDTO> subcategoryDTOs;
+    private List<SubcategoryDTO> subcategories;
 }

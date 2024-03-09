@@ -4,6 +4,7 @@ import com.azizONeill.product.dto.CategoryDTO;
 import com.azizONeill.product.dto.CreateCategoryDTO;
 import com.azizONeill.product.dto.UpdateCategoryDTO;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ public interface CategoryService {
 
     CategoryDTO getCategoryById(UUID categoryId);
 
-    Set<CategoryDTO> getAllCategories();
+    List<CategoryDTO> getAllCategories();
 
     CategoryDTO updateCategory(UUID categoryId, UpdateCategoryDTO updateCategoryDTO);
 

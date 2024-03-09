@@ -15,6 +15,4 @@ public class UpdateSubcategoryDTO {
     @Size(min = 2, message = "name must be at least 2 characters")
     private String name;
 
-    @NotNull(message = "category cannot be null")
-    private UUID categoryId;
 }

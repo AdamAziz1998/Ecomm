@@ -18,10 +18,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -116,14 +113,6 @@ public class ProductServiceImpl implements ProductService {
         updatedProduct.setImageUrl(updateProductDTO.getImageUrl());
         updatedProduct.setDescription(updateProductDTO.getDescription());
 
-        Subcategory subcategory = subcategoryRepository.findById(updateProductDTO.getSubcategoryId()).orElse(null);
-
-        if (subcategory == null) {
-            return null;
-        }
-
-        updatedProduct.setSubcategory(subcategory);
-
         productRepository.save(updatedProduct);
 
         return DTOConverter.convertProductToProductDTO(updatedProduct);
@@ -152,8 +141,8 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
 
-        Set<Subcategory> subCategories = category.getSubCategories();
-        Set<Product> products = new HashSet<>();
+        List<Subcategory> subCategories = category.getSubcategories();
+        List<Product> products = new ArrayList<>();
 
         subCategories.forEach(
                 subcategory -> products.addAll(subcategory.getProducts())
@@ -170,7 +159,7 @@ public class ProductServiceImpl implements ProductService {
             return null;
         }
 
-        Set<Product> products = subcategory.getProducts();
+        List<Product> products = subcategory.getProducts();
 
         return products.stream().map(DTOConverter::convertProductToProductDTO).collect(Collectors.toList());
     }

@@ -5,6 +5,7 @@ import com.azizONeill.product.dto.CreateCategoryDTO;
 import com.azizONeill.product.dto.UpdateCategoryDTO;
 import com.azizONeill.product.dto.convert.DTOConverter;
 import com.azizONeill.product.model.Category;
+import com.azizONeill.product.model.Subcategory;
 import com.azizONeill.product.repository.CategoryRepository;
 import com.azizONeill.product.repository.SubcategoryRepository;
 import com.azizONeill.product.service.CategoryService;
@@ -12,10 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,9 +38,11 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = new Category();
 
         category.setName(createCategoryDTO.getName());
-        category.setSubCategories(new HashSet<>());
+        category.setSubcategories(new ArrayList<>());
 
-        return DTOConverter.convertCategoryToCategoryDTO(category);
+        Category newCategory = categoryRepository.save(category);
+
+        return DTOConverter.convertCategoryToCategoryDTO(newCategory);
     }
 
     @Override
@@ -58,10 +58,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Set<CategoryDTO> getAllCategories() {
+    public List<CategoryDTO> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
 
-        return categories.stream().map(DTOConverter::convertCategoryToCategoryDTO).collect(Collectors.toSet());
+        return categories.stream().map(DTOConverter::convertCategoryToCategoryDTO).toList();
     }
 
     @Override

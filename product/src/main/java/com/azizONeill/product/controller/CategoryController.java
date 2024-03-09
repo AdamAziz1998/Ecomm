@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -44,9 +45,9 @@ public class CategoryController {
     }
 
     @GetMapping("/category")
-    public ResponseEntity<Set<CategoryDTO>> getAllCategories() {
+    public ResponseEntity<List<CategoryDTO>> getAllCategories() {
 
-        Set<CategoryDTO> categoryDTOs = categoryService.getAllCategories();
+        List<CategoryDTO> categoryDTOs = categoryService.getAllCategories();
 
         return ResponseEntity.status(HttpStatus.OK).body(categoryDTOs);
     }

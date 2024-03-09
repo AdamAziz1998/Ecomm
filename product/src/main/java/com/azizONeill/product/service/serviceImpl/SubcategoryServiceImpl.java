@@ -49,10 +49,11 @@ public class SubcategoryServiceImpl implements SubcategoryService {
             return null;
         }
 
-        category.getSubCategories().add(subcategory);
+        category.getSubcategories().add(subcategory);
         categoryRepository.save(category);
+        Subcategory newSubcategory = subcategoryRepository.save(subcategory);
 
-        return DTOConverter.convertSubcategoryToSubcategoryDTO(subcategory);
+        return DTOConverter.convertSubcategoryToSubcategoryDTO(newSubcategory);
     }
 
     @Override
@@ -68,11 +69,11 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
-    public Set<SubcategoryDTO> getAllSubcategories() {
+    public List<SubcategoryDTO> getAllSubcategories() {
 
         List<Subcategory> subcategories = subcategoryRepository.findAll();
 
-        return subcategories.stream().map(DTOConverter::convertSubcategoryToSubcategoryDTO).collect(Collectors.toSet());
+        return subcategories.stream().map(DTOConverter::convertSubcategoryToSubcategoryDTO).toList();
     }
 
     @Override
@@ -85,14 +86,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         }
 
         subcategory.setName(updateSubcategoryDTO.getName());
-
-        Category category = categoryRepository.findById(updateSubcategoryDTO.getCategoryId()).orElse(null);
-
-        if (category == null) {
-            return null;
-        }
-
-        subcategory.setCategory(category);
+        subcategoryRepository.save(subcategory);
 
         return DTOConverter.convertSubcategoryToSubcategoryDTO(subcategory);
     }

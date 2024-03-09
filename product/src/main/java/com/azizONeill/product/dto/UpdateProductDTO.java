@@ -35,6 +35,4 @@ public class UpdateProductDTO {
     @NotBlank(message = "imageUrl cannot be empty")
     private String imageUrl;
 
-    @NotNull(message = "subcategory cannot be null")
-    private UUID subcategoryId;
 }

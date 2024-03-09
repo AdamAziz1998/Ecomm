@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -18,13 +18,14 @@ public class Category {
 
     @Id
     @GeneratedValue(generator = "UUID")
-    @Column(name = "category_id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = false, nullable = false)
     private UUID id;
 
     @NotNull
     @Column(name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "category")
-    private Set<Subcategory> subCategories;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "CATEGORY_ID")
+    private List<Subcategory> subcategories;
 }

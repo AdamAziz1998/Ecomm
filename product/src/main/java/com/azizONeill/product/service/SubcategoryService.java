@@ -4,6 +4,7 @@ import com.azizONeill.product.dto.CreateSubcategoryDTO;
 import com.azizONeill.product.dto.SubcategoryDTO;
 import com.azizONeill.product.dto.UpdateSubcategoryDTO;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ public interface SubcategoryService {
 
     SubcategoryDTO getSubcategoryById(UUID subcategoryId);
 
-    Set<SubcategoryDTO> getAllSubcategories();
+    List<SubcategoryDTO> getAllSubcategories();
 
     SubcategoryDTO updateSubcategory(UUID subcategoryId, UpdateSubcategoryDTO updateSubcategoryDTO);
 
