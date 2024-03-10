@@ -22,7 +22,8 @@ public class Subcategory {
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
-    @OneToMany(mappedBy = "subcategory")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "SUBCATEGORY_ID")
     private List<Product> products;
 
     public Subcategory(UUID id, @NotNull String name, Category category, List<Product> products) {

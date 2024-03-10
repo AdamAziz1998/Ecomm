@@ -46,7 +46,7 @@ public class Product {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "subcategory_id")
+    @JoinColumn(name = "SUBCATEGORY_ID")
     private Subcategory subcategory;
 
 
