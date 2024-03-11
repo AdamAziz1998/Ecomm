@@ -26,7 +26,7 @@ spring:
           uri: http://localhost:8070
           predicates:
             - Path=/api/v1/user/**
-        - id: user
+        - id: category
           uri: http://localhost:8050
           predicates:
             - Path=/api/v1/category/**,/api/v1/subcategory/**

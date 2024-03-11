@@ -4,12 +4,8 @@ import com.azizONeill.product.dto.CreateProductDTO;
 import com.azizONeill.product.dto.ProductDTO;
 import com.azizONeill.product.dto.UpdateProductDTO;
 import com.azizONeill.product.dto.convert.DTOConverter;
-import com.azizONeill.product.model.Category;
 import com.azizONeill.product.model.Product;
-import com.azizONeill.product.model.Subcategory;
-import com.azizONeill.product.repository.CategoryRepository;
 import com.azizONeill.product.repository.ProductRepository;
-import com.azizONeill.product.repository.SubcategoryRepository;
 import com.azizONeill.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +14,9 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,20 +24,14 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final DTOConverter DTOConverter;
-    private final SubcategoryRepository subcategoryRepository;
-    private final CategoryRepository categoryRepository;
 
     @Autowired
     public ProductServiceImpl(
             ProductRepository productRepository,
-            DTOConverter DTOConverter,
-            SubcategoryRepository subcategoryRepository,
-            CategoryRepository categoryRepository
+            DTOConverter DTOConverter
     ) {
         this.productRepository = productRepository;
         this.DTOConverter = DTOConverter;
-        this.subcategoryRepository = subcategoryRepository;
-        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -73,25 +65,16 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO createProduct(CreateProductDTO createProductDTO) {
 
-        Product newProduct = new Product();
+        Product product = new Product();
 
-        newProduct.setName(createProductDTO.getName());
-        newProduct.setStatus(createProductDTO.getStatus());
-        newProduct.setPrice(createProductDTO.getPrice());
-        newProduct.setStockQuantity(createProductDTO.getStockQuantity());
-        newProduct.setImageUrl(createProductDTO.getImageUrl());
-        newProduct.setDescription(createProductDTO.getDescription());
+        product.setName(createProductDTO.getName());
+        product.setStatus(createProductDTO.getStatus());
+        product.setPrice(createProductDTO.getPrice());
+        product.setStockQuantity(createProductDTO.getStockQuantity());
+        product.setImageUrl(createProductDTO.getImageUrl());
+        product.setDescription(createProductDTO.getDescription());
 
-        Subcategory subcategory = subcategoryRepository
-                .findById(createProductDTO.getSubcategoryId())
-                .orElse(null);
-
-        if (subcategory == null) {
-            return null;
-        }
-
-        subcategory.getProducts().add(newProduct);
-        subcategoryRepository.save(subcategory);
+        Product newProduct = productRepository.save(product);
 
         return DTOConverter.convertProductToProductDTO(newProduct);
     }
@@ -131,36 +114,5 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(productId);
 
         return DTOConverter.convertProductToProductDTO(product);
-    }
-
-    @Override
-    public List<ProductDTO> getProductsByCategory(UUID categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElse(null);
-
-        if (category == null) {
-            return null;
-        }
-
-        List<Subcategory> subCategories = category.getSubcategories();
-        List<Product> products = new ArrayList<>();
-
-        subCategories.forEach(
-                subcategory -> products.addAll(subcategory.getProducts())
-        );
-
-        return products.stream().map(DTOConverter::convertProductToProductDTO).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ProductDTO> getProductsBySubcategory(UUID subcategoryId) {
-        Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElse(null);
-
-        if (subcategory == null) {
-            return null;
-        }
-
-        List<Product> products = subcategory.getProducts();
-
-        return products.stream().map(DTOConverter::convertProductToProductDTO).collect(Collectors.toList());
     }
 }

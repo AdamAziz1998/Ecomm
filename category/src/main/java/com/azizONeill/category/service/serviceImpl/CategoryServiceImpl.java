@@ -12,6 +12,10 @@ import com.azizONeill.category.repository.CategoryRepository;
 import com.azizONeill.category.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -63,6 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(value = "categories")
     public List<CategoryDTO> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
 
@@ -70,6 +75,8 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @CacheEvict(value = "categories", allEntries = true)
+    @CachePut(value = "category", key = "#categoryId")
     public CategoryDTO updateCategory(UUID categoryId, UpdateCategoryDTO updateCategoryDTO) {
 
         Category category = categoryRepository.findById(categoryId).orElse(null);
@@ -86,6 +93,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Caching( evict = {
+            @CacheEvict(value = "category", key = "#categoryId"),
+            @CacheEvict(value = "categories", allEntries = true)
+    })
     public void deleteCategory(UUID categoryId) {
         Category category = categoryRepository.findById(categoryId).orElse(null);
 
@@ -98,6 +109,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Cacheable(value = "category")
     public List<ProductDTO> getProductsByCategory(UUID categoryId) {
 
         Category category = categoryRepository.findById(categoryId).orElse(null);

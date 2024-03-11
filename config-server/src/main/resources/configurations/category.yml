@@ -32,6 +32,10 @@ spring:
     compose:
       file: ./category/compose.yaml
 
+application:
+  config:
+    product-url: http://localhost:8222/api/v1
+
 management:
   tracing:
     sampling:

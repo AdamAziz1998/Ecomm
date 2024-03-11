@@ -84,20 +84,4 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{}");
         }
     }
-
-    @GetMapping("/product/category/{categoryId}")
-    public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable UUID categoryId) {
-
-        List<ProductDTO> productDTOList = productService.getProductsByCategory(categoryId);
-
-        return ResponseEntity.status(HttpStatus.OK).body(productDTOList);
-    }
-
-    @GetMapping("/product/subCategory/{subcategory}")
-    public ResponseEntity<List<ProductDTO>> getProductsBySubcategory(@PathVariable UUID subcategoryId) {
-
-        List<ProductDTO> productDTOList = productService.getProductsBySubcategory(subcategoryId);
-
-        return ResponseEntity.status(HttpStatus.OK).body(productDTOList);
-    }
 }

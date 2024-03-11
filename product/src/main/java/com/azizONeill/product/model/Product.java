@@ -45,12 +45,8 @@ public class Product {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SUBCATEGORY_ID")
-    private Subcategory subcategory;
 
-
-    public Product(UUID id, @NotNull String name, @NotNull Status status, @NotNull @Positive BigDecimal price, @NotNull @PositiveOrZero int stockQuantity, @NotNull String imageUrl, @NotNull String description, Subcategory subcategory) {
+    public Product(UUID id, @NotNull String name, @NotNull Status status, @NotNull @Positive BigDecimal price, @NotNull @PositiveOrZero int stockQuantity, @NotNull String imageUrl, @NotNull String description) {
         this.id = id;
         this.name = name;
         this.status = status;
@@ -58,7 +54,6 @@ public class Product {
         this.stockQuantity = stockQuantity;
         this.imageUrl = imageUrl;
         this.description = description;
-        this.subcategory = subcategory;
     }
 
     public Product() {
@@ -92,10 +87,6 @@ public class Product {
         return this.description;
     }
 
-    public Subcategory getSubcategory() {
-        return this.subcategory;
-    }
-
     public void setId(UUID id) {
         this.id = id;
     }
@@ -122,9 +113,5 @@ public class Product {
 
     public void setDescription(@NotNull String description) {
         this.description = description;
-    }
-
-    public void setSubcategory(Subcategory subcategory) {
-        this.subcategory = subcategory;
     }
 }

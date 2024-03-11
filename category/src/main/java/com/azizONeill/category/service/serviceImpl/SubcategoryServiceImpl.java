@@ -13,6 +13,10 @@ import com.azizONeill.category.repository.SubcategoryRepository;
 import com.azizONeill.category.service.SubcategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -76,6 +80,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
+    @Cacheable("subcategoriesCache")
     public List<SubcategoryDTO> getAllSubcategories() {
 
         List<Subcategory> subcategories = subcategoryRepository.findAll();
@@ -84,6 +89,8 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
+    @CachePut(value = "subcategoryCache", key = "#subcategoryId")
+    @CacheEvict(value = "subcategoriesCache", allEntries = true)
     public SubcategoryDTO updateSubcategory(UUID subcategoryId, UpdateSubcategoryDTO updateSubcategoryDTO) {
 
         Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElse(null);
@@ -100,6 +107,10 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
+    @Caching( evict = {
+            @CacheEvict(value = "subcategoryCache", key = "#subcategoryId"),
+            @CacheEvict(value = "subcategoriesCache", allEntries = true)
+    })
     public void deleteSubcategory(UUID subcategoryId) {
 
         Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElse(null);
@@ -112,6 +123,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
+    @Cacheable("subcategoryCache")
     public List<ProductDTO> getProductsBySubcategory(UUID categoryId) {
 
         Subcategory subcategory = subcategoryRepository.findById(categoryId).orElse(null);

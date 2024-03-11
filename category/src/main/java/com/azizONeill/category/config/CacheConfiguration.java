@@ -29,7 +29,19 @@ public class CacheConfiguration {
     @Bean
     public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
         return (builder) -> builder
-                .withCacheConfiguration("productCache",
+                .withCacheConfiguration("categoryCache",
+                        RedisCacheConfiguration
+                                .defaultCacheConfig()
+                                .entryTtl(Duration.ofMinutes(59)))
+                .withCacheConfiguration("categoriesCache",
+                        RedisCacheConfiguration
+                                .defaultCacheConfig()
+                                .entryTtl(Duration.ofMinutes(59)))
+                .withCacheConfiguration("subcategoryCache",
+                        RedisCacheConfiguration
+                                .defaultCacheConfig()
+                                .entryTtl(Duration.ofMinutes(59)))
+                .withCacheConfiguration("subcategoriesCache",
                         RedisCacheConfiguration
                                 .defaultCacheConfig()
                                 .entryTtl(Duration.ofMinutes(59)));

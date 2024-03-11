@@ -21,8 +21,4 @@ public interface ProductService {
     ProductDTO updateProduct(UUID productId, UpdateProductDTO updateProductDTO);
 
     ProductDTO deleteProduct(UUID productId);
-
-    List<ProductDTO> getProductsByCategory(UUID categoryId);
-
-    List<ProductDTO> getProductsBySubcategory(UUID subcategoryId);
 }

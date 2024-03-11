@@ -69,7 +69,7 @@ public class SubcategoryController {
         subcategoryService.deleteSubcategory(subcategoryId);
     }
 
-    @GetMapping("category/product/{categoryId}")
+    @GetMapping("subcategory/product/{categoryId}")
     public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable UUID subcategoryId) {
         List<ProductDTO> products = subcategoryService.getProductsBySubcategory(subcategoryId);
 
