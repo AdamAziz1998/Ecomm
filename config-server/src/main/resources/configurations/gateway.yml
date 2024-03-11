@@ -17,7 +17,7 @@ spring:
         - id: product
           uri: http://localhost:8090
           predicates:
-            - Path=/api/v1/product/**,/api/v1/category/**,/api/v1/subcategory/**
+            - Path=/api/v1/product/**
         - id: cart
           uri: http://localhost:8060
           predicates:
@@ -26,6 +26,10 @@ spring:
           uri: http://localhost:8070
           predicates:
             - Path=/api/v1/user/**
+        - id: user
+          uri: http://localhost:8050
+          predicates:
+            - Path=/api/v1/category/**,/api/v1/subcategory/**
 management:
   tracing:
     sampling:
