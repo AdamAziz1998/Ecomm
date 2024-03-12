@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -79,7 +80,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @CachePut(value = "productCache", key = "#productId")
+    @Caching(evict = {
+            @CacheEvict(value = "subcategory", allEntries = true, beforeInvocation = true),
+            @CacheEvict(value = "productCartCache", allEntries = true, beforeInvocation = true)
+            },
+            put = {@CachePut(value = "productCache", key = "#productId")}
+    )
     public ProductDTO updateProduct(UUID productId, UpdateProductDTO updateProductDTO) {
 
         Product updatedProduct = productRepository.findById(productId).orElse(null);
@@ -99,7 +105,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    @CacheEvict(value = "productCache", key = "#productId", beforeInvocation = true)
+    @Caching(evict = {
+            @CacheEvict(value = "productCache", key = "#productId", beforeInvocation = true),
+            @CacheEvict(value = "productVariant", allEntries = true, beforeInvocation = true),
+            @CacheEvict(value = "subcategory", allEntries = true, beforeInvocation = true),
+            @CacheEvict(value = "productCartCache", allEntries = true, beforeInvocation = true),
+    })
     public ProductDTO deleteProduct(UUID productId) {
 
         Product product = productRepository.findById(productId).orElse(null);
@@ -113,6 +124,7 @@ public class ProductServiceImpl implements ProductService {
         return DTOConverter.convertProductToProductDTO(product);
     }
 
+    @Cacheable("productVariant")
     public List<ProductVariantDTO> getProductVariantByProductId(UUID productId) {
         Product product = productRepository.findById(productId).orElse(null);
 

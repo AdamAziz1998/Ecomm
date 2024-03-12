@@ -11,6 +11,8 @@ import com.azizONeill.product.repository.ProductVariantRepository;
 import com.azizONeill.product.service.ProductVariantService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +37,13 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         this.productRepository = productRepository;
     }
 
+    @Override
+    @Caching(evict = {
+            @CacheEvict(value = "productCache", key = "#createProductVariantDTO.getProductId()", beforeInvocation = true),
+            @CacheEvict(value = "productVariant", key = "#productVariantId", beforeInvocation = true),
+            @CacheEvict(value = "subcategory", allEntries = true, beforeInvocation = true),
+            @CacheEvict(value = "productCartCache", allEntries = true, beforeInvocation = true),
+    })
     public ProductVariantDTO createProductVariant(CreateProductVariantDTO createProductVariantDTO) {
 
         ProductVariant productVariant = new ProductVariant();
@@ -69,6 +78,13 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         return DTOConverter.convertProductVariantToProductVariantDTO(newProductVariant);
     }
 
+    @Override
+    @Caching(evict = {
+            @CacheEvict(value = "productCache", key = "#productVariant.getProduct().getId()", beforeInvocation = true),
+            @CacheEvict(value = "productVariant", key = "#productVariantId", beforeInvocation = true),
+            @CacheEvict(value = "subcategory", allEntries = true, beforeInvocation = true),
+            @CacheEvict(value = "productCartCache", allEntries = true, beforeInvocation = true),
+    })
     public ProductVariantDTO updateProductVariant(UUID productVariantId, UpdateProductVariantDTO updateProductVariantDTO) {
         ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElse(null);
 
@@ -98,6 +114,13 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         return DTOConverter.convertProductVariantToProductVariantDTO(updatedProductVariant);
     }
 
+    @Override
+    @Caching(evict = {
+            @CacheEvict(value = "productCache", key = "#productVariant.getProduct().getId()", beforeInvocation = true),
+            @CacheEvict(value = "productVariant", key = "#productVariantId", beforeInvocation = true),
+            @CacheEvict(value = "subcategory", allEntries = true, beforeInvocation = true),
+            @CacheEvict(value = "productCartCache", allEntries = true, beforeInvocation = true),
+    })
     public void deleteProductVariant(UUID productVariantId) {
         ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElse(null);
 
@@ -108,6 +131,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         productVariantRepository.delete(productVariant);
     }
 
+    @Override
     public ProductVariantDTO getProductVariant(UUID productVariantId) {
         ProductVariant productVariant = productVariantRepository.findById(productVariantId).orElse(null);
 
@@ -118,6 +142,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
         return DTOConverter.convertProductVariantToProductVariantDTO(productVariant);
     }
 
+    @Override
     public List<ProductVariantDTO> getAllProductVariants() {
         List<ProductVariant> subcategories = productVariantRepository.findAll();
 

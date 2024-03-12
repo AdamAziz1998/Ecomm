@@ -108,7 +108,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @CacheEvict(value = "productCache", key = "#cartId")
+    @CacheEvict(value = "productCartCache", key = "#cartId")
     public void deleteCart(UUID cartId) {
         Cart cart = this.cartRepository.findById(cartId).orElse(null);
 
