@@ -28,7 +28,11 @@ public class SubcategoryController {
 
         SubcategoryDTO subcategoryDTO = subcategoryService.createSubcategory(createSubcategoryDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(subcategoryDTO);
+        if (subcategoryDTO != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(subcategoryDTO);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
     }
 
     @GetMapping("/subcategory/{subcategoryId}")

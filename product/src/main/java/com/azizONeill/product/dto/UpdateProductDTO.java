@@ -15,16 +15,9 @@ public class UpdateProductDTO {
     @Size(min = 2, message = "name must be at least 2 characters")
     private String name;
 
-    @NotNull(message = "status cannot be null")
-    private Status status;
-
-    @NotNull(message = "price cannot be null")
-    @Positive(message = "price must be positive")
-    private BigDecimal price;
-
-    @NotNull(message = "stockQuantity cannot be null")
-    @PositiveOrZero(message = "stockQuantity must be at least 0")
-    private int stockQuantity;
+    @NotNull(message = "displayPrice cannot be null")
+    @Positive(message = "displayPrice must be positive")
+    private double displayPrice;
 
     @NotNull(message = "description cannot be null")
     @NotBlank(message = "description cannot be empty")

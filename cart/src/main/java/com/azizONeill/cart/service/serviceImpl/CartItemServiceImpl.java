@@ -41,6 +41,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
+    @CacheEvict(value = "productCartCache", key = "#createCartItemDTO.getCartId()")
     public CartItemDTO createCartItem(CreateCartItemDTO createCartItemDTO) {
 
         Cart cart = this.cartRepository.findById(createCartItemDTO.getCartId()).orElse(null);
@@ -50,8 +51,8 @@ public class CartItemServiceImpl implements CartItemService {
         }
 
         //check if cartItem is already in cart
-        Set<CartItem> cartItems = cart.getCartItems();
-        Set<CartItem> filteredCartItems = cartItems.stream().filter(cartItem -> createCartItemDTO.getProductId().equals(cartItem.getProductId())).collect(Collectors.toSet());
+        List<CartItem> cartItems = cart.getCartItems();
+        List<CartItem> filteredCartItems = cartItems.stream().filter(cartItem -> createCartItemDTO.getProductId().equals(cartItem.getProductId())).toList();
 
         if (!filteredCartItems.isEmpty()) {
             return null;
@@ -71,7 +72,6 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    @Cacheable("cartItemCache")
     public CartItemDTO getCartItemByCartItemId(UUID cartItemId) {
         CartItem cartItem = this.cartItemRepository.findById(cartItemId).orElse(null);
 
@@ -97,13 +97,12 @@ public class CartItemServiceImpl implements CartItemService {
             return null;
         }
 
-        Set<CartItem> cartItems = cart.getCartItems();
+        List<CartItem> cartItems = cart.getCartItems();
 
         return cartItems.stream().map(this.DTOConverter::convertCartItemToCartItemDTO).collect(Collectors.toList());
     }
 
     @Override
-    @CachePut(value = "cartItemCache", key = "#updateCartItemDTO.getCartItemId()")
     public CartItemDTO updateCartItemQuantity(UpdateCartItemDTO updateCartItemDTO) {
         CartItem cartItem = this.cartItemRepository.findById(updateCartItemDTO.getCartItemId()).orElse(null);
 
@@ -118,7 +117,7 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    @CacheEvict(value = "cartItemCache", key = "#deleteCartItemDTO.getCartItemId()", beforeInvocation = true)
+    @CacheEvict(value = "productCartCache", key = "#deleteCartItemDTO.getCartId()")
     public CartDTO deleteCartItem(DeleteCartItemDTO deleteCartItemDTO) {
 
         Cart cart = cartRepository.findById(deleteCartItemDTO.getCartId()).orElse(null);
@@ -127,7 +126,7 @@ public class CartItemServiceImpl implements CartItemService {
             return null;
         }
 
-        Set<CartItem> cartItems = cart.getCartItems();
+        List<CartItem> cartItems = cart.getCartItems();
         CartItem cartItem = cartItems.stream()
                 .filter(item -> deleteCartItemDTO.getCartItemId().equals(item.getId()))
                 .findFirst()

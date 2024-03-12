@@ -67,7 +67,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Cacheable(value = "categories")
     public List<CategoryDTO> getAllCategories() {
         List<Category> categories = categoryRepository.findAll();
 
@@ -75,8 +74,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @CacheEvict(value = "categories", allEntries = true)
-    @CachePut(value = "category", key = "#categoryId")
     public CategoryDTO updateCategory(UUID categoryId, UpdateCategoryDTO updateCategoryDTO) {
 
         Category category = categoryRepository.findById(categoryId).orElse(null);
@@ -93,10 +90,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Caching( evict = {
-            @CacheEvict(value = "category", key = "#categoryId"),
-            @CacheEvict(value = "categories", allEntries = true)
-    })
+    @CacheEvict(value = "subcategory", allEntries = true)
     public void deleteCategory(UUID categoryId) {
         Category category = categoryRepository.findById(categoryId).orElse(null);
 
@@ -109,7 +103,6 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    @Cacheable(value = "category")
     public List<ProductDTO> getProductsByCategory(UUID categoryId) {
 
         Category category = categoryRepository.findById(categoryId).orElse(null);

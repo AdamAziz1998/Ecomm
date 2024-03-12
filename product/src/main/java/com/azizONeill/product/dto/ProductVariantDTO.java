@@ -1,7 +1,6 @@
-package com.azizONeill.cart.dto;
+package com.azizONeill.product.dto;
 
-import com.azizONeill.cart.dto.enums.Status;
-import jakarta.validation.Valid;
+import com.azizONeill.product.model.enums.Status;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -9,33 +8,36 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
 @Data
-public class ProductDTO {
-    @Valid
+public class ProductVariantDTO {
 
-    @NotNull(message = "name cannot be null")
-    @NotBlank(message = "name cannot be empty")
-    @Size(min = 2, message = "name must be at least 2 characters")
-    private String name;
+    @NotNull(message = "productId cannot be null")
+    private UUID id;
 
     @NotNull(message = "status cannot be null")
+    @NotBlank(message = "status cannot be empty")
     private Status status;
 
     @NotNull(message = "price cannot be null")
     @Positive(message = "price must be positive")
-    private BigDecimal price;
+    private double price;
 
     @NotNull(message = "stockQuantity cannot be null")
-    @Positive(message = "stockQuantity must be at least 0")
+    @Positive(message = "stockQuantity must be positive")
     private int stockQuantity;
-
-    @NotNull(message = "description cannot be null")
-    @NotBlank(message = "description cannot be empty")
-    @Size(min = 5, message = "description must be at least 5 characters")
-    private String description;
 
     @NotNull(message = "imageUrl cannot be null")
     @NotBlank(message = "imageUrl cannot be empty")
     private String imageUrl;
+
+    @NotBlank(message = "color cannot be empty")
+    private String color;
+
+    @NotBlank(message = "size cannot be empty")
+    private String size;
+
+    @NotBlank(message = "flavour cannot be empty")
+    private String flavour;
 }

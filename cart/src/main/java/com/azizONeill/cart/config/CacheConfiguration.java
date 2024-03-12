@@ -29,14 +29,10 @@ public class CacheConfiguration {
     @Bean
     public RedisCacheManagerBuilderCustomizer redisCacheManagerBuilderCustomizer() {
         return (builder) -> builder
-                .withCacheConfiguration("cartCache",
+                .withCacheConfiguration("productCartCache",
                         RedisCacheConfiguration
                                 .defaultCacheConfig()
-                                .entryTtl(Duration.ofMinutes(20)))
-                .withCacheConfiguration("cartItemCache",
-                    RedisCacheConfiguration
-                            .defaultCacheConfig()
-                            .entryTtl(Duration.ofMinutes(20)));
+                                .entryTtl(Duration.ofMinutes(30)));
     }
 }
 

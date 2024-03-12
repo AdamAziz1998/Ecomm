@@ -5,4 +5,4 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Status {inStock, outOfStock, oneLeftInStock, almostSoldOut}
+public enum Status {inStock, outOfStock, oneLeftInStock, almostSoldOut, unlimitedStock}

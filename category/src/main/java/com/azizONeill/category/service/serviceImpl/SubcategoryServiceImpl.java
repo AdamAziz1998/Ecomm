@@ -61,8 +61,8 @@ public class SubcategoryServiceImpl implements SubcategoryService {
         }
 
         category.getSubcategories().add(subcategory);
-        categoryRepository.save(category);
         Subcategory newSubcategory = subcategoryRepository.save(subcategory);
+        categoryRepository.save(category);
 
         return DTOConverter.convertSubcategoryToSubcategoryDTO(newSubcategory);
     }
@@ -80,7 +80,6 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
-    @Cacheable("subcategoriesCache")
     public List<SubcategoryDTO> getAllSubcategories() {
 
         List<Subcategory> subcategories = subcategoryRepository.findAll();
@@ -89,8 +88,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
-    @CachePut(value = "subcategoryCache", key = "#subcategoryId")
-    @CacheEvict(value = "subcategoriesCache", allEntries = true)
+    @CacheEvict(value = "subcategory", key = "#subcategoryId")
     public SubcategoryDTO updateSubcategory(UUID subcategoryId, UpdateSubcategoryDTO updateSubcategoryDTO) {
 
         Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElse(null);
@@ -107,10 +105,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
-    @Caching( evict = {
-            @CacheEvict(value = "subcategoryCache", key = "#subcategoryId"),
-            @CacheEvict(value = "subcategoriesCache", allEntries = true)
-    })
+    @CacheEvict(value = "subcategory", key = "#subcategoryId")
     public void deleteSubcategory(UUID subcategoryId) {
 
         Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElse(null);
@@ -123,10 +118,10 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     }
 
     @Override
-    @Cacheable("subcategoryCache")
-    public List<ProductDTO> getProductsBySubcategory(UUID categoryId) {
+    @Cacheable(value = "subcategory")
+    public List<ProductDTO> getProductsBySubcategory(UUID subcategoryId) {
 
-        Subcategory subcategory = subcategoryRepository.findById(categoryId).orElse(null);
+        Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElse(null);
 
         if (subcategory == null) {
             return null;

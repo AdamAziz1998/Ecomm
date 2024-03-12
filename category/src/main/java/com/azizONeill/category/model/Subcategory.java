@@ -22,6 +22,8 @@ public class Subcategory {
     @JoinColumn(name = "CATEGORY_ID")
     private Category category;
 
+    @NotNull
+    @Column(name = "products")
     private List<UUID> products;
 
     public Subcategory(UUID id, @NotNull String name, Category category, List<UUID> products) {

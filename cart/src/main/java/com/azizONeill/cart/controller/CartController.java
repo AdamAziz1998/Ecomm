@@ -1,7 +1,8 @@
 package com.azizONeill.cart.controller;
 
-import com.azizONeill.cart.dto.*;
-import com.azizONeill.cart.model.Cart;
+import com.azizONeill.cart.dto.CartDTO;
+import com.azizONeill.cart.dto.CreateCartDTO;
+import com.azizONeill.cart.dto.ProductDTO;
 import com.azizONeill.cart.service.CartService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;

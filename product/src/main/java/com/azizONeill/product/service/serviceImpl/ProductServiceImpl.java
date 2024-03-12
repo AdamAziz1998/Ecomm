@@ -2,6 +2,7 @@ package com.azizONeill.product.service.serviceImpl;
 
 import com.azizONeill.product.dto.CreateProductDTO;
 import com.azizONeill.product.dto.ProductDTO;
+import com.azizONeill.product.dto.ProductVariantDTO;
 import com.azizONeill.product.dto.UpdateProductDTO;
 import com.azizONeill.product.dto.convert.DTOConverter;
 import com.azizONeill.product.model.Product;
@@ -68,9 +69,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = new Product();
 
         product.setName(createProductDTO.getName());
-        product.setStatus(createProductDTO.getStatus());
-        product.setPrice(createProductDTO.getPrice());
-        product.setStockQuantity(createProductDTO.getStockQuantity());
+        product.setDisplayPrice(createProductDTO.getDisplayPrice());
         product.setImageUrl(createProductDTO.getImageUrl());
         product.setDescription(createProductDTO.getDescription());
 
@@ -90,9 +89,7 @@ public class ProductServiceImpl implements ProductService {
         }
 
         updatedProduct.setName(updateProductDTO.getName());
-        updatedProduct.setStatus(updateProductDTO.getStatus());
-        updatedProduct.setPrice(updateProductDTO.getPrice());
-        updatedProduct.setStockQuantity(updateProductDTO.getStockQuantity());
+        updatedProduct.setDisplayPrice(updateProductDTO.getDisplayPrice());
         updatedProduct.setImageUrl(updateProductDTO.getImageUrl());
         updatedProduct.setDescription(updateProductDTO.getDescription());
 
@@ -114,5 +111,9 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteById(productId);
 
         return DTOConverter.convertProductToProductDTO(product);
+    }
+
+    public List<ProductVariantDTO> getProductVariantByProductId(UUID productId) {
+
     }
 }

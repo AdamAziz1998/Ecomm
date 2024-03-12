@@ -8,19 +8,16 @@ import com.azizONeill.cart.dto.ProductDTO;
 import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
 import com.azizONeill.cart.model.CartItem;
-import com.azizONeill.cart.repository.CartItemRepository;
 import com.azizONeill.cart.repository.CartRepository;
 import com.azizONeill.cart.service.CartService;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -47,9 +44,9 @@ public class CartServiceImpl implements CartService {
 
         Cart cart = new Cart();
 
-        Set<CartItemDTO> cartItemDTOS = createCartDTO.getCartItems();
-        Set<CartItem> cartItems = cartItemDTOS.stream()
-                .map(this.DTOConverter::convertCartItemDTOToCartItem).collect(Collectors.toSet());
+        List<CartItemDTO> cartItemDTOS = createCartDTO.getCartItems();
+        List<CartItem> cartItems = cartItemDTOS.stream()
+                .map(this.DTOConverter::convertCartItemDTOToCartItem).toList();
 
         cart.setCartItems(cartItems);
         cart.setUserId(createCartDTO.getUserId());
@@ -67,7 +64,6 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @Cacheable("cartCache")
     public CartDTO getCartByCartId(UUID cartId) {
 
         Cart cart = cartRepository.findById(cartId).orElse(null);
@@ -80,6 +76,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Cacheable("productCartCache")
     public List<ProductDTO> getProductsByCartId(UUID cartId) {
         Cart cart = this.cartRepository.findById(cartId).orElse(null);
 
@@ -87,13 +84,13 @@ public class CartServiceImpl implements CartService {
             return null;
         }
 
-        Set<CartItem> cartItems = cart.getCartItems();
+        List<CartItem> cartItems = cart.getCartItems();
 
         return cartItems.stream().map(cartItem -> productClient.findProductById(cartItem.getProductId())).toList();
     }
 
     @Override
-    @CachePut(value = "cartCache", key = "#cartId")
+    @CacheEvict(value = "productCartCache", key = "#cartId")
     public CartDTO clearCart(UUID cartId) {
 
         Cart cart = this.cartRepository.findById(cartId).orElse(null);
@@ -102,7 +99,7 @@ public class CartServiceImpl implements CartService {
             return null;
         }
 
-        Set<CartItem> cartItems = cart.getCartItems();
+        List<CartItem> cartItems = cart.getCartItems();
         cartItems.clear();
 
         Cart emptiedCart = cartRepository.save(cart);
@@ -111,7 +108,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @CacheEvict(value = "cartItemCache", key = "#cartId")
+    @CacheEvict(value = "productCache", key = "#cartId")
     public void deleteCart(UUID cartId) {
         Cart cart = this.cartRepository.findById(cartId).orElse(null);
 
