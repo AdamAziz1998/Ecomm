@@ -3,6 +3,7 @@ package com.azizONeill.product.service;
 
 import com.azizONeill.product.dto.CreateProductDTO;
 import com.azizONeill.product.dto.ProductDTO;
+import com.azizONeill.product.dto.ProductVariantDTO;
 import com.azizONeill.product.dto.UpdateProductDTO;
 
 import java.util.List;
@@ -21,4 +22,6 @@ public interface ProductService {
     ProductDTO updateProduct(UUID productId, UpdateProductDTO updateProductDTO);
 
     ProductDTO deleteProduct(UUID productId);
+
+    List<ProductVariantDTO> getProductVariantByProductId(UUID productId);
 }

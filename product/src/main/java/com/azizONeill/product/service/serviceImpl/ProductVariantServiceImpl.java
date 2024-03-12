@@ -4,7 +4,9 @@ import com.azizONeill.product.dto.CreateProductVariantDTO;
 import com.azizONeill.product.dto.ProductVariantDTO;
 import com.azizONeill.product.dto.UpdateProductVariantDTO;
 import com.azizONeill.product.dto.convert.DTOConverter;
+import com.azizONeill.product.model.Product;
 import com.azizONeill.product.model.ProductVariant;
+import com.azizONeill.product.repository.ProductRepository;
 import com.azizONeill.product.repository.ProductVariantRepository;
 import com.azizONeill.product.service.ProductVariantService;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +22,17 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     private final ProductVariantRepository productVariantRepository;
     private final DTOConverter DTOConverter;
+    private final ProductRepository productRepository;
 
     @Autowired
     public ProductVariantServiceImpl(
             ProductVariantRepository productVariantRepository,
-            DTOConverter DTOConverter
+            DTOConverter DTOConverter,
+            ProductRepository productRepository
     ) {
         this.productVariantRepository = productVariantRepository;
         this.DTOConverter = DTOConverter;
+        this.productRepository = productRepository;
     }
 
     public ProductVariantDTO createProductVariant(CreateProductVariantDTO createProductVariantDTO) {
@@ -51,6 +56,14 @@ public class ProductVariantServiceImpl implements ProductVariantService {
             productVariant.setSize(createProductVariantDTO.getSize());
         }
 
+        Product product = productRepository.findById(createProductVariantDTO.getProductId()).orElse(null);
+
+        if (product == null) {
+            return null;
+        }
+
+        product.getProductVariants().add(productVariant);
+        productRepository.save(product);
         ProductVariant newProductVariant = productVariantRepository.save(productVariant);
 
         return DTOConverter.convertProductVariantToProductVariantDTO(newProductVariant);

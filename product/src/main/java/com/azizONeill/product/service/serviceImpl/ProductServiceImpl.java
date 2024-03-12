@@ -114,6 +114,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public List<ProductVariantDTO> getProductVariantByProductId(UUID productId) {
+        Product product = productRepository.findById(productId).orElse(null);
 
+        if (product == null) {
+            return null;
+        }
+
+        return product.getProductVariants().stream().map(DTOConverter::convertProductVariantToProductVariantDTO).toList();
     }
 }

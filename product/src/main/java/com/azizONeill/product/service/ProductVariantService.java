@@ -14,5 +14,4 @@ public interface ProductVariantService {
     void deleteProductVariant(UUID productVariantId);
     ProductVariantDTO getProductVariant(UUID productVariantId);
     List<ProductVariantDTO> getAllProductVariants();
-    List<ProductVariantDTO> getProductVariantByProductId(UUID productId);
 }

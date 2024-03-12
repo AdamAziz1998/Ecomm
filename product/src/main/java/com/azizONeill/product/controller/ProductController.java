@@ -3,6 +3,7 @@ package com.azizONeill.product.controller;
 
 import com.azizONeill.product.dto.CreateProductDTO;
 import com.azizONeill.product.dto.ProductDTO;
+import com.azizONeill.product.dto.ProductVariantDTO;
 import com.azizONeill.product.dto.UpdateProductDTO;
 import com.azizONeill.product.service.ProductService;
 import jakarta.validation.Valid;
@@ -39,6 +40,19 @@ public class ProductController {
 
         if (productDTO != null) {
             return ResponseEntity.status(HttpStatus.OK).body(productDTO);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    @GetMapping("/product/{id}")
+    public ResponseEntity<List<ProductVariantDTO>> getProductVariantByProductId(@PathVariable UUID id) {
+
+        List<ProductVariantDTO> productVariantDTOs = productService.getProductVariantByProductId(id);
+
+        if (productVariantDTOs != null) {
+            return ResponseEntity.status(HttpStatus.OK).body(productVariantDTOs);
         }
         else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
