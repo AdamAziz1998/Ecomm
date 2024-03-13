@@ -17,7 +17,6 @@ public class ProductVariantDTO {
     private UUID id;
 
     @NotNull(message = "status cannot be null")
-    @NotBlank(message = "status cannot be empty")
     private Status status;
 
     @NotNull(message = "price cannot be null")

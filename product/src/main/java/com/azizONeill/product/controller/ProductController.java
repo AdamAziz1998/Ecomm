@@ -46,7 +46,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/product/productVariant/{id}")
     public ResponseEntity<List<ProductVariantDTO>> getProductVariantByProductId(@PathVariable UUID id) {
 
         List<ProductVariantDTO> productVariantDTOs = productService.getProductVariantByProductId(id);

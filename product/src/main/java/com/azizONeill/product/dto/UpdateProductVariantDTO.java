@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 @Data
 public class UpdateProductVariantDTO {
     @NotNull(message = "status cannot be null")
-    @NotBlank(message = "status cannot be empty")
     private Status status;
 
     @NotNull(message = "price cannot be null")

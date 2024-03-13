@@ -39,8 +39,8 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     @Override
     @Caching(evict = {
-            @CacheEvict(value = "productCache", key = "#createProductVariantDTO.getProductId()", beforeInvocation = true),
-            @CacheEvict(value = "productVariant", key = "#productVariantId", beforeInvocation = true),
+            @CacheEvict(value = "productCache", key = "#createProductVariantDTO.getProductId()"),
+            @CacheEvict(value = "productVariant", allEntries = true, beforeInvocation = true),
             @CacheEvict(value = "subcategory", allEntries = true, beforeInvocation = true),
             @CacheEvict(value = "productCartCache", allEntries = true, beforeInvocation = true),
     })
@@ -80,8 +80,8 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     @Override
     @Caching(evict = {
-            @CacheEvict(value = "productCache", key = "#productVariant.getProduct().getId()", beforeInvocation = true),
-            @CacheEvict(value = "productVariant", key = "#productVariantId", beforeInvocation = true),
+            @CacheEvict(value = "productCache", key = "#productVariant.getProduct().getId()"),
+            @CacheEvict(value = "productVariant", key = "#productVariantId"),
             @CacheEvict(value = "subcategory", allEntries = true, beforeInvocation = true),
             @CacheEvict(value = "productCartCache", allEntries = true, beforeInvocation = true),
     })
@@ -116,7 +116,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     @Override
     @Caching(evict = {
-            @CacheEvict(value = "productCache", key = "#productVariant.getProduct().getId()", beforeInvocation = true),
+            @CacheEvict(value = "productCache", allEntries = true, beforeInvocation = true),
             @CacheEvict(value = "productVariant", key = "#productVariantId", beforeInvocation = true),
             @CacheEvict(value = "subcategory", allEntries = true, beforeInvocation = true),
             @CacheEvict(value = "productCartCache", allEntries = true, beforeInvocation = true),
@@ -144,8 +144,8 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     @Override
     public List<ProductVariantDTO> getAllProductVariants() {
-        List<ProductVariant> subcategories = productVariantRepository.findAll();
+        List<ProductVariant> productVariants = productVariantRepository.findAll();
 
-        return subcategories.stream().map(DTOConverter::convertProductVariantToProductVariantDTO).toList();
+        return productVariants.stream().map(DTOConverter::convertProductVariantToProductVariantDTO).toList();
     }
 }

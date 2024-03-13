@@ -15,7 +15,6 @@ public class CreateProductDTO {
     @Size(min = 2, message = "name must be at least 2 characters")
     private String name;
 
-
     @NotNull(message = "displayPrice cannot be null")
     @Positive(message = "displayPrice must be positive")
     private double displayPrice;

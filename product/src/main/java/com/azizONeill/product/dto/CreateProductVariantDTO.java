@@ -15,7 +15,6 @@ public class CreateProductVariantDTO {
     private UUID productId;
 
     @NotNull(message = "status cannot be null")
-    @NotBlank(message = "status cannot be empty")
     private Status status;
 
     @NotNull(message = "price cannot be null")
@@ -30,13 +29,10 @@ public class CreateProductVariantDTO {
     @NotBlank(message = "imageUrl cannot be empty")
     private String imageUrl;
 
-    @NotBlank(message = "color cannot be empty")
     private String color;
 
-    @NotBlank(message = "size cannot be empty")
     private String size;
 
-    @NotBlank(message = "flavour cannot be empty")
     private String flavour;
 
     public boolean isColorPresent() {
