@@ -9,7 +9,6 @@ import java.util.UUID;
 
 @Data
 public class CreateCartItemDTO {
-    @Valid
 
     @NotNull(message = "cartId cannot be null")
     private UUID cartId;

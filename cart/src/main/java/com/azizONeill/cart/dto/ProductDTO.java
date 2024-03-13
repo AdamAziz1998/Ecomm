@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 
 @Data
 public class ProductDTO {
-    @Valid
 
     @NotNull(message = "name cannot be null")
     @NotBlank(message = "name cannot be empty")

@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Data
 public class CartItemDTO implements Serializable {
-    @Valid
 
     @NotNull(message = "cartItemId cannot be null")
     private UUID id;
