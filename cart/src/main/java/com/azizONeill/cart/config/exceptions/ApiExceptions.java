@@ -14,7 +14,6 @@ import java.util.Set;
 public class ApiExceptions {
 
     private final Set<String> messages;
-    private final Throwable throwable;
     private final HttpStatus httpStatus;
     private final ZonedDateTime timeStamp;
 }

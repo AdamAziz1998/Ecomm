@@ -61,7 +61,7 @@ public class CartItemController {
     }
 
     @PutMapping("/cartItem")
-    public ResponseEntity<CartItemDTO> updateCartItemQuantity(@Valid @RequestBody UpdateCartItemDTO updateCartItemDTO) {
+    public ResponseEntity<CartItemDTO> updateCartItemQuantity(@RequestBody UpdateCartItemDTO updateCartItemDTO) {
         CartItemDTO cartItemDTO = this.cartItemService.updateCartItemQuantity(updateCartItemDTO);
 
         if (cartItemDTO != null) {
@@ -72,7 +72,7 @@ public class CartItemController {
     }
 
     @DeleteMapping("/cartItem")
-    public ResponseEntity<CartDTO> deleteCartItem(@Valid @RequestBody DeleteCartItemDTO deleteCartItemDTO) {
+    public ResponseEntity<CartDTO> deleteCartItem(@RequestBody DeleteCartItemDTO deleteCartItemDTO) {
         CartDTO cartDTO = this.cartItemService.deleteCartItem(deleteCartItemDTO);
 
         if (cartDTO != null) {

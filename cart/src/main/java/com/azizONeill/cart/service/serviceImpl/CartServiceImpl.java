@@ -1,7 +1,7 @@
 package com.azizONeill.cart.service.serviceImpl;
 
 import com.azizONeill.cart.client.ProductClient;
-import com.azizONeill.cart.config.exceptions.ObjectValidation;
+import com.azizONeill.cart.config.exceptions.validation.ObjectValidation;
 import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
@@ -10,7 +10,6 @@ import com.azizONeill.cart.repository.CartRepository;
 import com.azizONeill.cart.service.CartService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
