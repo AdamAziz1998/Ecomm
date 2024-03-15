@@ -1,5 +1,6 @@
 package com.azizONeill.cart.service.serviceImpl;
 
+import com.azizONeill.cart.config.exceptions.ObjectValidation;
 import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
@@ -7,20 +8,17 @@ import com.azizONeill.cart.model.CartItem;
 import com.azizONeill.cart.repository.CartItemRepository;
 import com.azizONeill.cart.repository.CartRepository;
 import com.azizONeill.cart.service.CartItemService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class CartItemServiceImpl implements CartItemService {
 
@@ -28,21 +26,14 @@ public class CartItemServiceImpl implements CartItemService {
     private final DTOConverter DTOConverter;
     private final CartRepository cartRepository;
 
-
-    @Autowired
-    public CartItemServiceImpl(
-            CartItemRepository cartItemRepository,
-            DTOConverter DTOConverter,
-            CartRepository cartRepository
-    ) {
-        this.cartItemRepository = cartItemRepository;
-        this.cartRepository = cartRepository;
-        this.DTOConverter = DTOConverter;
-    }
+    private final ObjectValidation<CreateCartItemDTO> createCartItemDTOObjectValidation;
+    private final ObjectValidation<UpdateCartItemDTO> updateCartItemDTOObjectValidation;
+    private final ObjectValidation<DeleteCartItemDTO> deleteCartItemDTOObjectValidation;
 
     @Override
     @CacheEvict(value = "productCartCache", key = "#createCartItemDTO.getCartId()")
     public CartItemDTO createCartItem(CreateCartItemDTO createCartItemDTO) {
+        createCartItemDTOObjectValidation.validate(createCartItemDTO);
 
         Cart cart = this.cartRepository.findById(createCartItemDTO.getCartId()).orElse(null);
 
@@ -104,6 +95,8 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItemDTO updateCartItemQuantity(UpdateCartItemDTO updateCartItemDTO) {
+        updateCartItemDTOObjectValidation.validate(updateCartItemDTO);
+
         CartItem cartItem = this.cartItemRepository.findById(updateCartItemDTO.getCartItemId()).orElse(null);
 
         if (cartItem == null) {
@@ -119,6 +112,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     @CacheEvict(value = "productCartCache", key = "#deleteCartItemDTO.getCartId()")
     public CartDTO deleteCartItem(DeleteCartItemDTO deleteCartItemDTO) {
+        deleteCartItemDTOObjectValidation.validate(deleteCartItemDTO);
 
         Cart cart = cartRepository.findById(deleteCartItemDTO.getCartId()).orElse(null);
 

@@ -1,15 +1,14 @@
 package com.azizONeill.cart.service.serviceImpl;
 
 import com.azizONeill.cart.client.ProductClient;
-import com.azizONeill.cart.dto.CartDTO;
-import com.azizONeill.cart.dto.CartItemDTO;
-import com.azizONeill.cart.dto.CreateCartDTO;
-import com.azizONeill.cart.dto.ProductDTO;
+import com.azizONeill.cart.config.exceptions.ObjectValidation;
+import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
 import com.azizONeill.cart.model.CartItem;
 import com.azizONeill.cart.repository.CartRepository;
 import com.azizONeill.cart.service.CartService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -20,27 +19,18 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 @Slf4j
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
     private final DTOConverter DTOConverter;
     private final ProductClient productClient;
-
-
-    @Autowired
-    public CartServiceImpl(
-            CartRepository cartRepository,
-            DTOConverter DTOConverter,
-            ProductClient productClient
-    ) {
-        this.cartRepository = cartRepository;
-        this.DTOConverter = DTOConverter;
-        this.productClient = productClient;
-    }
+    private final ObjectValidation<CreateCartDTO> createCartDTOObjectValidation;
 
     @Override
     public CartDTO createCart(CreateCartDTO createCartDTO) {
+        createCartDTOObjectValidation.validate(createCartDTO);
 
         Cart cart = new Cart();
 
