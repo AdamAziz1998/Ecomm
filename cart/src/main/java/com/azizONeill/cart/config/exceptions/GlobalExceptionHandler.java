@@ -1,5 +1,6 @@
 package com.azizONeill.cart.config.exceptions;
 
+import com.azizONeill.cart.config.exceptions.notFound.ResourceNotFoundException;
 import com.azizONeill.cart.config.exceptions.validation.ObjectNotValidException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -26,12 +27,12 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(apiException, badRequest);
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<?> handleEntityNotFoundException(EntityNotFoundException e) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException e) {
         HttpStatus notFound = HttpStatus.NOT_FOUND;
 
         ApiException apiException = new ApiException(
-                e.getMessage(),
+                e.getErrorMessage(),
                 notFound,
                 ZonedDateTime.now(ZoneId.of("Z"))
         );

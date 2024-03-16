@@ -65,7 +65,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItemDTO getCartItemByCartItemId(UUID cartItemId) {
-        CartItem cartItem = this.cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResourceNotFoundException("cartItem not found with id" + cartItemId));
+        CartItem cartItem = this.cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResourceNotFoundException("cartItem not found with id " + cartItemId));
 
         return this.DTOConverter.convertCartItemToCartItemDTO(cartItem);
     }
@@ -94,11 +94,7 @@ public class CartItemServiceImpl implements CartItemService {
     public CartItemDTO updateCartItemQuantity(UpdateCartItemDTO updateCartItemDTO) {
         updateCartItemDTOObjectValidation.validate(updateCartItemDTO);
 
-        CartItem cartItem = this.cartItemRepository.findById(updateCartItemDTO.getCartItemId()).orElse(null);
-
-        if (cartItem == null) {
-            return null;
-        }
+        CartItem cartItem = this.cartItemRepository.findById(updateCartItemDTO.getCartItemId()).orElseThrow(() -> new ResourceNotFoundException("cartItem not found with id " + updateCartItemDTO.getCartItemId()));
 
         cartItem.setQuantity(updateCartItemDTO.getQuantity());
         CartItem updatedCartItem = cartItemRepository.save(cartItem);
