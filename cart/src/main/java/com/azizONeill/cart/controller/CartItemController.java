@@ -33,13 +33,9 @@ public class CartItemController {
 
     @GetMapping("/cartItem/{cartItemId}")
     public ResponseEntity<CartItemDTO> getCartItemByCartItemId(@PathVariable UUID cartItemId) {
-        CartItemDTO cartItemDTO = this.cartItemService.getCartItemByCartItemId(cartItemId);
 
-        if (cartItemDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(cartItemDTO);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        CartItemDTO cartItemDTO = this.cartItemService.getCartItemByCartItemId(cartItemId);
+        return ResponseEntity.status(HttpStatus.OK).body(cartItemDTO);
     }
 
     @GetMapping("/cartItem")

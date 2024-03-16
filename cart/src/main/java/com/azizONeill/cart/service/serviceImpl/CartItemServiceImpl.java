@@ -1,5 +1,6 @@
 package com.azizONeill.cart.service.serviceImpl;
 
+import com.azizONeill.cart.config.exceptions.notFound.ResourceNotFoundException;
 import com.azizONeill.cart.config.exceptions.validation.ObjectValidation;
 import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.dto.convert.DTOConverter;
@@ -64,11 +65,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItemDTO getCartItemByCartItemId(UUID cartItemId) {
-        CartItem cartItem = this.cartItemRepository.findById(cartItemId).orElse(throw EntityNotFoundException(mess));
-
-        if (cartItem == null) {
-            return null;
-        }
+        CartItem cartItem = this.cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResourceNotFoundException("cartItem not found with id" + cartItemId));
 
         return this.DTOConverter.convertCartItemToCartItemDTO(cartItem);
     }
