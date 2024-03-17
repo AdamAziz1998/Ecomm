@@ -1,4 +1,4 @@
-package com.azizONeill.cart.config.exceptions;
+package com.azizONeill.product.config.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,4 +15,6 @@ public class ApiException {
     private final String message;
     private final HttpStatus httpStatus;
     private final ZonedDateTime timeStamp;
+
+
 }

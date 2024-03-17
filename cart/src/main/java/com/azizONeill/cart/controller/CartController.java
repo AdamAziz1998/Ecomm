@@ -25,55 +25,43 @@ public class CartController {
 
     @PostMapping("/cart")
     public ResponseEntity<CartDTO> createCart(@RequestBody CreateCartDTO createCartDTO) {
-        CartDTO cartDTO = cartService.createCart(createCartDTO);
 
+        CartDTO cartDTO = cartService.createCart(createCartDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(cartDTO);
     }
 
     @GetMapping("/cart")
     public ResponseEntity<List<CartDTO>> getAllCarts() {
-        List<CartDTO> cartDTOs = cartService.getAllCarts();
 
+        List<CartDTO> cartDTOs = cartService.getAllCarts();
         return ResponseEntity.status(HttpStatus.OK).body(cartDTOs);
     }
 
     @GetMapping("/cart/{cartId}")
     public ResponseEntity<CartDTO> getCartByCartId(@PathVariable UUID cartId) {
-        CartDTO cartDTO = cartService.getCartByCartId(cartId);
 
-        if (cartDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(cartDTO);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        CartDTO cartDTO = cartService.getCartByCartId(cartId);
+        return ResponseEntity.status(HttpStatus.OK).body(cartDTO);
     }
 
     @GetMapping("/cart/products/{cartId}")
     public ResponseEntity<List<ProductDTO>> getProductsByCartId(@PathVariable UUID cartId) {
-        List<ProductDTO> productDTOs = this.cartService.getProductsByCartId(cartId);
 
-        if (productDTOs != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(productDTOs);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        List<ProductDTO> productDTOs = this.cartService.getProductsByCartId(cartId);
+        return ResponseEntity.status(HttpStatus.OK).body(productDTOs);
     }
 
     @DeleteMapping("/cart/clear/{cartId}")
     public ResponseEntity<CartDTO> clearCart(@PathVariable UUID cartId) {
-        CartDTO cartDTO = this.cartService.clearCart(cartId);
 
-        if (cartDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(cartDTO);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        CartDTO cartDTO = this.cartService.clearCart(cartId);
+        return ResponseEntity.status(HttpStatus.OK).body(cartDTO);
     }
 
     @DeleteMapping("/cart/{cartId}")
     public ResponseEntity<?> deleteCart(@PathVariable UUID cartId) {
-        this.cartService.deleteCart(cartId);
 
+        this.cartService.deleteCart(cartId);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

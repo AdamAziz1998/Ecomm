@@ -16,6 +16,9 @@ public class CreateCartItemDTO {
     @NotNull(message = "productId cannot be null")
     private UUID productId;
 
+    @NotNull(message = "productVariantId cannot be null")
+    private UUID productVariantId;
+
     @NotNull(message = "quantity cannot be null")
     @Positive(message = "quantity must be positive")
     private int quantity;

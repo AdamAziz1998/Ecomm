@@ -1,5 +1,6 @@
-package com.azizONeill.cart.config.exceptions.validation;
+package com.azizONeill.cart.config.exceptions;
 
+import com.azizONeill.cart.config.exceptions.exceptionTypes.ObjectNotValidException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;

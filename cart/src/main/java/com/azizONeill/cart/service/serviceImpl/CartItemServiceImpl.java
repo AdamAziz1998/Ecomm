@@ -1,7 +1,9 @@
 package com.azizONeill.cart.service.serviceImpl;
 
-import com.azizONeill.cart.config.exceptions.notFound.ResourceNotFoundException;
-import com.azizONeill.cart.config.exceptions.validation.ObjectValidation;
+import com.azizONeill.cart.client.ProductClient;
+import com.azizONeill.cart.config.exceptions.exceptionTypes.CartItemAlreadyExistsException;
+import com.azizONeill.cart.config.exceptions.exceptionTypes.ResourceNotFoundException;
+import com.azizONeill.cart.config.exceptions.ObjectValidation;
 import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
@@ -9,6 +11,7 @@ import com.azizONeill.cart.model.CartItem;
 import com.azizONeill.cart.repository.CartItemRepository;
 import com.azizONeill.cart.repository.CartRepository;
 import com.azizONeill.cart.service.CartItemService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -24,6 +27,7 @@ import java.util.stream.Collectors;
 public class CartItemServiceImpl implements CartItemService {
 
     private final CartItemRepository cartItemRepository;
+    private final ProductClient productClient;
     private final DTOConverter DTOConverter;
     private final CartRepository cartRepository;
 
@@ -32,27 +36,26 @@ public class CartItemServiceImpl implements CartItemService {
     private final ObjectValidation<DeleteCartItemDTO> deleteCartItemDTOObjectValidation;
 
     @Override
+    @Transactional
     @CacheEvict(value = "productCartCache", key = "#createCartItemDTO.getCartId()")
     public CartItemDTO createCartItem(CreateCartItemDTO createCartItemDTO) {
         createCartItemDTOObjectValidation.validate(createCartItemDTO);
 
-        Cart cart = this.cartRepository.findById(createCartItemDTO.getCartId()).orElse(null);
+        //check if the product which will be added exists
+        productClient.findProductById(createCartItemDTO.getProductId());
+        productClient.findProductVariantById(createCartItemDTO.getProductVariantId());
 
-        if (cart == null) {
-            return null;
-        }
+        UUID cartId = createCartItemDTO.getCartId();
+        Cart cart = this.cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("Cart not found with id " + cartId));
 
-        //check if cartItem is already in cart
-        List<CartItem> cartItems = cart.getCartItems();
-        List<CartItem> filteredCartItems = cartItems.stream().filter(cartItem -> createCartItemDTO.getProductId().equals(cartItem.getProductId())).toList();
-
-        if (!filteredCartItems.isEmpty()) {
-            return null;
+        // Check if cartItem is already in cart
+        if (cart.getCartItems().stream().anyMatch(cartItem -> createCartItemDTO.getProductId().equals(cartItem.getProductVariantId()))) {
+            throw new CartItemAlreadyExistsException("Cart already contains product with id: " + createCartItemDTO.getProductVariantId());
         }
 
         CartItem newCartItem = new CartItem();
-
         newCartItem.setProductId(createCartItemDTO.getProductId());
+        newCartItem.setProductVariantId(createCartItemDTO.getProductVariantId());
         newCartItem.setQuantity(createCartItemDTO.getQuantity());
 
         cart.getCartItems().add(newCartItem);
@@ -79,11 +82,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public List<CartItemDTO> getCartItemsByCartId(UUID cartId) {
-        Cart cart = this.cartRepository.findById(cartId).orElse(null);
-
-        if (cart == null) {
-            return null;
-        }
+        Cart cart = this.cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("Cart not found with id " + cartId));
 
         List<CartItem> cartItems = cart.getCartItems();
 
@@ -91,10 +90,12 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
+    @CacheEvict(value = "productCartCache", key = "#createCartItemDTO.getCartId()")
     public CartItemDTO updateCartItemQuantity(UpdateCartItemDTO updateCartItemDTO) {
         updateCartItemDTOObjectValidation.validate(updateCartItemDTO);
 
-        CartItem cartItem = this.cartItemRepository.findById(updateCartItemDTO.getCartItemId()).orElseThrow(() -> new ResourceNotFoundException("cartItem not found with id " + updateCartItemDTO.getCartItemId()));
+        UUID cartItemId = updateCartItemDTO.getCartItemId();
+        CartItem cartItem = this.cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResourceNotFoundException("cartItem not found with id " + cartItemId));
 
         cartItem.setQuantity(updateCartItemDTO.getQuantity());
         CartItem updatedCartItem = cartItemRepository.save(cartItem);
@@ -107,21 +108,14 @@ public class CartItemServiceImpl implements CartItemService {
     public CartDTO deleteCartItem(DeleteCartItemDTO deleteCartItemDTO) {
         deleteCartItemDTOObjectValidation.validate(deleteCartItemDTO);
 
-        Cart cart = cartRepository.findById(deleteCartItemDTO.getCartId()).orElse(null);
-
-        if (cart == null) {
-            return null;
-        }
+        UUID cartId = deleteCartItemDTO.getCartId();
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("cartItem not found with id " + cartId));
 
         List<CartItem> cartItems = cart.getCartItems();
         CartItem cartItem = cartItems.stream()
                 .filter(item -> deleteCartItemDTO.getCartItemId().equals(item.getId()))
                 .findFirst()
-                .orElse(null);
-
-        if (cartItem == null) {
-            return null;
-        }
+                .orElseThrow(() -> new ResourceNotFoundException("cartItem not found with id " + cartId));
 
         cartItems.remove(cartItem);
         Cart newCart = cartRepository.save(cart);

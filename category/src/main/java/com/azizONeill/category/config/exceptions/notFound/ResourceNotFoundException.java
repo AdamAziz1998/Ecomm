@@ -1,10 +1,8 @@
-package com.azizONeill.cart.config.exceptions.notFound;
+package com.azizONeill.category.config.exceptions.notFound;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Set;
 
 @Getter
 @RequiredArgsConstructor

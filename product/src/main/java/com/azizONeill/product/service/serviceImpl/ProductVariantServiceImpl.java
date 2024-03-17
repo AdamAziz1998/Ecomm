@@ -1,5 +1,6 @@
 package com.azizONeill.product.service.serviceImpl;
 
+import com.azizONeill.product.config.exceptions.notFound.ResourceNotFoundException;
 import com.azizONeill.product.dto.CreateProductVariantDTO;
 import com.azizONeill.product.dto.ProductVariantDTO;
 import com.azizONeill.product.dto.UpdateProductVariantDTO;
@@ -48,10 +49,14 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
         ProductVariant productVariant = new ProductVariant();
 
+        UUID productId = createProductVariantDTO.getProductId();
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with id " + productId));
+
         productVariant.setStatus(createProductVariantDTO.getStatus());
         productVariant.setPrice(createProductVariantDTO.getPrice());
         productVariant.setStockQuantity(createProductVariantDTO.getStockQuantity());
         productVariant.setImageUrl(createProductVariantDTO.getImageUrl());
+        productVariant.setProduct(product);
 
         if (createProductVariantDTO.isColorPresent()) {
             productVariant.setColor(createProductVariantDTO.getColor());
@@ -65,14 +70,7 @@ public class ProductVariantServiceImpl implements ProductVariantService {
             productVariant.setSize(createProductVariantDTO.getSize());
         }
 
-        Product product = productRepository.findById(createProductVariantDTO.getProductId()).orElse(null);
-
-        if (product == null) {
-            return null;
-        }
-
         product.getProductVariants().add(productVariant);
-        productRepository.save(product);
         ProductVariant newProductVariant = productVariantRepository.save(productVariant);
 
         return DTOConverter.convertProductVariantToProductVariantDTO(newProductVariant);

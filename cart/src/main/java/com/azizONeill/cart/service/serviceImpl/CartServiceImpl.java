@@ -1,7 +1,8 @@
 package com.azizONeill.cart.service.serviceImpl;
 
 import com.azizONeill.cart.client.ProductClient;
-import com.azizONeill.cart.config.exceptions.validation.ObjectValidation;
+import com.azizONeill.cart.config.exceptions.exceptionTypes.ResourceNotFoundException;
+import com.azizONeill.cart.config.exceptions.ObjectValidation;
 import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
@@ -47,46 +48,33 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartDTO> getAllCarts() {
-        List<Cart> carts = cartRepository.findAll();
 
+        List<Cart> carts = cartRepository.findAll();
         return carts.stream().map(this.DTOConverter::convertCartToCartDTO).toList();
     }
 
     @Override
     public CartDTO getCartByCartId(UUID cartId) {
 
-        Cart cart = cartRepository.findById(cartId).orElse(null);
-
-        if (cart == null) {
-            return null;
-        }
-
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("cartId not found with id " + cartId));
         return this.DTOConverter.convertCartToCartDTO(cart);
     }
 
     @Override
     @Cacheable("productCartCache")
     public List<ProductDTO> getProductsByCartId(UUID cartId) {
-        Cart cart = this.cartRepository.findById(cartId).orElse(null);
 
-        if (cart == null) {
-            return null;
-        }
-
+        Cart cart = this.cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("cartId not found with id " + cartId));
         List<CartItem> cartItems = cart.getCartItems();
+        List<ProductDTO> products = cartItems.stream().map(cartItem -> productClient.findProductById(cartItem.getProductId())).toList();
 
-        return cartItems.stream().map(cartItem -> productClient.findProductById(cartItem.getProductId())).toList();
     }
 
     @Override
     @CacheEvict(value = "productCartCache", key = "#cartId")
     public CartDTO clearCart(UUID cartId) {
 
-        Cart cart = this.cartRepository.findById(cartId).orElse(null);
-
-        if (cart == null) {
-            return null;
-        }
+        Cart cart = this.cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("cartId not found with id " + cartId));
 
         List<CartItem> cartItems = cart.getCartItems();
         cartItems.clear();
@@ -99,9 +87,8 @@ public class CartServiceImpl implements CartService {
     @Override
     @CacheEvict(value = "productCartCache", key = "#cartId")
     public void deleteCart(UUID cartId) {
-        Cart cart = this.cartRepository.findById(cartId).orElse(null);
 
+        Cart cart = this.cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("cartId not found with id " + cartId));
         cartRepository.delete(cart);
-
     }
 }

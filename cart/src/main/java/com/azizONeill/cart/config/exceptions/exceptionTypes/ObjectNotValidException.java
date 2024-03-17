@@ -1,4 +1,4 @@
-package com.azizONeill.cart.config.exceptions.validation;
+package com.azizONeill.cart.config.exceptions.exceptionTypes;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

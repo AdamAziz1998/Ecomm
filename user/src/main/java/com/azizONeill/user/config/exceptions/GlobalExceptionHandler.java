@@ -1,8 +1,8 @@
-package com.azizONeill.cart.config.exceptions;
+package com.azizONeill.user.config.exceptions;
 
-import com.azizONeill.cart.config.exceptions.exceptionTypes.CartItemAlreadyExistsException;
-import com.azizONeill.cart.config.exceptions.exceptionTypes.ResourceNotFoundException;
-import com.azizONeill.cart.config.exceptions.exceptionTypes.ObjectNotValidException;
+
+import com.azizONeill.user.config.exceptions.notFound.ResourceNotFoundException;
+import com.azizONeill.user.config.exceptions.validation.ObjectNotValidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -51,18 +51,5 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(apiExceptions, badRequest);
-    }
-
-    @ExceptionHandler(CartItemAlreadyExistsException.class)
-    public ResponseEntity<?> handleCartItemAlreadyExistsEcaption(CartItemAlreadyExistsException e) {
-        HttpStatus conflict = HttpStatus.CONFLICT;
-
-        ApiException apiException = new ApiException(
-                e.getErrorMessage(),
-                conflict,
-                ZonedDateTime.now(ZoneId.of("Z"))
-        );
-
-        return new ResponseEntity<>(apiException, conflict);
     }
 }

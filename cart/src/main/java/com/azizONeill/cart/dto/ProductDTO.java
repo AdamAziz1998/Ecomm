@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class ProductDTO {
@@ -18,16 +19,9 @@ public class ProductDTO {
     @Size(min = 2, message = "name must be at least 2 characters")
     private String name;
 
-    @NotNull(message = "status cannot be null")
-    private Status status;
-
-    @NotNull(message = "price cannot be null")
-    @Positive(message = "price must be positive")
-    private BigDecimal price;
-
-    @NotNull(message = "stockQuantity cannot be null")
-    @Positive(message = "stockQuantity must be at least 0")
-    private int stockQuantity;
+    @NotNull(message = "displayPrice cannot be null")
+    @Positive(message = "displayPrice must be positive")
+    private double displayPrice;
 
     @NotNull(message = "description cannot be null")
     @NotBlank(message = "description cannot be empty")
@@ -37,4 +31,7 @@ public class ProductDTO {
     @NotNull(message = "imageUrl cannot be null")
     @NotBlank(message = "imageUrl cannot be empty")
     private String imageUrl;
+
+    @NotNull(message = "productVariants cannot be null")
+    private List<ProductVariantDTO> productVariants;
 }
