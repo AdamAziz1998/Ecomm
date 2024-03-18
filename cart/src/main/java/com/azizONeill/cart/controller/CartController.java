@@ -2,6 +2,7 @@ package com.azizONeill.cart.controller;
 
 import com.azizONeill.cart.dto.CartDTO;
 import com.azizONeill.cart.dto.CreateCartDTO;
+import com.azizONeill.cart.dto.FullCartInformationDTO;
 import com.azizONeill.cart.dto.ProductDTO;
 import com.azizONeill.cart.service.CartService;
 import jakarta.validation.Valid;
@@ -45,9 +46,9 @@ public class CartController {
     }
 
     @GetMapping("/cart/products/{cartId}")
-    public ResponseEntity<List<ProductDTO>> getProductsByCartId(@PathVariable UUID cartId) {
+    public ResponseEntity<FullCartInformationDTO> getProductsByCartId(@PathVariable UUID cartId) {
 
-        List<ProductDTO> productDTOs = this.cartService.getProductsByCartId(cartId);
+        FullCartInformationDTO productDTOs = this.cartService.getProductsByCartId(cartId);
         return ResponseEntity.status(HttpStatus.OK).body(productDTOs);
     }
 

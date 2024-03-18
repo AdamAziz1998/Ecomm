@@ -15,8 +15,10 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -62,12 +64,41 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Cacheable("productCartCache")
-    public List<ProductDTO> getProductsByCartId(UUID cartId) {
+    public FullCartInformationDTO getProductsByCartId(UUID cartId) {
 
-        Cart cart = this.cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("cartId not found with id " + cartId));
+        Cart cart = this.cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("cartId not found with id: " + cartId));
         List<CartItem> cartItems = cart.getCartItems();
-        List<ProductDTO> products = cartItems.stream().map(cartItem -> productClient.findProductById(cartItem.getProductId())).toList();
 
+        FullCartInformationDTO fullCartInformationDTO = new FullCartInformationDTO();
+
+        List<ProductCartDTO> productCartDTOs = cartItems.stream().map(cartItem -> {
+            ProductCartDTO productCartDTO = new ProductCartDTO();
+            ProductDTO productDTO = productClient.findProductById(cartItem.getProductId());
+            ProductVariantDTO productVariantDTO = productClient.findProductVariantById(cartItem.getProductVariantId());
+            productCartDTO.setProductId(cartItem.getProductId());
+            productCartDTO.setProductVariantId(cartItem.getProductVariantId());
+            productCartDTO.setName(productDTO.getName());
+            productCartDTO.setImageUrl(productDTO.getImageUrl());
+            productCartDTO.setStatus(productVariantDTO.getStatus());
+            productCartDTO.setPrice(productVariantDTO.getPrice());
+
+            productCartDTO.setColor(productVariantDTO.getColor());
+            productCartDTO.setSize(productVariantDTO.getSize());
+            productCartDTO.setFlavour(productVariantDTO.getFlavour());
+            productCartDTO.setQuantity(cartItem.getQuantity());
+
+            return productCartDTO;
+        }).toList();
+
+        double totalPrice = productCartDTOs.stream()
+                .mapToDouble(productCartDTO -> productCartDTO.getPrice() * productCartDTO.getQuantity())
+                .sum();
+
+        fullCartInformationDTO.setCartId(cartId);
+        fullCartInformationDTO.setProductInfo(productCartDTOs);
+        fullCartInformationDTO.setTotalPrice(totalPrice);
+
+        return fullCartInformationDTO;
     }
 
     @Override

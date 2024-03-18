@@ -15,7 +15,7 @@ public class FullCartInformationDTO {
     private UUID cartId;
 
     @Valid
-    private List<ProductCartDTO> products;
+    private List<ProductCartDTO> productInfo;
 
     @NotNull(message = "totalPrice cannot be null")
     @Positive(message = "total price cannot be less than zero")
