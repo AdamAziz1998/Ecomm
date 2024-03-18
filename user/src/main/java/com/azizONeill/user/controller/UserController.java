@@ -23,70 +23,44 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/user")
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
 
         List<UserDTO> users = userService.getAllUsers();
-
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
     @GetMapping("/user/{id}")
-    public ResponseEntity<?> getUserById(@PathVariable UUID id) {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable UUID id) {
 
         UserDTO userDTO = userService.getUserById(id);
-
-        if (userDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(userDTO);
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{}");
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
     @GetMapping("/user/email/{emailAddress}")
-    public ResponseEntity<?> getUserByEmail(@PathVariable String emailAddress) {
+    public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String emailAddress) {
 
         UserDTO userDTO = userService.getUserByEmail(emailAddress);
-
-        if (userDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(userDTO);
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{}");
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
     @PostMapping("/user")
-    public ResponseEntity<?> createUser(@Valid @RequestBody NewUserRequestDTO newUserDTO) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody NewUserRequestDTO newUserDTO) {
 
         UserDTO userDTO = userService.createUser(newUserDTO);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable UUID id, @Valid @RequestBody UpdateUserRequestDTO updatedUserDTO) {
+    public ResponseEntity<UserDTO> updateUser(@PathVariable UUID id, @RequestBody UpdateUserRequestDTO updatedUserDTO) {
 
         UserDTO userDTO = userService.updateUser(id, updatedUserDTO);
-
-        if (userDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(userDTO);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{}");
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
     @DeleteMapping("/user/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable UUID id) {
-        // Delete the id
+    public ResponseEntity<UserDTO> deleteUser(@PathVariable UUID id) {
 
         UserDTO userDTO = userService.deleteUserById(id);
-
-        if (userDTO!= null) {
-            return ResponseEntity.status(HttpStatus.OK).body("{}");
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{}");
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 }

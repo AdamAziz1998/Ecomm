@@ -1,15 +1,16 @@
 package com.azizONeill.user.service.serviceImpl;
 
 
-import com.azizONeill.user.dto.convert.UserConverter;
+import com.azizONeill.user.config.exceptions.notFound.ResourceNotFoundException;
 import com.azizONeill.user.dto.NewUserRequestDTO;
 import com.azizONeill.user.dto.UpdateUserRequestDTO;
 import com.azizONeill.user.dto.UserDTO;
+import com.azizONeill.user.dto.convert.UserConverter;
 import com.azizONeill.user.model.User;
 import com.azizONeill.user.repository.UserRepository;
 import com.azizONeill.user.service.UserService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,18 +18,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
     private final UserConverter userConverter;
-
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository, UserConverter userConverter) {
-        this.userRepository = userRepository;
-        this.userConverter = userConverter;
-    }
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -39,24 +34,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserById(UUID userId) {
-        User user = userRepository.findById(userId).orElse(null);
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with id: " + userId));;
+        return userConverter.convertUserToUserDTO(user);
 
-        if (user != null) {
-            return userConverter.convertUserToUserDTO(user);
-        }
-
-        return null;
     }
 
     @Override
     public UserDTO getUserByEmail(String userEmail) {
+
         User user = userRepository.findByEmail(userEmail);
 
-        if (user != null) {
-            return userConverter.convertUserToUserDTO(user);
+        if (user == null) {
+            throw new ResourceNotFoundException("User with email " + userEmail + " not found");
         }
 
-        return null;
+        return userConverter.convertUserToUserDTO(user);
     }
 
     @Override
@@ -76,20 +68,15 @@ public class UserServiceImpl implements UserService {
         newUser.setCounty(newUserRequestDTO.getCounty());
         newUser.setPostCode(newUserRequestDTO.getPostCode());
         newUser.setPassword(newUserRequestDTO.getPassword());
-
         newUser = userRepository.save(newUser);
 
         return userConverter.convertUserToUserDTO(newUser);
     }
 
     @Override
-    public UserDTO updateUser(UUID id, UpdateUserRequestDTO updateUserRequestDTO) {
+    public UserDTO updateUser(UUID userId, UpdateUserRequestDTO updateUserRequestDTO) {
 
-        User updatedUser = userRepository.findById(id).orElse(null);
-
-        if (updatedUser == null) {
-            return null;
-        }
+        User updatedUser = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with id: " + userId));
 
         updatedUser.setTitle(updateUserRequestDTO.getTitle());
         updatedUser.setFirstName(updateUserRequestDTO.getFirstName());
@@ -110,17 +97,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO deleteUserById(UUID id) {
+    public UserDTO deleteUserById(UUID userId) {
 
-        User deleteUser = userRepository.findById(id).orElse(null);
-
-        if (deleteUser == null) {
-            return null;
-        }
-
-        userRepository.deleteById(id);
-
+        User deleteUser = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with id: " + userId));;
+        userRepository.deleteById(userId);
         return userConverter.convertUserToUserDTO(deleteUser);
-
     }
 }

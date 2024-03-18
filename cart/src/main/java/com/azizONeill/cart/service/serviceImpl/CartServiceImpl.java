@@ -1,8 +1,8 @@
 package com.azizONeill.cart.service.serviceImpl;
 
 import com.azizONeill.cart.client.ProductClient;
-import com.azizONeill.cart.config.exceptions.exceptionTypes.ResourceNotFoundException;
 import com.azizONeill.cart.config.exceptions.ObjectValidation;
+import com.azizONeill.cart.config.exceptions.exceptionTypes.ResourceNotFoundException;
 import com.azizONeill.cart.dto.*;
 import com.azizONeill.cart.dto.convert.DTOConverter;
 import com.azizONeill.cart.model.Cart;
@@ -11,14 +11,10 @@ import com.azizONeill.cart.repository.CartRepository;
 import com.azizONeill.cart.service.CartService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -63,7 +59,6 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @Cacheable("productCartCache")
     public FullCartInformationDTO getProductsByCartId(UUID cartId) {
 
         Cart cart = this.cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("cartId not found with id: " + cartId));
@@ -102,7 +97,6 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @CacheEvict(value = "productCartCache", key = "#cartId")
     public CartDTO clearCart(UUID cartId) {
 
         Cart cart = this.cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("cartId not found with id " + cartId));
@@ -116,7 +110,6 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    @CacheEvict(value = "productCartCache", key = "#cartId")
     public void deleteCart(UUID cartId) {
 
         Cart cart = this.cartRepository.findById(cartId).orElseThrow(() -> new ResourceNotFoundException("cartId not found with id " + cartId));

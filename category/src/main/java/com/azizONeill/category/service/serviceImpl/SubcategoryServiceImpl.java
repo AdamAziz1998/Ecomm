@@ -1,6 +1,7 @@
 package com.azizONeill.category.service.serviceImpl;
 
 import com.azizONeill.category.client.ProductClient;
+import com.azizONeill.category.config.exceptions.notFound.ResourceNotFoundException;
 import com.azizONeill.category.dto.CreateSubcategoryDTO;
 import com.azizONeill.category.dto.ProductDTO;
 import com.azizONeill.category.dto.SubcategoryDTO;
@@ -11,6 +12,7 @@ import com.azizONeill.category.model.Subcategory;
 import com.azizONeill.category.repository.CategoryRepository;
 import com.azizONeill.category.repository.SubcategoryRepository;
 import com.azizONeill.category.service.SubcategoryService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@AllArgsConstructor
 @Slf4j
 public class SubcategoryServiceImpl implements SubcategoryService {
 
@@ -31,19 +34,6 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     private final SubcategoryRepository subcategoryRepository;
     private final CategoryRepository categoryRepository;
     private final ProductClient productClient;
-
-    @Autowired
-    public SubcategoryServiceImpl(
-            DTOConverter DTOConverter,
-            SubcategoryRepository subcategoryRepository,
-            CategoryRepository categoryRepository,
-            ProductClient productClient
-    ) {
-        this.DTOConverter = DTOConverter;
-        this.subcategoryRepository = subcategoryRepository;
-        this.categoryRepository = categoryRepository;
-        this.productClient = productClient;
-    }
 
     @Override
     public SubcategoryDTO createSubcategory(CreateSubcategoryDTO createSubcategoryDTO) {
@@ -54,11 +44,8 @@ public class SubcategoryServiceImpl implements SubcategoryService {
 
         Category category = categoryRepository
                 .findById(createSubcategoryDTO.getCategory())
-                .orElse(null);
+                .orElseThrow(() -> new ResourceNotFoundException("category not found with id: " + createSubcategoryDTO.getCategory()));
 
-        if (category == null) {
-            return null;
-        }
 
         category.getSubcategories().add(subcategory);
         Subcategory newSubcategory = subcategoryRepository.save(subcategory);
@@ -70,12 +57,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @Override
     public SubcategoryDTO getSubcategoryById(UUID subcategoryId) {
 
-        Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElse(null);
-
-        if (subcategory == null) {
-            return null;
-        }
-
+        Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElseThrow(() -> new ResourceNotFoundException("subcategory not found with id: " + subcategoryId));;
         return DTOConverter.convertSubcategoryToSubcategoryDTO(subcategory);
     }
 
@@ -83,7 +65,6 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     public List<SubcategoryDTO> getAllSubcategories() {
 
         List<Subcategory> subcategories = subcategoryRepository.findAll();
-
         return subcategories.stream().map(DTOConverter::convertSubcategoryToSubcategoryDTO).toList();
     }
 
@@ -91,16 +72,10 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @CacheEvict(value = "subcategory", key = "#subcategoryId")
     public SubcategoryDTO updateSubcategory(UUID subcategoryId, UpdateSubcategoryDTO updateSubcategoryDTO) {
 
-        Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElse(null);
-
-        if (subcategory == null) {
-            return null;
-        }
-
+        Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElseThrow(() -> new ResourceNotFoundException("subcategory not found with id: " + subcategoryId));;
         subcategory.setName(updateSubcategoryDTO.getName());
         subcategory.setProducts(updateSubcategoryDTO.getProducts());
         subcategoryRepository.save(subcategory);
-
         return DTOConverter.convertSubcategoryToSubcategoryDTO(subcategory);
     }
 
@@ -108,12 +83,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @CacheEvict(value = "subcategory", key = "#subcategoryId")
     public void deleteSubcategory(UUID subcategoryId) {
 
-        Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElse(null);
-
-        if (subcategory == null) {
-            //throw error here
-        }
-
+        Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElseThrow(() -> new ResourceNotFoundException("subcategory not found with id: " + subcategoryId));;
         subcategoryRepository.delete(subcategory);
     }
 
@@ -121,12 +91,7 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @Cacheable(value = "subcategory")
     public List<ProductDTO> getProductsBySubcategory(UUID subcategoryId) {
 
-        Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElse(null);
-
-        if (subcategory == null) {
-            return null;
-        }
-
+        Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElseThrow(() -> new ResourceNotFoundException("category not found with id: " + subcategoryId));;
         return subcategory.getProducts().stream().map(productClient::findProductById).toList();
     }
 }
