@@ -1,5 +1,6 @@
 package com.azizONeill.category.model;
 
+import com.azizONeill.category.model.enums.SuperCategory;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,10 @@ public class Category {
     @NotNull
     @Column(name = "name")
     private String name;
+
+    @NotNull
+    @Column(name = "superCategory")
+    private SuperCategory superCategory;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "CATEGORY_ID")

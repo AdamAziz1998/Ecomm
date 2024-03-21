@@ -5,6 +5,7 @@ import com.azizONeill.category.config.exceptions.notFound.ResourceNotFoundExcept
 import com.azizONeill.category.config.exceptions.validation.ObjectNotValidException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -51,5 +52,21 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(apiExceptions, badRequest);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleInvalidEnum(IllegalArgumentException ex) {
+        HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+
+//        String errorMessage = String.format(
+//                "Invalid value '%s' for parameter '%s'. Please provide a valid value from the corresponding enum.",
+//                invalidValue, paramName);
+        ApiException apiException = new ApiException(
+                ex.getMessage(),
+                badRequest,
+                ZonedDateTime.now(ZoneId.of("Z"))
+        );
+
+        return new ResponseEntity<>(apiException, badRequest);
     }
 }

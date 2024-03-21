@@ -9,10 +9,12 @@ import com.azizONeill.category.dto.ProductDTO;
 import com.azizONeill.category.dto.UpdateCategoryDTO;
 import com.azizONeill.category.dto.convert.DTOConverter;
 import com.azizONeill.category.model.Category;
+import com.azizONeill.category.model.enums.SuperCategory;
 import com.azizONeill.category.repository.CategoryRepository;
 import com.azizONeill.category.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.internal.bytebuddy.implementation.bind.annotation.Super;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -77,6 +79,12 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category not found with id: " + categoryId));
         return category.getSubcategories().stream().flatMap(subcategory -> subcategory.getProducts().stream().map(productClient::findProductById)).toList();
+    }
+
+    @Override
+    public List<CategoryDTO> getCategoriesBySuperCategory(SuperCategory superCategory) {
+        List<Category> categories = categoryRepository.findBySuperCategory(superCategory);
+        return categories.stream().map(DTOConverter::convertCategoryToCategoryDTO).toList();
     }
 
 }

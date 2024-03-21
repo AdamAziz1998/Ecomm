@@ -72,6 +72,9 @@ public class SubcategoryServiceImpl implements SubcategoryService {
     @CacheEvict(value = "subcategory", key = "#subcategoryId")
     public SubcategoryDTO updateSubcategory(UUID subcategoryId, UpdateSubcategoryDTO updateSubcategoryDTO) {
 
+        //check the products exist
+        updateSubcategoryDTO.getProducts().forEach(productClient::findProductById);
+
         Subcategory subcategory = subcategoryRepository.findById(subcategoryId).orElseThrow(() -> new ResourceNotFoundException("subcategory not found with id: " + subcategoryId));;
         subcategory.setName(updateSubcategoryDTO.getName());
         subcategory.setProducts(updateSubcategoryDTO.getProducts());

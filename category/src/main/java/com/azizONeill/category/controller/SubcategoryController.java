@@ -25,47 +25,27 @@ public class SubcategoryController {
 
     @PostMapping("/subcategory")
     public ResponseEntity<SubcategoryDTO> createSubcategory(@Valid @RequestBody CreateSubcategoryDTO createSubcategoryDTO) {
-
         SubcategoryDTO subcategoryDTO = subcategoryService.createSubcategory(createSubcategoryDTO);
-
-        if (subcategoryDTO != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(subcategoryDTO);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(subcategoryDTO);
     }
 
     @GetMapping("/subcategory/{subcategoryId}")
     public ResponseEntity<SubcategoryDTO> getSubcategoryById(@PathVariable UUID subcategoryId) {
-
         SubcategoryDTO subcategoryDTO = subcategoryService.getSubcategoryById(subcategoryId);
-
-        if (subcategoryDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(subcategoryDTO);
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(subcategoryDTO);
     }
 
     @GetMapping("/subcategory")
     public ResponseEntity<List<SubcategoryDTO>> getAllSubcategories() {
 
         List<SubcategoryDTO> categoryDTOs = subcategoryService.getAllSubcategories();
-
         return ResponseEntity.status(HttpStatus.OK).body(categoryDTOs);
     }
 
     @PutMapping("subcategory/{subcategoryId}")
     public ResponseEntity<SubcategoryDTO> updateSubcategory(@PathVariable UUID subcategoryId, @RequestBody UpdateSubcategoryDTO updateSubcategoryDTO) {
-
         SubcategoryDTO subcategoryDTO = subcategoryService.updateSubcategory(subcategoryId, updateSubcategoryDTO);
-
-        if (subcategoryDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(subcategoryDTO);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(subcategoryDTO);
     }
 
     @DeleteMapping("subcategory/{subcategoryId}")
@@ -76,11 +56,6 @@ public class SubcategoryController {
     @GetMapping("subcategory/product/{categoryId}")
     public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable UUID subcategoryId) {
         List<ProductDTO> products = subcategoryService.getProductsBySubcategory(subcategoryId);
-
-        if (products != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(products);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 }

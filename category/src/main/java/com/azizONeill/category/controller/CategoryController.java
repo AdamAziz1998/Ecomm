@@ -4,6 +4,7 @@ import com.azizONeill.category.dto.CategoryDTO;
 import com.azizONeill.category.dto.CreateCategoryDTO;
 import com.azizONeill.category.dto.ProductDTO;
 import com.azizONeill.category.dto.UpdateCategoryDTO;
+import com.azizONeill.category.model.enums.SuperCategory;
 import com.azizONeill.category.service.CategoryService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -25,43 +26,27 @@ public class CategoryController {
 
     @PostMapping("/category")
     public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CreateCategoryDTO createCategoryDTO) {
-
         CategoryDTO categoryDTO = categoryService.createCategory(createCategoryDTO);
-
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryDTO);
     }
 
     @GetMapping("/category/{categoryId}")
     public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable UUID categoryId) {
-
         CategoryDTO categoryDTO = categoryService.getCategoryById(categoryId);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryDTO);
 
-        if (categoryDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(categoryDTO);
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
     }
 
     @GetMapping("/category")
     public ResponseEntity<List<CategoryDTO>> getAllCategories() {
-
         List<CategoryDTO> categoryDTOs = categoryService.getAllCategories();
-
         return ResponseEntity.status(HttpStatus.OK).body(categoryDTOs);
     }
 
     @PutMapping("category/{categoryId}")
     public ResponseEntity<CategoryDTO> updateCategory(@PathVariable UUID categoryId, @RequestBody UpdateCategoryDTO updateCategoryDTO) {
-
         CategoryDTO categoryDTO = categoryService.updateCategory(categoryId, updateCategoryDTO);
-
-        if (categoryDTO != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(categoryDTO);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(categoryDTO);
     }
 
     @DeleteMapping("category/{categoryId}")
@@ -72,11 +57,12 @@ public class CategoryController {
     @GetMapping("category/product/{categoryId}")
     public ResponseEntity<List<ProductDTO>> getProductsByCategory(@PathVariable UUID categoryId) {
         List<ProductDTO> products = categoryService.getProductsByCategory(categoryId);
+        return ResponseEntity.status(HttpStatus.OK).body(products);
+    }
 
-        if (products != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(products);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    @GetMapping("category/superCategory/{superCategory}")
+    public ResponseEntity<List<CategoryDTO>> getCategoriesBySuperCategory(@PathVariable SuperCategory superCategory) {
+        List<CategoryDTO> categoryDTOs = categoryService.getCategoriesBySuperCategory(superCategory);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryDTOs);
     }
 }

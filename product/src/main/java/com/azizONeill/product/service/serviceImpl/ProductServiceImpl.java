@@ -1,5 +1,6 @@
 package com.azizONeill.product.service.serviceImpl;
 
+import com.azizONeill.product.config.exceptions.notFound.ResourceNotFoundException;
 import com.azizONeill.product.dto.CreateProductDTO;
 import com.azizONeill.product.dto.ProductDTO;
 import com.azizONeill.product.dto.ProductVariantDTO;
@@ -8,6 +9,7 @@ import com.azizONeill.product.dto.convert.DTOConverter;
 import com.azizONeill.product.model.Product;
 import com.azizONeill.product.repository.ProductRepository;
 import com.azizONeill.product.service.ProductService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -22,43 +24,34 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 @Slf4j
 public class ProductServiceImpl implements ProductService {
+
     private final ProductRepository productRepository;
     private final DTOConverter DTOConverter;
 
-    @Autowired
-    public ProductServiceImpl(
-            ProductRepository productRepository,
-            DTOConverter DTOConverter
-    ) {
-        this.productRepository = productRepository;
-        this.DTOConverter = DTOConverter;
-    }
+
 
     @Override
     public List<ProductDTO> getAllProducts() {
-        List<Product> products = productRepository.findAll();
 
+        List<Product> products = productRepository.findAll();
         return products.stream().map(DTOConverter::convertProductToProductDTO).collect(Collectors.toList());
     }
 
     @Override
     @Cacheable("productCache")
     public ProductDTO getProductById(UUID productId) {
-        Product product = productRepository.findById(productId).orElse(null);
 
-        if (product != null) {
-            return DTOConverter.convertProductToProductDTO(product);
-        }
-
-        return null;
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with id: " + productId));
+        return DTOConverter.convertProductToProductDTO(product);
     }
 
     @Override
     public List<ProductDTO> getProductsBySearch(String searchTerm) {
-        List<Product> products = productRepository.findBySearchTerm(searchTerm);
 
+        List<Product> products = productRepository.findBySearchTerm(searchTerm);
         return products.stream().map(DTOConverter::convertProductToProductDTO).collect(Collectors.toList());
     }
 
@@ -68,14 +61,11 @@ public class ProductServiceImpl implements ProductService {
     public ProductDTO createProduct(CreateProductDTO createProductDTO) {
 
         Product product = new Product();
-
         product.setName(createProductDTO.getName());
         product.setDisplayPrice(createProductDTO.getDisplayPrice());
         product.setImageUrl(createProductDTO.getImageUrl());
         product.setDescription(createProductDTO.getDescription());
-
         Product newProduct = productRepository.save(product);
-
         return DTOConverter.convertProductToProductDTO(newProduct);
     }
 
@@ -88,19 +78,12 @@ public class ProductServiceImpl implements ProductService {
     )
     public ProductDTO updateProduct(UUID productId, UpdateProductDTO updateProductDTO) {
 
-        Product updatedProduct = productRepository.findById(productId).orElse(null);
-
-        if (updatedProduct == null) {
-            return null;
-        }
-
+        Product updatedProduct = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with id: " + productId));
         updatedProduct.setName(updateProductDTO.getName());
         updatedProduct.setDisplayPrice(updateProductDTO.getDisplayPrice());
         updatedProduct.setImageUrl(updateProductDTO.getImageUrl());
         updatedProduct.setDescription(updateProductDTO.getDescription());
-
         productRepository.save(updatedProduct);
-
         return DTOConverter.convertProductToProductDTO(updatedProduct);
     }
 
@@ -113,25 +96,15 @@ public class ProductServiceImpl implements ProductService {
     })
     public ProductDTO deleteProduct(UUID productId) {
 
-        Product product = productRepository.findById(productId).orElse(null);
-
-        if (product == null) {
-            return null;
-        }
-
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with id: " + productId));
         productRepository.deleteById(productId);
-
         return DTOConverter.convertProductToProductDTO(product);
     }
 
     @Cacheable("productVariant")
     public List<ProductVariantDTO> getProductVariantByProductId(UUID productId) {
-        Product product = productRepository.findById(productId).orElse(null);
 
-        if (product == null) {
-            return null;
-        }
-
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("product not found with id: " + productId));
         return product.getProductVariants().stream().map(DTOConverter::convertProductVariantToProductVariantDTO).toList();
     }
 }
