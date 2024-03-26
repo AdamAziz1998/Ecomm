@@ -21,20 +21,21 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf()
-            .disable()
-            .authorizeHttpRequests()
-            .anyRequest()
-            .authenticated();
+                .csrf()
+                .disable()
+                .authorizeHttpRequests()
+                .anyRequest()
+                .authenticated();
 
         http
-            .oauth2ResourceServer()
-            .jwt()
-            .jwtAuthenticationConverter(jwtAuthConverter);
+                .oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(jwtAuthConverter);
 
         http
-            .sessionManagement()
-            .sessionCreationPolicy(STATELESS);
+                .sessionManagement()
+                .sessionCreationPolicy(STATELESS);
 
         return http.build();
     }
+}
