@@ -1,5 +1,6 @@
 package com.azizONeill.user.controller;
 
+import com.azizONeill.user.dto.AuthorizeRequestDTO;
 import com.azizONeill.user.dto.NewUserRequestDTO;
 import com.azizONeill.user.dto.UpdateUserRequestDTO;
 import com.azizONeill.user.dto.UserDTO;
@@ -8,6 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +24,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @GetMapping("/user")
     public ResponseEntity<List<UserDTO>> getAllUsers() {
@@ -55,5 +62,28 @@ public class UserController {
     public ResponseEntity<UserDTO> deleteUser(@PathVariable UUID id) {
         UserDTO userDTO = userService.deleteUserById(id);
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
+    }
+
+    @PostMapping("user/token/")
+    public ResponseEntity<String> getToken(@RequestBody AuthorizeRequestDTO authorizeRequestDTO) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        authorizeRequestDTO.getUsername(),
+                        authorizeRequestDTO.getPassword()
+                )
+        );
+
+        if (authentication.isAuthenticated()) {
+            String response = userService.generateToken(authorizeRequestDTO.getUsername());
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            throw new RuntimeException("invalid exception");
+        }
+    }
+
+    @GetMapping("user/validate/{token}")
+    public ResponseEntity<?> validateToken(@PathVariable String token) {
+        userService.validateToken(token);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

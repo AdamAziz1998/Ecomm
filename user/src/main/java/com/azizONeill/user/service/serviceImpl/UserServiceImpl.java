@@ -8,12 +8,15 @@ import com.azizONeill.user.dto.UserDTO;
 import com.azizONeill.user.dto.convert.UserConverter;
 import com.azizONeill.user.model.User;
 import com.azizONeill.user.repository.UserRepository;
+import com.azizONeill.user.service.JwtService;
 import com.azizONeill.user.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -24,11 +27,12 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserConverter userConverter;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     @Override
     public List<UserDTO> getAllUsers() {
         List<User> users = userRepository.findAll();
-
         return users.stream().map(userConverter::convertUserToUserDTO).collect(Collectors.toList());
     }
 
@@ -41,13 +45,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getUserByEmail(String userEmail) {
-
-        User user = userRepository.findByEmail(userEmail);
-
-        if (user == null) {
-            throw new ResourceNotFoundException("User with email " + userEmail + " not found");
-        }
-
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("user not found with email: " + userEmail));
         return userConverter.convertUserToUserDTO(user);
     }
 
@@ -67,7 +65,7 @@ public class UserServiceImpl implements UserService {
         newUser.setTownCity(newUserRequestDTO.getTownCity());
         newUser.setCounty(newUserRequestDTO.getCounty());
         newUser.setPostCode(newUserRequestDTO.getPostCode());
-        newUser.setPassword(newUserRequestDTO.getPassword());
+        newUser.setPassword(passwordEncoder.encode(newUserRequestDTO.getPassword()));
         newUser = userRepository.save(newUser);
 
         return userConverter.convertUserToUserDTO(newUser);
@@ -102,5 +100,15 @@ public class UserServiceImpl implements UserService {
         User deleteUser = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("user not found with id: " + userId));;
         userRepository.deleteById(userId);
         return userConverter.convertUserToUserDTO(deleteUser);
+    }
+
+    @Override
+    public String generateToken(String username) {
+        return jwtService.generateToken(username);
+    }
+
+    @Override
+    public void validateToken(String token) {
+        jwtService.validateToken(token);
     }
 }

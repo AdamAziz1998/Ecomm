@@ -21,4 +21,8 @@ public interface UserService {
     UserDTO updateUser(UUID id, UpdateUserRequestDTO updateUserRequestDTO);
 
     UserDTO deleteUserById(UUID id);
+
+    String generateToken(String username);
+
+    void validateToken(String token);
 }

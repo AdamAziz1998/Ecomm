@@ -70,12 +70,4 @@ public class User {
     @NotNull
     @Column(name = "password")
     private String password;
-
-    //@NotNull
-    //@Column(name = "lastLogin")
-    //private LocalDateTime lastLogin;
-
-    //@NotNull
-    //@Column(name = "accountCreationTime", updatable = false)
-    //private LocalDateTime accountCreationTime;
 }
