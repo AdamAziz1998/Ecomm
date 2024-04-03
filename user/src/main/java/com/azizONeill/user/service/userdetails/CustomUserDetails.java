@@ -1,19 +1,20 @@
 package com.azizONeill.user.service.userdetails;
 
+import com.azizONeill.user.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
 
-    private String username;
-    private String password;
+    private final String username;
+    private final String password;
 
     public CustomUserDetails(User user) {
-        this.username = user.getUsername();
+        this.username = user.getEmail();
         this.password = user.getPassword();
     }
 

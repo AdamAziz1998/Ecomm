@@ -64,25 +64,22 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userDTO);
     }
 
-    @PostMapping("user/token/")
+    @PostMapping("/user/auth/token")
     public ResponseEntity<String> getToken(@RequestBody AuthorizeRequestDTO authorizeRequestDTO) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authorizeRequestDTO.getUsername(),
-                        authorizeRequestDTO.getPassword()
-                )
-        );
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(authorizeRequestDTO.getUsername(), authorizeRequestDTO.getPassword());
+        Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+
 
         if (authentication.isAuthenticated()) {
             String response = userService.generateToken(authorizeRequestDTO.getUsername());
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } else {
-            throw new RuntimeException("invalid exception");
+            throw new RuntimeException("invalid access");
         }
     }
 
-    @GetMapping("user/validate/{token}")
-    public ResponseEntity<?> validateToken(@PathVariable String token) {
+    @GetMapping("/user/auth/validate")
+    public ResponseEntity<?> validateToken(@RequestParam("token") String token) {
         userService.validateToken(token);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
