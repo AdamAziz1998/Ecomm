@@ -77,10 +77,4 @@ public class UserController {
             throw new RuntimeException("invalid access");
         }
     }
-
-    @GetMapping("/user/auth/validate")
-    public ResponseEntity<?> validateToken(@RequestParam("token") String token) {
-        userService.validateToken(token);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }
 }

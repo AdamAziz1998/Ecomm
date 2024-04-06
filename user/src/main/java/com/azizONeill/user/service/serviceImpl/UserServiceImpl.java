@@ -106,9 +106,4 @@ public class UserServiceImpl implements UserService {
     public String generateToken(String username) {
         return jwtService.generateToken(username);
     }
-
-    @Override
-    public void validateToken(String token) {
-        jwtService.validateToken(token);
-    }
 }
