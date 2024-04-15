@@ -1,0 +1,1 @@
+package com.safalifter.authservice.exc;

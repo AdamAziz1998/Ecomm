@@ -1,6 +1,6 @@
 package com.azizONeill.userservice.dto;
 
-import com.azizONeill.userservice.enums.Role;
+import com.azizONeill.userservice.model.enums.Role;
 import lombok.Data;
 
 @Data

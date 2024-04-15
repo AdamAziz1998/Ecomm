@@ -1,6 +1,6 @@
 package com.azizONeill.userservice;
 
-import com.azizONeill.userservice.enums.Role;
+import com.azizONeill.userservice.model.enums.Role;
 import com.azizONeill.userservice.model.User;
 import com.azizONeill.userservice.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;

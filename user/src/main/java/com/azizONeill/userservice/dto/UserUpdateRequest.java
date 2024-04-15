@@ -1,4 +1,4 @@
-package com.azizONeill.userservice.request;
+package com.azizONeill.userservice.dto;
 
 import com.azizONeill.userservice.model.UserDetails;
 import jakarta.validation.constraints.NotBlank;

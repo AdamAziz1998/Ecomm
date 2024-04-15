@@ -1,4 +1,4 @@
-package com.azizONeill.userservice.request;
+package com.azizONeill.userservice.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;

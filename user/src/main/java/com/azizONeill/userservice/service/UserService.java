@@ -2,13 +2,13 @@ package com.azizONeill.userservice.service;
 
 import com.azizONeill.userservice.client.FileStorageClient;
 import com.azizONeill.userservice.config.exceptions.notFound.ResourceNotFoundException;
-import com.azizONeill.userservice.enums.Active;
-import com.azizONeill.userservice.enums.Role;
+import com.azizONeill.userservice.model.enums.Active;
+import com.azizONeill.userservice.model.enums.Role;
 import com.azizONeill.userservice.model.User;
 import com.azizONeill.userservice.model.UserDetails;
 import com.azizONeill.userservice.repository.UserRepository;
-import com.azizONeill.userservice.request.RegisterRequest;
-import com.azizONeill.userservice.request.UserUpdateRequest;
+import com.azizONeill.userservice.dto.RegisterRequest;
+import com.azizONeill.userservice.dto.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +27,6 @@ public class UserService {
 
     public User saveUser(RegisterRequest request) {
         User toSave = User.builder()
-                .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
                 .role(Role.USER)

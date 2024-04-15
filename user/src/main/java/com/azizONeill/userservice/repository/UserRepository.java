@@ -1,6 +1,6 @@
 package com.azizONeill.userservice.repository;
 
-import com.azizONeill.userservice.enums.Active;
+import com.azizONeill.userservice.model.enums.Active;
 import com.azizONeill.userservice.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

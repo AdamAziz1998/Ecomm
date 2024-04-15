@@ -1,4 +1,4 @@
-package com.azizONeill.userservice.jwt;
+package com.azizONeill.userservice.config.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

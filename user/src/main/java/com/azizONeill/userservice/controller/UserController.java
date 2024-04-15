@@ -1,8 +1,8 @@
 package com.azizONeill.userservice.controller;
 
 import com.azizONeill.userservice.dto.UserDto;
-import com.azizONeill.userservice.request.RegisterRequest;
-import com.azizONeill.userservice.request.UserUpdateRequest;
+import com.azizONeill.userservice.dto.RegisterRequest;
+import com.azizONeill.userservice.dto.UserUpdateRequest;
 import com.azizONeill.userservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

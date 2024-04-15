@@ -1,7 +1,7 @@
 package com.azizONeill.userservice.model;
 
-import com.azizONeill.userservice.enums.Active;
-import com.azizONeill.userservice.enums.Role;
+import com.azizONeill.userservice.model.enums.Active;
+import com.azizONeill.userservice.model.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
