@@ -1,21 +1,21 @@
 package com.azizONeill.userservice.service;
 
+import com.azizONeill.userservice.client.FileStorageClient;
+import com.azizONeill.userservice.config.exceptions.notFound.ResourceNotFoundException;
 import com.azizONeill.userservice.enums.Active;
 import com.azizONeill.userservice.enums.Role;
-import com.azizONeill.userservice.exc.NotFoundException;
 import com.azizONeill.userservice.model.User;
 import com.azizONeill.userservice.model.UserDetails;
 import com.azizONeill.userservice.repository.UserRepository;
-import com.azizONeill.userservice.client.FileStorageClient;
 import com.azizONeill.userservice.request.RegisterRequest;
 import com.azizONeill.userservice.request.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +39,7 @@ public class UserService {
         return userRepository.findAllByActive(Active.ACTIVE);
     }
 
-    public User getUserById(String id) {
+    public User getUserById(UUID id) {
         return findUserById(id);
     }
 
@@ -47,53 +47,34 @@ public class UserService {
         return findUserByEmail(email);
     }
 
-    public User getUserByUsername(String username) {
-        return findUserByUsername(username);
-    }
-
-    public User updateUserById(UserUpdateRequest request, MultipartFile file) {
+    public User updateUserById(UserUpdateRequest request) {
         User toUpdate = findUserById(request.getId());
 
-        request.setUserDetails(updateUserDetails(toUpdate.getUserDetails(), request.getUserDetails(), file));
+        request.setUserDetails(updateUserDetails(toUpdate.getUserDetails(), request.getUserDetails()));
         modelMapper.map(request, toUpdate);
 
         return userRepository.save(toUpdate);
     }
 
-    public void deleteUserById(String id) {
+    public void deleteUserById(UUID id) {
         User toDelete = findUserById(id);
         toDelete.setActive(Active.INACTIVE);
         userRepository.save(toDelete);
     }
 
-    protected User findUserById(String id) {
+    protected User findUserById(UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
 
     protected User findUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
     }
 
-    protected User findUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException("User not found"));
-    }
-
-    private UserDetails updateUserDetails(UserDetails toUpdate, UserDetails request, MultipartFile file) {
+    private UserDetails updateUserDetails(UserDetails toUpdate, UserDetails request) {
         toUpdate = toUpdate == null ? new UserDetails() : toUpdate;
-
-        if (file != null) {
-            String profilePicture = fileStorageClient.uploadImageToFIleSystem(file).getBody();
-            if (profilePicture != null) {
-                fileStorageClient.deleteImageFromFileSystem(toUpdate.getProfilePicture());
-                toUpdate.setProfilePicture(profilePicture);
-            }
-        }
-
         modelMapper.map(request, toUpdate);
-
         return toUpdate;
     }
 }

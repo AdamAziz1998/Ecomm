@@ -4,12 +4,13 @@ import com.azizONeill.userservice.model.UserDetails;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.util.UUID;
+
 
 @Data
 public class UserUpdateRequest {
-    @NotBlank(message = "Id is required")
-    private String id;
-    private String username;
+    private UUID id;
+    private String email;
     private String password;
     private UserDetails userDetails;
 }

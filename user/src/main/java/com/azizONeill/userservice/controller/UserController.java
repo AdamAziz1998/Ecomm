@@ -1,10 +1,9 @@
 package com.azizONeill.userservice.controller;
 
-import com.azizONeill.userservice.dto.AuthUserDto;
 import com.azizONeill.userservice.dto.UserDto;
-import com.azizONeill.userservice.service.UserService;
 import com.azizONeill.userservice.request.RegisterRequest;
 import com.azizONeill.userservice.request.UserUpdateRequest;
+import com.azizONeill.userservice.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -13,8 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/v1/user")
@@ -36,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserById/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
         return ResponseEntity.ok(modelMapper.map(userService.getUserById(id), UserDto.class));
     }
 
@@ -45,21 +44,16 @@ public class UserController {
         return ResponseEntity.ok(modelMapper.map(userService.getUserByEmail(email), UserDto.class));
     }
 
-    @GetMapping("/getUserByUsername/{username}")
-    public ResponseEntity<AuthUserDto> getUserByUsername(@PathVariable String username) {
-        return ResponseEntity.ok(modelMapper.map(userService.getUserByUsername(username), AuthUserDto.class));
-    }
-
     @PutMapping("/update")
     @PreAuthorize("hasRole('ADMIN') or @userService.getUserById(#request.id).username == principal")
     public ResponseEntity<UserDto> updateUserById(@Valid @RequestPart UserUpdateRequest request,
                                                   @RequestPart(required = false) MultipartFile file) {
-        return ResponseEntity.ok(modelMapper.map(userService.updateUserById(request, file), UserDto.class));
+        return ResponseEntity.ok(modelMapper.map(userService.updateUserById(request), UserDto.class));
     }
 
     @DeleteMapping("/deleteUserById/{id}")
     @PreAuthorize("hasRole('ADMIN') or @userService.getUserById(#id).username == principal")
-    public ResponseEntity<Void> deleteUserById(@PathVariable String id) {
+    public ResponseEntity<Void> deleteUserById(@PathVariable UUID id) {
         userService.deleteUserById(id);
         return ResponseEntity.ok().build();
     }
