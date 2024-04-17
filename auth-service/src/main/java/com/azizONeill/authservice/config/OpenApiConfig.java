@@ -1,4 +1,4 @@
-package com.safalifter.authservice.config;
+package com.azizONeill.authservice.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;

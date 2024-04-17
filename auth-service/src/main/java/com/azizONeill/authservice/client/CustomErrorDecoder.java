@@ -1,8 +1,8 @@
-package com.safalifter.authservice.client;
+package com.azizONeill.authservice.client;
 
+import com.azizONeill.authservice.config.exc.GenericErrorResponse;
+import com.azizONeill.authservice.config.exc.ValidationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.safalifter.authservice.exc.GenericErrorResponse;
-import com.safalifter.authservice.exc.ValidationException;
 import feign.Response;
 import feign.codec.ErrorDecoder;
 import org.apache.commons.io.IOUtils;
