@@ -1,7 +1,7 @@
 package com.azizONeill.authservice.client;
 
-import com.azizONeill.authservice.config.exc.GenericErrorResponse;
-import com.azizONeill.authservice.config.exc.ValidationException;
+import com.azizONeill.authservice.config.exception.GenericErrorResponse;
+import com.azizONeill.authservice.config.exception.ValidationException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;

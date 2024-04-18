@@ -1,6 +1,6 @@
 package com.azizONeill.authservice.dto;
 
-import com.azizONeill.authservice.enums.Role;
+import com.azizONeill.authservice.dto.enums.Role;
 import lombok.Data;
 
 

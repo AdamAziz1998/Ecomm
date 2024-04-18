@@ -8,21 +8,28 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
 public class AuthConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/v1/auth/**").permitAll()
-                .and()
+        return http
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/v1/auth/**").permitAll();
+                    auth.anyRequest().authenticated();
+                })
+                .oauth2Login(withDefaults())
+                .formLogin(withDefaults())
                 .build();
     }
 
@@ -38,7 +45,7 @@ public class AuthConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers(
+        return (web) -> web.ignoring().requestMatchers(
                 "/v1/auth/**",
                 "/swagger-resources/**",
                 "/swagger-ui.html/**",

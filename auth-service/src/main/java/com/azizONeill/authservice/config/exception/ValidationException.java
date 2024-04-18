@@ -1,4 +1,4 @@
-package com.azizONeill.authservice.config.exc;
+package com.azizONeill.authservice.config.exception;
 
 import lombok.Builder;
 import lombok.Getter;
