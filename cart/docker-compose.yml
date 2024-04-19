@@ -1,0 +1,12 @@
+version: '3.1'
+services:
+  cart:
+    image: "postgres:11-alpine"
+    container_name: cart
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=carts
+      - POSTGRES_USER=adam
+      - POSTGRES_PASSWORD=password
+    restart: always

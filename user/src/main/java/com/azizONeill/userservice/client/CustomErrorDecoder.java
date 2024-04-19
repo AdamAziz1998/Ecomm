@@ -1,6 +1,6 @@
 package com.azizONeill.userservice.client;
 
-import com.azizONeill.userservice.exc.GenericErrorResponse;
+import com.azizONeill.userservice.config.exception.GenericErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import feign.Response;
 import feign.codec.ErrorDecoder;

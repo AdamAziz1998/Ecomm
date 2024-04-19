@@ -1,7 +1,6 @@
 package com.azizONeill.userservice.service;
 
 import com.azizONeill.userservice.client.FileStorageClient;
-import com.azizONeill.userservice.config.exceptions.notFound.ResourceNotFoundException;
 import com.azizONeill.userservice.model.enums.Active;
 import com.azizONeill.userservice.model.enums.Role;
 import com.azizONeill.userservice.model.User;
@@ -9,6 +8,7 @@ import com.azizONeill.userservice.model.UserDetails;
 import com.azizONeill.userservice.repository.UserRepository;
 import com.azizONeill.userservice.dto.RegisterRequest;
 import com.azizONeill.userservice.dto.UserUpdateRequest;
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -63,12 +63,12 @@ public class UserService {
 
     protected User findUserById(UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new NotFoundException("User not found with id: " + id));
     }
 
     protected User findUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
+                .orElseThrow(() -> new NotFoundException("User not found with email: " + email));
     }
 
     private UserDetails updateUserDetails(UserDetails toUpdate, UserDetails request) {

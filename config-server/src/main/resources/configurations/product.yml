@@ -37,7 +37,7 @@ spring:
 
   docker:
     compose:
-      file: ./product/compose.yaml
+      file: ./product/docker-compose.yml
 
 management:
   tracing:

@@ -1,26 +1,5 @@
 services:
 
-  product:
-    image: "postgres:11-alpine"
-    container_name: product
-    ports:
-      - "5435:5432"
-    environment:
-      - POSTGRES_DB=products
-      - POSTGRES_USER=adam
-      - POSTGRES_PASSWORD=password
-    restart: always
-
-  cart:
-    image: "postgres:11-alpine"
-    container_name: cart
-    ports:
-      - "5434:5432"
-    environment:
-      - POSTGRES_DB=carts
-      - POSTGRES_USER=adam
-      - POSTGRES_PASSWORD=password
-    restart: always
 
   user:
     image: "postgres:11-alpine"
