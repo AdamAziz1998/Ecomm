@@ -24,7 +24,7 @@ spring:
 
   docker:
     compose:
-      file: ./user/compose.yaml
+      file: ./user/docker-compose.yml
 
 management:
   tracing:
@@ -38,3 +38,8 @@ application:
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
+
+application-title: User Service
+application-description: User service
+application-version: 1
+application-license: no license

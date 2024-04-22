@@ -1,7 +1,5 @@
 spring:
-  application:
-    name: user-service
-  config:
-    import: optional:configserver:http://localhost:8888
-
-application-title: User Service
+    application:
+        name: user
+    config:
+        import: optional:configserver:http://localhost:8888

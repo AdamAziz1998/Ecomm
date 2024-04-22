@@ -1,0 +1,12 @@
+version: '3.1'
+services:
+  category:
+    image: "postgres:11-alpine"
+    container_name: category
+    ports:
+      - "5436:5432"
+    environment:
+      - POSTGRES_DB=categories
+      - POSTGRES_USER=adam
+      - POSTGRES_PASSWORD=password
+    restart: always

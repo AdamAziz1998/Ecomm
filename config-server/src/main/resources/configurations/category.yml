@@ -30,7 +30,7 @@ spring:
 
   docker:
     compose:
-      file: ./category/compose.yaml
+      file: ./category/docker-compose.yml
 
 application:
   config:
