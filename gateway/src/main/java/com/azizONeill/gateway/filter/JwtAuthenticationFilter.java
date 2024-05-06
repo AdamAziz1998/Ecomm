@@ -25,7 +25,7 @@ public class JwtAuthenticationFilter implements GatewayFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
 
-        final List<String> apiEndpoints = List.of("/v1/auth/login", "/v1/auth/register", "/eureka");
+        final List<String> apiEndpoints = List.of("/api/v1/auth/login", "/api/v1/auth/register", "/eureka");
 
         Predicate<ServerHttpRequest> isApiSecured = r -> apiEndpoints.stream()
                 .noneMatch(uri -> r.getURI().getPath().contains(uri));
@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter implements GatewayFilter {
         if (isApiSecured.test(request)) {
             if (authMissing(request)) return onError(exchange);
 
-            String token = request.getHeaders().getOrEmpty("Authorization").get(0);
+            String token = request.getHeaders().getOrEmpty("Authorization").getFirst();
 
             if (token != null && token.startsWith("Bearer ")) token = token.substring(7);
 

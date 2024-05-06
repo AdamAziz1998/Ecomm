@@ -26,10 +26,10 @@ public class UserApplication implements CommandLineRunner {
 	public void run(String... args) {
 		final String pass = "$2a$10$2529eBq3R6Y41t03Mku2I.2Nh3W0p25lt.s.85mG0kiAvxI4bsAHa";
 		var admin = User.builder()
-				.email("admin@gmail.com")
+				.username("admin@gmail.com")
 				.password(pass)
 				.role(Role.ADMIN).build();
-		if (userRepository.findByEmail("admin@gmail.com").isEmpty()) userRepository.save(admin);
+		if (userRepository.findByUsername("admin@gmail.com").isEmpty()) userRepository.save(admin);
 	}
 
 }

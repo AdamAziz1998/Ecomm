@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 public class UserUpdateRequest {
     private UUID id;
-    private String email;
+    private String username;
     private String password;
     private UserDetails userDetails;
 }

@@ -28,7 +28,7 @@ public class UserService {
     public User saveUser(RegisterRequest request) {
         User toSave = User.builder()
                 .password(passwordEncoder.encode(request.getPassword()))
-                .email(request.getEmail())
+                .username(request.getUsername())
                 .role(Role.USER)
                 .active(Active.ACTIVE).build();
         return userRepository.save(toSave);
@@ -67,7 +67,7 @@ public class UserService {
     }
 
     protected User findUserByEmail(String email) {
-        return userRepository.findByEmail(email)
+        return userRepository.findByUsername(email)
                 .orElseThrow(() -> new NotFoundException("User not found with email: " + email));
     }
 

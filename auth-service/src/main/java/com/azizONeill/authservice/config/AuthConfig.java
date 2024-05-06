@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,11 +23,11 @@ public class AuthConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/v1/auth/**").permitAll();
-                    auth.anyRequest().authenticated();
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests((auth) -> {
+                    auth.requestMatchers("/api/v1/auth/**").permitAll()
+                    .anyRequest().authenticated();
                 })
-                .oauth2Login(withDefaults())
                 .formLogin(withDefaults())
                 .build();
     }
